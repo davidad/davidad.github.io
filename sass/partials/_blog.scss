@@ -3,9 +3,8 @@ article {
   a { @extend .force-wrap; }
   header {
     position: relative;
-    padding-top: 2em;
+    padding-top: 1.5em;
     padding-bottom: 1em;
-    margin-bottom: 1em;
     background: $img-border bottom left repeat-x;
     h1 {
       margin: 0;
@@ -16,6 +15,8 @@ article {
       font-size: .9em;
       color: $text-color-light;
       margin: 0;
+      width: 100%;
+      text-align: left;
       &.meta {
         @extend .serif;
         text-transform: uppercase;
@@ -23,7 +24,6 @@ article {
       }
     }
     @media only screen and (min-width: 768px) {
-      margin-bottom: 1.5em;
       padding-bottom: 1em;
       background: $img-border bottom left repeat-x;
     }
