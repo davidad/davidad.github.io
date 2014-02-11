@@ -26,7 +26,7 @@ a.davidadlink {
         position: relative;
         span {
             font-weight: bold;
-            color: $solar-yellow;
+            color: $solar-orange;
         }
     }
 }
@@ -34,7 +34,7 @@ a.davidadlink:hover {
     text-shadow: none
 }
 a.davidadlink:hover span {
-    text-shadow: 0 0 4px $solar-yellow;
+    text-shadow: 0 0 4px $solar-orange;
 }
 
 div, span {
