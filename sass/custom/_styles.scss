@@ -7,7 +7,7 @@ a {
     }
 }
 a:hover {text-shadow: 0 0 4px $solar-blue;}
-nav a:hover {text-shadow: none;}
+nav, footer { a:hover {text-shadow: none;} }
 a:active {color: $solar-cyan}
 a:visited {color: $solar-violet}
 a.davidadlink {
