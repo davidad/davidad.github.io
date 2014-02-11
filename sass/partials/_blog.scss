@@ -9,8 +9,7 @@ article {
     background: $img-border bottom left repeat-x;
     h1 {
       margin: 0;
-      a { text-decoration: none;
-        &:hover { text-decoration: underline; } }
+      a { text-decoration: none; }
     }
     p {
       font-size: .9em;
