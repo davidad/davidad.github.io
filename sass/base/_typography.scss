@@ -9,31 +9,31 @@ $header-subtitle-font-family: $heading-font-family !default;
 // Fonts
 @font-face {
   font-family: 'GaramondNo8';
-  src: url('/garamondno8/GaramondNo8-Regular.otf') format('opentype'),
-       url('/garamondno8/reg-webfont.eot?#iefix') format('embedded-opentype'),
-       url('/garamondno8/reg-webfont.woff') format('woff'),
-       url('/garamondno8/reg-webfont.ttf') format('truetype'),
-       url('/garamondno8/reg-webfont.svg#GaramondNo8Regular') format('svg');
+  src: url('/assets/garamondno8/assets/garamondNo8-Regular.otf') format('opentype'),
+       url('/assets/garamondno8/reg-webfont.eot?#iefix') format('embedded-opentype'),
+       url('/assets/garamondno8/reg-webfont.woff') format('woff'),
+       url('/assets/garamondno8/reg-webfont.ttf') format('truetype'),
+       url('/assets/garamondno8/reg-webfont.svg#GaramondNo8Regular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: 'GaramondNo8';
-  src: url('/garamondno8/GaramondNo8-Medium.otf') format('opentype'),
-       url('/garamondno8/med-webfont.eot?#iefix') format('embedded-opentype'),
-       url('/garamondno8/med-webfont.woff') format('woff'),
-       url('/garamondno8/med-webfont.ttf') format('truetype'),
-       url('/garamondno8/med-webfont.svg#GaramondNo8medular') format('svg');
+  src: url('/assets/garamondno8/assets/garamondNo8-Medium.otf') format('opentype'),
+       url('/assets/garamondno8/med-webfont.eot?#iefix') format('embedded-opentype'),
+       url('/assets/garamondno8/med-webfont.woff') format('woff'),
+       url('/assets/garamondno8/med-webfont.ttf') format('truetype'),
+       url('/assets/garamondno8/med-webfont.svg#GaramondNo8medular') format('svg');
   font-weight: bold;
   font-style: normal;
 }
 @font-face {
   font-family: 'GaramondNo8';
-  src: url('/garamondno8/GaramondNo8-Italic.otf') format('opentype'),
-       url('/garamondno8/ita-webfont.eot?#iefix') format('embedded-opentype'),
-       url('/garamondno8/ita-webfont.woff') format('woff'),
-       url('/garamondno8/ita-webfont.ttf') format('truetype'),
-       url('/garamondno8/ita-webfont.svg#GaramondNo8Italic') format('svg');
+  src: url('/assets/garamondno8/assets/garamondNo8-Italic.otf') format('opentype'),
+       url('/assets/garamondno8/ita-webfont.eot?#iefix') format('embedded-opentype'),
+       url('/assets/garamondno8/ita-webfont.woff') format('woff'),
+       url('/assets/garamondno8/ita-webfont.ttf') format('truetype'),
+       url('/assets/garamondno8/ita-webfont.svg#GaramondNo8Italic') format('svg');
   font-weight: normal;
   font-style: italic;
 }
