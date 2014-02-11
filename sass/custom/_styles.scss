@@ -1,18 +1,34 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
+a {color: $solar-blue; text-decoration: none}
+a:hover {text-shadow: 0 0 4px $solar-blue;}
+a:active {color: $solar-cyan}
+a:visited {color: $solar-violet}
 a.davidadlink {
     background: $base02;
-    color: $base00;
+    color: $base1;
     position: absolute;
     padding: 7px;
     border-radius: 9px;
     white-space: nowrap;
+    top:-4px;
+    right:0px;
+    z-index: 5;
+    padding-bottom:4px;
     div {
+        top: 0.9pt;
+        position: relative;
         span {
             font-weight: bold;
-            color: $base1;
+            color: $solar-orange;
         }
     }
+}
+a.davidadlink:hover {
+    text-shadow: none
+}
+a.davidadlink:hover span {
+    text-shadow: 0 0 4px $solar-orange;
 }
 
 div, span {
@@ -27,4 +43,8 @@ h1, h2 {
 
 p {
     @include stdFont;
+}
+
+aside.sidebar p {
+    text-align: left;
 }

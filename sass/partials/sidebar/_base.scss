@@ -7,7 +7,6 @@ aside.sidebar {
   text-shadow: lighten($sidebar-bg, 8) 0 1px;
   a { @extend .force-wrap; }
   section {
-    @extend .sans;
     font-size: .8em;
     line-height: 1.4em;
     margin-bottom: 1.5em;
