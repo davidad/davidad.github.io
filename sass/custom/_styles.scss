@@ -1,6 +1,8 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
 a {color: $solar-blue; text-decoration: none}
+a:active {color: $solar-cyan}
+a:visited {color: $solar-violet}
 a {
     @media screen {
         @include transition(color 220ms linear, text-shadow 120ms cubic-bezier(.1,.83,.83,.67))
@@ -8,8 +10,6 @@ a {
 }
 a:hover {text-shadow: 0 0 0.22em $solar-blue;}
 aside.sidebar, nav, footer { a:hover {text-shadow: none;} }
-a:active {color: $solar-cyan}
-a:visited {color: $solar-violet}
 a.davidadlink {
     background: $base02;
     color: $base1;
@@ -26,7 +26,7 @@ a.davidadlink {
         position: relative;
         span {
             font-weight: bold;
-            color: $solar-orange;
+            color: $solar-yellow;
         }
     }
 }
@@ -34,7 +34,7 @@ a.davidadlink:hover {
     text-shadow: none
 }
 a.davidadlink:hover span {
-    text-shadow: 0 0 4px $solar-orange;
+    text-shadow: 0 0 4px $solar-yellow;
 }
 
 div, span {
