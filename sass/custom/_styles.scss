@@ -1,0 +1,25 @@
+// This File is imported last, and will override other styles in the cascade
+// Add styles here to make changes without digging in too much
+a.davidadlink {
+    background: $base02;
+    color: $base00;
+    position: absolute;
+    padding: 7px;
+    border-radius: 9px;
+    white-space: nowrap;
+    div {
+        span {
+            font-weight: bold;
+            color: $base1;
+        }
+    }
+}
+
+div, span {
+    @include fontyGoodness;
+    font-family: "GaramondNo8",serif;
+}
+
+p {
+    @include stdFont;
+}
