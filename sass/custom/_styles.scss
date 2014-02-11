@@ -1,6 +1,11 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
 a {color: $solar-blue; text-decoration: none}
+a {
+    @media screen {
+        @include transition(color 220ms linear, text-shadow 120ms cubic-bezier(.1,.83,.83,.67))
+    }
+}
 a:hover {text-shadow: 0 0 4px $solar-blue;}
 a:active {color: $solar-cyan}
 a:visited {color: $solar-violet}
