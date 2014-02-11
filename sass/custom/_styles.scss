@@ -20,6 +20,11 @@ div, span {
     font-family: "GaramondNo8",serif;
 }
 
+h1, h2 {
+    font-family: "GaramondNo8",serif;
+}
+
+
 p {
     @include stdFont;
 }

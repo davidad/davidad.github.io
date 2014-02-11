@@ -17,7 +17,7 @@ article {
       color: $text-color-light;
       margin: 0;
       &.meta {
-        @extend .sans;
+        @extend .serif;
         text-transform: uppercase;
         position: absolute; top: 0;
       }
