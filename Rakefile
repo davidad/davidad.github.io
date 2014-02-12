@@ -116,7 +116,7 @@ task :new_post, :title do |t, args|
       post.puts "---"
     end
   end
-  system "rm new_post.md"
+  system "rm -f new_post.md"
   system "ln -s #{filename} new_post.md"
 end
 
