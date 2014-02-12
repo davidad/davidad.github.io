@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-02-11T18:08:45-05:00</updated>
+  <updated>2014-02-11T19:48:08-05:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -14,11 +14,21 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Test Blog Post]]></title>
-    <link href="http://davidad.github.io/blog/2014/02/11/test-blog-post/"/>
-    <updated>2014-02-11T17:35:51-05:00</updated>
-    <id>http://davidad.github.io/blog/2014/02/11/test-blog-post</id>
-    <content type="html"><![CDATA[<p>Oh boy!</p>
+    <title type="html"><![CDATA[Testing Workflow]]></title>
+    <link href="http://davidad.github.io/blog/2014/02/11/testing-workflow/"/>
+    <updated>2014-02-11T19:47:47-05:00</updated>
+    <id>http://davidad.github.io/blog/2014/02/11/testing-workflow</id>
+    <content type="html"><![CDATA[<p>This is only a test. If this were not a test, there would be content.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress Workflow]]></title>
+    <link href="http://davidad.github.io/blog/2014/02/11/octopress-workflow/"/>
+    <updated>2014-02-11T18:10:58-05:00</updated>
+    <id>http://davidad.github.io/blog/2014/02/11/octopress-workflow</id>
+    <content type="html"><![CDATA[<p>Today is my second day at <a href="http://hackerschool.com">Hacker School</a>, and I
+decided to set up a framework for blogging about what I do here.</p>
 ]]></content>
   </entry>
   
