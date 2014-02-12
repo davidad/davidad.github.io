@@ -18,6 +18,7 @@ documentation for [installation](http://octopress.org/docs/setup/),
 [theme customization](http://octopress.org/docs/theme/). But I wanted even more
 convenience. So, I'm here to introduce you to the `blog` command.
 {% highlight shell-session %}
-davidad@zayin ~/octopress> blog
+davidad@zayin ~> blog
 Enter a title for your post:
 {% endhighlight %}
+

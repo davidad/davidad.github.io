@@ -251,10 +251,6 @@ end
 
 desc "deploy public directory to github pages"
 multitask :push do
-  message = "Site updated at #{Time.now.utc}"
-  system "git add ."
-  system "git commit -m '#{message}'"
-  system "git push"
   puts "## Deploying branch to Github Pages "
   puts "## Pulling any updates from Github Pages "
   cd "#{deploy_dir}" do 
@@ -266,10 +262,10 @@ multitask :push do
   cp_r "#{public_dir}/.", deploy_dir
   cd "#{deploy_dir}" do
     system "git add -A"
-    puts "\n## Committing: #{message}"
+    puts "\n## Committing: Site updated at #{Time.now.utc}"
+    message = "Site updated at #{Time.now.utc}"
     system "git commit -m \"#{message}\""
     puts "\n## Pushing generated #{deploy_dir} website"
-    system "git pull origin #{deploy_branch}"
     system "git push origin #{deploy_branch}"
     puts "\n## Github Pages deploy complete"
   end
