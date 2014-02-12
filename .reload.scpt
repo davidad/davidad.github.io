@@ -11,7 +11,7 @@ tell application "Google Chrome"
         set theTabIndex to 0
         repeat with theTab in every tab of theWindow
             set theTabIndex to theTabIndex + 1
-            if theTab's URL contains "localhost:4000" then
+            if theTab's URL contains "http://localhost:4000/" then
                 set found to true
                 exit
             end if
@@ -26,6 +26,6 @@ tell application "Google Chrome"
         tell theTab to reload
         set theWindow's active tab index to theTabIndex
     else
-        tell window 1 to make new tab with properties {URL:"http://localhost:4000"}
+        tell window 1 to make new tab with properties {URL:"http://localhost:4000/"}
     end if
 end tell
