@@ -1,1 +1,1 @@
-source/_posts/2014-02-12-foo.markdown
+source/_posts/2014-02-11-octopress-workflow.markdown

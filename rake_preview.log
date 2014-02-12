@@ -1,21 +1,20 @@
 Starting to watch source with Jekyll and Compass. Starting Rack on port 4000
-[2014-02-11 20:55:11] INFO  WEBrick 1.3.1
-[2014-02-11 20:55:11] INFO  ruby 1.9.3 (2013-11-22) [x86_64-darwin12.3.0]
-[2014-02-11 20:55:11] INFO  WEBrick::HTTPServer#start: pid=84800 port=4000
-127.0.0.1 - - [11/Feb/2014 20:55:11] "GET / HTTP/1.1" 200 - 0.0187
->>> Change detected at 20:55:11 to: screen.scss
-[31m127.0.0.1 - - [11/Feb/2014 20:55:11] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 200 - 0.0011
-127.0.0.1 - - [11/Feb/2014 20:55:11] "GET /javascripts/github.js HTTP/1.1" 200 - 0.0011
-127.0.0.1 - - [11/Feb/2014 20:55:11] "GET /stylesheets/screen.css HTTP/1.1" 200 - 0.0072
-127.0.0.1 - - [11/Feb/2014 20:55:11] "GET /javascripts/octopress.js HTTP/1.1" 200 - 0.0016
-127.0.0.1 - - [11/Feb/2014 20:55:12] "GET /images/noise.png?1392151054 HTTP/1.1" 200 - 0.0053
-127.0.0.1 - - [11/Feb/2014 20:55:12] "GET /images/line-tile.png?1392151054 HTTP/1.1" 200 - 0.0035
-127.0.0.1 - - [11/Feb/2014 20:55:12] "GET /javascripts/libs/jXHR.js HTTP/1.1" 200 - 0.0010
-127.0.0.1 - - [11/Feb/2014 20:55:12] "GET /images/rss.png?1392151054 HTTP/1.1" 200 - 0.0040
-127.0.0.1 - - [11/Feb/2014 20:55:12] "GET /assets/garamondno8/assets/garamondNo8-Regular.otf HTTP/1.1" 404 - 0.0008
-127.0.0.1 - - [11/Feb/2014 20:55:12] "GET /assets/garamondno8/assets/garamondNo8-Medium.otf HTTP/1.1" 404 - 0.0011
-127.0.0.1 - - [11/Feb/2014 20:55:12] "GET /assets/garamondno8/med-webfont.woff HTTP/1.1" 200 - 0.0052
-127.0.0.1 - - [11/Feb/2014 20:55:12] "GET /assets/garamondno8/reg-webfont.woff HTTP/1.1" 200 - 0.0132
+[2014-02-12 10:49:50] INFO  WEBrick 1.3.1
+[2014-02-12 10:49:50] INFO  ruby 1.9.3 (2013-11-22) [x86_64-darwin12.3.0]
+[2014-02-12 10:49:50] INFO  WEBrick::HTTPServer#start: pid=88690 port=4000
+>>> Change detected at 10:49:50 to: screen.scss
+[31m127.0.0.1 - - [12/Feb/2014 10:49:50] "GET / HTTP/1.1" 206 - 0.0185
+127.0.0.1 - - [12/Feb/2014 10:49:50] "GET / HTTP/1.1" 200 - 0.0088
+127.0.0.1 - - [12/Feb/2014 10:49:51] "GET /stylesheets/screen.css HTTP/1.1" 200 - 0.0017
+127.0.0.1 - - [12/Feb/2014 10:49:51] "GET /javascripts/octopress.js HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 10:49:51] "GET /javascripts/github.js HTTP/1.1" 200 - 0.0006
+127.0.0.1 - - [12/Feb/2014 10:49:51] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 200 - 0.0026
+127.0.0.1 - - [12/Feb/2014 10:49:51] "GET /images/line-tile.png?1392151054 HTTP/1.1" 200 - 0.0009
+127.0.0.1 - - [12/Feb/2014 10:49:51] "GET /images/noise.png?1392151054 HTTP/1.1" 200 - 0.0023
+127.0.0.1 - - [12/Feb/2014 10:49:51] "GET /javascripts/libs/jXHR.js HTTP/1.1" 200 - 0.0007
+127.0.0.1 - - [12/Feb/2014 10:49:51] "GET /images/rss.png?1392151054 HTTP/1.1" 200 - 0.0042
+127.0.0.1 - - [12/Feb/2014 10:49:51] "GET /assets/garamondno8/assets/garamondNo8-Regular.otf HTTP/1.1" 404 - 0.0013
+127.0.0.1 - - [12/Feb/2014 10:49:51] "GET /assets/garamondno8/assets/garamondNo8-Medium.otf HTTP/1.1" 404 - 0.0009
 [0m
 Dear developers making use of FSSM in your projects,
 FSSM is essentially dead at this point. Further development will
@@ -25,49 +24,552 @@ let us know if you need help transitioning! ^_^b
 
 [31m[0m[32midentical[0m public/stylesheets/screen.css 
 >>> Compass is watching for changes. Press Ctrl-C to Stop.
-127.0.0.1 - - [11/Feb/2014 20:55:12] "GET /favicon.png HTTP/1.1" 200 - 0.0011
-127.0.0.1 - - [11/Feb/2014 20:55:27] "GET / HTTP/1.1" 206 - 0.0015
-127.0.0.1 - - [11/Feb/2014 20:55:27] "GET / HTTP/1.1" 200 - 0.0012
-127.0.0.1 - - [11/Feb/2014 20:55:27] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0005
-[2014-02-11 20:55:27] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
-127.0.0.1 - - [11/Feb/2014 20:55:27] "GET /stylesheets/screen.css HTTP/1.1" 200 - 0.0032
-127.0.0.1 - - [11/Feb/2014 20:55:27] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0009
-127.0.0.1 - - [11/Feb/2014 20:55:27] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0008
-[2014-02-11 20:55:27] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
-[2014-02-11 20:55:27] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
-127.0.0.1 - - [11/Feb/2014 20:55:27] "GET /images/line-tile.png?1392151054 HTTP/1.1" 304 - 0.0051
-[2014-02-11 20:55:27] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
-127.0.0.1 - - [11/Feb/2014 20:55:27] "GET /images/noise.png?1392151054 HTTP/1.1" 304 - 0.0005
-[2014-02-11 20:55:27] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
-127.0.0.1 - - [11/Feb/2014 20:55:27] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0006
-[2014-02-11 20:55:27] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
-127.0.0.1 - - [11/Feb/2014 20:55:27] "GET /images/rss.png?1392151054 HTTP/1.1" 304 - 0.0005
-[2014-02-11 20:55:27] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
-127.0.0.1 - - [11/Feb/2014 20:55:27] "GET /assets/garamondno8/assets/garamondNo8-Regular.otf HTTP/1.1" 404 - 0.0012
-127.0.0.1 - - [11/Feb/2014 20:55:27] "GET /assets/garamondno8/assets/garamondNo8-Medium.otf HTTP/1.1" 404 - 0.0007
-127.0.0.1 - - [11/Feb/2014 20:55:27] "GET /assets/garamondno8/reg-webfont.woff HTTP/1.1" 200 - 0.0057
-127.0.0.1 - - [11/Feb/2014 20:55:27] "GET /assets/garamondno8/med-webfont.woff HTTP/1.1" 200 - 0.0078
-127.0.0.1 - - [11/Feb/2014 20:55:27] "GET /favicon.png HTTP/1.1" 200 - 0.0057
-127.0.0.1 - - [11/Feb/2014 20:55:38] "GET / HTTP/1.1" 200 - 0.0009
-127.0.0.1 - - [11/Feb/2014 20:55:38] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0006
-[2014-02-11 20:55:38] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
-127.0.0.1 - - [11/Feb/2014 20:55:38] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0005
-[2014-02-11 20:55:38] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
-127.0.0.1 - - [11/Feb/2014 20:55:38] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0006
-[2014-02-11 20:55:38] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
-127.0.0.1 - - [11/Feb/2014 20:55:38] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0006
-[2014-02-11 20:55:38] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
-127.0.0.1 - - [11/Feb/2014 20:55:38] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0006
-[2014-02-11 20:55:38] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
-127.0.0.1 - - [11/Feb/2014 20:55:38] "GET /favicon.png HTTP/1.1" 200 - 0.0043
-127.0.0.1 - - [11/Feb/2014 20:56:01] "GET / HTTP/1.1" 200 - 0.0009
-127.0.0.1 - - [11/Feb/2014 20:56:01] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0009
-[2014-02-11 20:56:01] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
-127.0.0.1 - - [11/Feb/2014 20:56:01] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0006
-[2014-02-11 20:56:01] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
-127.0.0.1 - - [11/Feb/2014 20:56:01] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0005
-[2014-02-11 20:56:01] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
-127.0.0.1 - - [11/Feb/2014 20:56:01] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0005
-[2014-02-11 20:56:01] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
-127.0.0.1 - - [11/Feb/2014 20:56:01] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0007
-[2014-02-11 20:56:01] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:49:51] "GET /favicon.png HTTP/1.1" 200 - 0.0013
+127.0.0.1 - - [12/Feb/2014 10:49:51] "GET /favicon.png HTTP/1.1" 200 - 0.0017
+127.0.0.1 - - [12/Feb/2014 10:49:51] "GET /favicon.png HTTP/1.1" 200 - 0.0057
+127.0.0.1 - - [12/Feb/2014 10:49:51] "GET /assets/garamondno8/med-webfont.woff HTTP/1.1" 200 - 0.0171
+127.0.0.1 - - [12/Feb/2014 10:49:51] "GET /assets/garamondno8/reg-webfont.woff HTTP/1.1" 200 - 0.0146
+127.0.0.1 - - [12/Feb/2014 10:49:52] "GET /favicon.png HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 10:49:52] "GET /favicon.png HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 10:50:24] "GET / HTTP/1.1" 200 - 0.0009
+127.0.0.1 - - [12/Feb/2014 10:50:24] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0005
+127.0.0.1 - - [12/Feb/2014 10:50:24] "GET /stylesheets/screen.css HTTP/1.1" 200 - 0.0098
+[2014-02-12 10:50:24] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:50:24] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0007
+[2014-02-12 10:50:24] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:50:24] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0004
+[2014-02-12 10:50:24] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:50:24] "GET /images/line-tile.png?1392151054 HTTP/1.1" 304 - 0.0005
+[2014-02-12 10:50:24] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:50:24] "GET /images/noise.png?1392151054 HTTP/1.1" 304 - 0.0005
+[2014-02-12 10:50:24] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:50:24] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 10:50:24] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:50:24] "GET /images/rss.png?1392151054 HTTP/1.1" 304 - 0.0008
+[2014-02-12 10:50:24] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:50:24] "GET /assets/garamondno8/assets/garamondNo8-Regular.otf HTTP/1.1" 404 - 0.0047
+127.0.0.1 - - [12/Feb/2014 10:50:24] "GET /assets/garamondno8/assets/garamondNo8-Medium.otf HTTP/1.1" 404 - 0.0013
+127.0.0.1 - - [12/Feb/2014 10:50:24] "GET /assets/garamondno8/reg-webfont.woff HTTP/1.1" 200 - 0.0047
+127.0.0.1 - - [12/Feb/2014 10:50:24] "GET /assets/garamondno8/med-webfont.woff HTTP/1.1" 200 - 0.0060
+127.0.0.1 - - [12/Feb/2014 10:50:25] "GET /favicon.png HTTP/1.1" 200 - 0.0017
+127.0.0.1 - - [12/Feb/2014 10:50:39] "GET / HTTP/1.1" 200 - 0.0009
+127.0.0.1 - - [12/Feb/2014 10:50:39] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 10:50:39] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:50:39] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0035
+[2014-02-12 10:50:39] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:50:39] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 10:50:39] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:50:39] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0004
+[2014-02-12 10:50:39] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:50:39] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 10:50:39] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:50:40] "GET /favicon.png HTTP/1.1" 200 - 0.0016
+127.0.0.1 - - [12/Feb/2014 10:50:40] "GET /favicon.png HTTP/1.1" 200 - 0.0014
+127.0.0.1 - - [12/Feb/2014 10:50:40] "GET /favicon.png HTTP/1.1" 200 - 0.0012
+127.0.0.1 - - [12/Feb/2014 10:50:40] "GET /favicon.png HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 10:52:16] "GET / HTTP/1.1" 200 - 0.0013
+127.0.0.1 - - [12/Feb/2014 10:52:17] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0008
+[2014-02-12 10:52:17] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:52:17] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 10:52:17] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:52:17] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0007
+[2014-02-12 10:52:17] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:52:17] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0009
+[2014-02-12 10:52:17] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:52:17] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0009
+[2014-02-12 10:52:17] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:52:17] "GET /favicon.png HTTP/1.1" 200 - 0.0013
+127.0.0.1 - - [12/Feb/2014 10:52:17] "GET /favicon.png HTTP/1.1" 416 25 0.0006
+127.0.0.1 - - [12/Feb/2014 10:52:17] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 10:52:18] "GET /favicon.png HTTP/1.1" 200 - 0.0017
+127.0.0.1 - - [12/Feb/2014 10:52:19] "GET / HTTP/1.1" 206 - 0.0008
+127.0.0.1 - - [12/Feb/2014 10:52:19] "GET / HTTP/1.1" 200 - 0.0008
+127.0.0.1 - - [12/Feb/2014 10:52:19] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0007
+[2014-02-12 10:52:19] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:52:19] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0009
+[2014-02-12 10:52:19] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:52:19] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 10:52:19] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:52:19] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 10:52:19] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:52:19] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0009
+[2014-02-12 10:52:19] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:52:19] "GET /favicon.png HTTP/1.1" 416 25 0.0007
+127.0.0.1 - - [12/Feb/2014 10:52:19] "GET /favicon.png HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 10:52:20] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 10:52:20] "GET /favicon.png HTTP/1.1" 416 25 0.0007
+127.0.0.1 - - [12/Feb/2014 10:52:20] "GET /favicon.png HTTP/1.1" 200 - 0.0044
+127.0.0.1 - - [12/Feb/2014 10:54:26] "GET / HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 10:54:26] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0008
+[2014-02-12 10:54:26] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:54:26] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0005
+127.0.0.1 - - [12/Feb/2014 10:54:26] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0047
+[2014-02-12 10:54:26] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:54:26] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0007
+[2014-02-12 10:54:26] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+[2014-02-12 10:54:26] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:54:26] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 10:54:26] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:54:27] "GET /favicon.png HTTP/1.1" 200 - 0.0012
+127.0.0.1 - - [12/Feb/2014 10:54:27] "GET /favicon.png HTTP/1.1" 416 25 0.0006
+127.0.0.1 - - [12/Feb/2014 10:54:27] "GET /favicon.png HTTP/1.1" 200 - 0.0009
+127.0.0.1 - - [12/Feb/2014 10:54:27] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 10:56:29] "GET / HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 10:56:29] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0005
+[2014-02-12 10:56:29] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:56:29] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 10:56:29] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:56:29] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 10:56:29] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:56:29] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 10:56:29] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:56:29] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0009
+[2014-02-12 10:56:29] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:56:29] "GET /favicon.png HTTP/1.1" 416 25 0.0011
+127.0.0.1 - - [12/Feb/2014 10:56:29] "GET /favicon.png HTTP/1.1" 200 - 0.0021
+127.0.0.1 - - [12/Feb/2014 10:56:30] "GET /favicon.png HTTP/1.1" 200 - 0.0061
+127.0.0.1 - - [12/Feb/2014 10:56:30] "GET /favicon.png HTTP/1.1" 416 25 0.0007
+127.0.0.1 - - [12/Feb/2014 10:56:30] "GET /favicon.png HTTP/1.1" 200 - 0.0012
+127.0.0.1 - - [12/Feb/2014 10:58:26] "GET / HTTP/1.1" 200 - 0.0009
+127.0.0.1 - - [12/Feb/2014 10:58:26] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0009
+[2014-02-12 10:58:26] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:58:26] "GET /javascripts/octopress.js HTTP/1.1" 200 - 0.0036
+127.0.0.1 - - [12/Feb/2014 10:58:26] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 200 - 0.0019
+127.0.0.1 - - [12/Feb/2014 10:58:26] "GET /javascripts/github.js HTTP/1.1" 200 - 0.0062
+127.0.0.1 - - [12/Feb/2014 10:58:26] "GET /images/line-tile.png?1392151054 HTTP/1.1" 304 - 0.0009
+[2014-02-12 10:58:26] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:58:26] "GET /images/noise.png?1392151054 HTTP/1.1" 304 - 0.0010
+[2014-02-12 10:58:26] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:58:26] "GET /javascripts/libs/jXHR.js HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 10:58:26] "GET /images/rss.png?1392151054 HTTP/1.1" 304 - 0.0010
+[2014-02-12 10:58:26] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:58:26] "GET /assets/garamondno8/assets/garamondNo8-Regular.otf HTTP/1.1" 404 - 0.0011
+127.0.0.1 - - [12/Feb/2014 10:58:26] "GET /assets/garamondno8/assets/garamondNo8-Medium.otf HTTP/1.1" 404 - 0.0009
+127.0.0.1 - - [12/Feb/2014 10:58:26] "GET /assets/garamondno8/reg-webfont.woff HTTP/1.1" 200 - 0.0071
+127.0.0.1 - - [12/Feb/2014 10:58:26] "GET /assets/garamondno8/med-webfont.woff HTTP/1.1" 200 - 0.0041
+127.0.0.1 - - [12/Feb/2014 10:58:27] "GET /favicon.png HTTP/1.1" 200 - 0.0012
+127.0.0.1 - - [12/Feb/2014 10:58:27] "GET /favicon.png HTTP/1.1" 416 25 0.0011
+127.0.0.1 - - [12/Feb/2014 10:58:27] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 10:58:29] "GET / HTTP/1.1" 206 - 0.0012
+127.0.0.1 - - [12/Feb/2014 10:58:29] "GET / HTTP/1.1" 200 - 0.0009
+127.0.0.1 - - [12/Feb/2014 10:58:29] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0037
+[2014-02-12 10:58:29] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:58:29] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 416 25 0.0006
+127.0.0.1 - - [12/Feb/2014 10:58:29] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 10:58:29] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:58:29] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0004
+[2014-02-12 10:58:29] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:58:29] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 200 - 0.0024
+127.0.0.1 - - [12/Feb/2014 10:58:29] "GET /images/line-tile.png?1392151054 HTTP/1.1" 304 - 0.0006
+[2014-02-12 10:58:29] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:58:29] "GET /images/noise.png?1392151054 HTTP/1.1" 304 - 0.0008
+[2014-02-12 10:58:29] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:58:29] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 10:58:29] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:58:29] "GET /images/rss.png?1392151054 HTTP/1.1" 304 - 0.0009
+[2014-02-12 10:58:29] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:58:29] "GET /assets/garamondno8/assets/garamondNo8-Medium.otf HTTP/1.1" 404 - 0.0009
+127.0.0.1 - - [12/Feb/2014 10:58:29] "GET /assets/garamondno8/assets/garamondNo8-Regular.otf HTTP/1.1" 404 - 0.0007
+127.0.0.1 - - [12/Feb/2014 10:58:30] "GET /assets/garamondno8/reg-webfont.woff HTTP/1.1" 200 - 0.0090
+127.0.0.1 - - [12/Feb/2014 10:58:30] "GET /assets/garamondno8/med-webfont.woff HTTP/1.1" 200 - 0.0142
+127.0.0.1 - - [12/Feb/2014 10:58:30] "GET /favicon.png HTTP/1.1" 200 - 0.0013
+127.0.0.1 - - [12/Feb/2014 10:58:30] "GET /favicon.png HTTP/1.1" 416 25 0.0006
+127.0.0.1 - - [12/Feb/2014 10:58:30] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 10:59:09] "GET / HTTP/1.1" 200 - 0.0012
+127.0.0.1 - - [12/Feb/2014 10:59:09] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0006
+127.0.0.1 - - [12/Feb/2014 10:59:09] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0008
+[2014-02-12 10:59:09] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+[2014-02-12 10:59:09] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:59:09] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0007
+[2014-02-12 10:59:09] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:59:09] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0008
+[2014-02-12 10:59:09] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:59:09] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0008
+[2014-02-12 10:59:09] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:59:10] "GET /favicon.png HTTP/1.1" 200 - 0.0012
+127.0.0.1 - - [12/Feb/2014 10:59:10] "GET /favicon.png HTTP/1.1" 416 25 0.0007
+127.0.0.1 - - [12/Feb/2014 10:59:10] "GET /favicon.png HTTP/1.1" 200 - 0.0017
+127.0.0.1 - - [12/Feb/2014 10:59:10] "GET /favicon.png HTTP/1.1" 200 - 0.0012
+127.0.0.1 - - [12/Feb/2014 10:59:14] "GET / HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 10:59:14] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0054
+[2014-02-12 10:59:14] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:59:14] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0008
+[2014-02-12 10:59:14] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:59:14] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0008
+[2014-02-12 10:59:14] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:59:14] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0008
+[2014-02-12 10:59:14] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:59:14] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0009
+[2014-02-12 10:59:14] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:59:14] "GET /favicon.png HTTP/1.1" 416 25 0.0009
+127.0.0.1 - - [12/Feb/2014 10:59:14] "GET /favicon.png HTTP/1.1" 200 - 0.0017
+127.0.0.1 - - [12/Feb/2014 10:59:15] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 10:59:15] "GET /favicon.png HTTP/1.1" 416 25 0.0007
+127.0.0.1 - - [12/Feb/2014 10:59:15] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 10:59:18] "GET / HTTP/1.1" 200 - 0.0009
+127.0.0.1 - - [12/Feb/2014 10:59:18] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0008
+[2014-02-12 10:59:18] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:59:18] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 10:59:18] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:59:18] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 10:59:18] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:59:18] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0008
+[2014-02-12 10:59:18] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:59:18] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0053
+[2014-02-12 10:59:18] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 10:59:18] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 10:59:19] "GET /favicon.png HTTP/1.1" 416 25 0.0007
+127.0.0.1 - - [12/Feb/2014 10:59:19] "GET /favicon.png HTTP/1.1" 200 - 0.0013
+127.0.0.1 - - [12/Feb/2014 10:59:19] "GET /favicon.png HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 11:04:30] "GET / HTTP/1.1" 200 - 0.0015
+127.0.0.1 - - [12/Feb/2014 11:04:30] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:04:30] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:04:30] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0053
+[2014-02-12 11:04:30] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:04:30] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0008
+[2014-02-12 11:04:30] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:04:30] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 11:04:30] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:04:31] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:04:31] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:04:31] "GET /favicon.png HTTP/1.1" 416 25 0.0008
+127.0.0.1 - - [12/Feb/2014 11:04:31] "GET /favicon.png HTTP/1.1" 200 - 0.0017
+127.0.0.1 - - [12/Feb/2014 11:04:31] "GET /favicon.png HTTP/1.1" 200 - 0.0018
+127.0.0.1 - - [12/Feb/2014 11:04:34] "GET / HTTP/1.1" 416 25 0.0038
+127.0.0.1 - - [12/Feb/2014 11:04:34] "GET / HTTP/1.1" 200 - 0.0008
+127.0.0.1 - - [12/Feb/2014 11:04:34] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0007
+[2014-02-12 11:04:34] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:04:34] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0009
+[2014-02-12 11:04:34] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:04:34] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:04:34] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:04:34] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0009
+[2014-02-12 11:04:34] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:04:34] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0009
+[2014-02-12 11:04:34] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:04:35] "GET /favicon.png HTTP/1.1" 416 25 0.0053
+127.0.0.1 - - [12/Feb/2014 11:04:35] "GET /favicon.png HTTP/1.1" 200 - 0.0074
+127.0.0.1 - - [12/Feb/2014 11:04:35] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:04:35] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:04:35] "GET /favicon.png HTTP/1.1" 416 25 0.0006
+127.0.0.1 - - [12/Feb/2014 11:04:35] "GET /favicon.png HTTP/1.1" 200 - 0.0009
+127.0.0.1 - - [12/Feb/2014 11:04:41] "GET / HTTP/1.1" 200 - 0.0008
+127.0.0.1 - - [12/Feb/2014 11:04:41] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0008
+[2014-02-12 11:04:41] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:04:41] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0007
+[2014-02-12 11:04:41] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:04:41] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0008
+[2014-02-12 11:04:41] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:04:41] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0008
+[2014-02-12 11:04:41] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:04:41] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:04:41] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:04:42] "GET /favicon.png HTTP/1.1" 200 - 0.0013
+127.0.0.1 - - [12/Feb/2014 11:04:42] "GET /favicon.png HTTP/1.1" 416 25 0.0007
+127.0.0.1 - - [12/Feb/2014 11:04:42] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:04:42] "GET /favicon.png HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 11:05:18] "GET / HTTP/1.1" 416 25 0.0013
+127.0.0.1 - - [12/Feb/2014 11:05:18] "GET / HTTP/1.1" 200 - 0.0014
+127.0.0.1 - - [12/Feb/2014 11:05:18] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0007
+[2014-02-12 11:05:18] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:05:18] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 11:05:18] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:05:18] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0005
+127.0.0.1 - - [12/Feb/2014 11:05:18] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 11:05:18] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+[2014-02-12 11:05:18] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:05:18] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:05:18] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:05:19] "GET /favicon.png HTTP/1.1" 416 25 0.0007
+127.0.0.1 - - [12/Feb/2014 11:05:19] "GET /favicon.png HTTP/1.1" 200 - 0.0046
+127.0.0.1 - - [12/Feb/2014 11:06:00] "GET / HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 11:06:00] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0008
+[2014-02-12 11:06:00] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:06:00] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:06:00] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:06:00] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:06:00] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:06:00] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:06:00] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:06:00] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:06:00] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:06:01] "GET /favicon.png HTTP/1.1" 200 - 0.0042
+127.0.0.1 - - [12/Feb/2014 11:06:03] "GET / HTTP/1.1" 416 25 0.0008
+127.0.0.1 - - [12/Feb/2014 11:06:03] "GET / HTTP/1.1" 200 - 0.0008
+127.0.0.1 - - [12/Feb/2014 11:06:03] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:06:03] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:06:03] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0007
+[2014-02-12 11:06:03] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:06:03] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:06:03] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:06:03] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:06:03] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:06:03] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:06:03] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:06:03] "GET /favicon.png HTTP/1.1" 416 25 0.0007
+127.0.0.1 - - [12/Feb/2014 11:06:03] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:06:03] "GET /favicon.png HTTP/1.1" 200 - 0.0014
+127.0.0.1 - - [12/Feb/2014 11:06:03] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:06:04] "GET /favicon.png HTTP/1.1" 416 25 0.0007
+127.0.0.1 - - [12/Feb/2014 11:06:04] "GET /favicon.png HTTP/1.1" 200 - 0.0014
+127.0.0.1 - - [12/Feb/2014 11:07:12] "GET / HTTP/1.1" 200 - 0.0052
+127.0.0.1 - - [12/Feb/2014 11:07:12] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0008
+[2014-02-12 11:07:12] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:07:12] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0009
+[2014-02-12 11:07:12] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:07:12] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0008
+[2014-02-12 11:07:12] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:07:12] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 11:07:12] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:07:13] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0007
+[2014-02-12 11:07:13] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:07:13] "GET /favicon.png HTTP/1.1" 200 - 0.0013
+127.0.0.1 - - [12/Feb/2014 11:07:13] "GET /favicon.png HTTP/1.1" 416 25 0.0007
+127.0.0.1 - - [12/Feb/2014 11:07:13] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:07:15] "GET / HTTP/1.1" 416 25 0.0008
+127.0.0.1 - - [12/Feb/2014 11:07:15] "GET / HTTP/1.1" 200 - 0.0008
+127.0.0.1 - - [12/Feb/2014 11:07:15] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0007
+[2014-02-12 11:07:15] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:07:15] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0007
+[2014-02-12 11:07:15] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:07:15] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0009
+[2014-02-12 11:07:15] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:07:15] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0007
+[2014-02-12 11:07:15] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:07:15] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0046
+[2014-02-12 11:07:15] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:07:16] "GET /favicon.png HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 11:07:16] "GET /favicon.png HTTP/1.1" 416 25 0.0007
+127.0.0.1 - - [12/Feb/2014 11:07:16] "GET /favicon.png HTTP/1.1" 200 - 0.0009
+127.0.0.1 - - [12/Feb/2014 11:07:16] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:07:18] "GET / HTTP/1.1" 200 - 0.0008
+127.0.0.1 - - [12/Feb/2014 11:07:18] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:07:18] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:07:18] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0008
+[2014-02-12 11:07:18] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:07:18] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 11:07:18] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:07:18] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0007
+[2014-02-12 11:07:18] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:07:18] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 11:07:18] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:07:19] "GET /favicon.png HTTP/1.1" 416 25 0.0037
+127.0.0.1 - - [12/Feb/2014 11:07:19] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:07:19] "GET /favicon.png HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 11:07:19] "GET /favicon.png HTTP/1.1" 416 25 0.0007
+127.0.0.1 - - [12/Feb/2014 11:07:19] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:08:10] "GET / HTTP/1.1" 206 - 0.0008
+127.0.0.1 - - [12/Feb/2014 11:08:10] "GET / HTTP/1.1" 200 - 0.0009
+127.0.0.1 - - [12/Feb/2014 11:08:10] "GET /stylesheets/screen.css HTTP/1.1" 200 - 0.0022
+127.0.0.1 - - [12/Feb/2014 11:08:10] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0007
+[2014-02-12 11:08:10] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:08:10] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:08:10] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:08:10] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0009
+[2014-02-12 11:08:10] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:08:10] "GET /images/line-tile.png?1392151054 HTTP/1.1" 304 - 0.0009
+[2014-02-12 11:08:10] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:08:10] "GET /images/noise.png?1392151054 HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:08:10] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:08:10] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:08:10] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:08:10] "GET /images/code_bg.png?1392151054 HTTP/1.1" 200 - 0.0060
+127.0.0.1 - - [12/Feb/2014 11:08:10] "GET /images/rss.png?1392151054 HTTP/1.1" 304 - 0.0005
+[2014-02-12 11:08:10] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:08:10] "GET /assets/garamondno8/assets/garamondNo8-Regular.otf HTTP/1.1" 404 - 0.0008
+127.0.0.1 - - [12/Feb/2014 11:08:10] "GET /assets/garamondno8/assets/garamondNo8-Medium.otf HTTP/1.1" 404 - 0.0012
+127.0.0.1 - - [12/Feb/2014 11:08:11] "GET /assets/garamondno8/reg-webfont.woff HTTP/1.1" 200 - 0.0041
+127.0.0.1 - - [12/Feb/2014 11:08:11] "GET /assets/garamondno8/med-webfont.woff HTTP/1.1" 200 - 0.0048
+127.0.0.1 - - [12/Feb/2014 11:08:11] "GET /favicon.png HTTP/1.1" 200 - 0.0017
+127.0.0.1 - - [12/Feb/2014 11:08:11] "GET /favicon.png HTTP/1.1" 416 25 0.0041
+127.0.0.1 - - [12/Feb/2014 11:08:11] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+>>> Change detected at 11:09:19 to: custom/_styles.scss
+[31m[0m127.0.0.1 - - [12/Feb/2014 11:09:21] "GET / HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:09:21] "GET /stylesheets/screen.css HTTP/1.1" 200 - 0.0019
+127.0.0.1 - - [12/Feb/2014 11:09:21] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 11:09:21] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:09:21] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 11:09:21] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:09:21] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0004
+[2014-02-12 11:09:21] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:09:21] "GET /images/line-tile.png?1392151054 HTTP/1.1" 304 - 0.0046
+[2014-02-12 11:09:21] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:09:21] "GET /images/noise.png?1392151054 HTTP/1.1" 304 - 0.0005
+[2014-02-12 11:09:21] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:09:21] "GET /images/code_bg.png?1392151054 HTTP/1.1" 304 - 0.0005
+[2014-02-12 11:09:21] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:09:21] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:09:21] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:09:21] "GET /images/rss.png?1392151054 HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:09:21] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:09:21] "GET /assets/garamondno8/assets/garamondNo8-Medium.otf HTTP/1.1" 404 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:09:21] "GET /assets/garamondno8/assets/garamondNo8-Regular.otf HTTP/1.1" 404 - 0.0011
+127.0.0.1 - - [12/Feb/2014 11:09:22] "GET /favicon.png HTTP/1.1" 200 - 0.0044
+127.0.0.1 - - [12/Feb/2014 11:09:22] "GET /favicon.png HTTP/1.1" 416 25 0.0008
+127.0.0.1 - - [12/Feb/2014 11:09:22] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:09:22] "GET /assets/garamondno8/reg-webfont.woff HTTP/1.1" 304 - 0.0008
+[2014-02-12 11:09:22] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:09:22] "GET /favicon.png HTTP/1.1" 200 - 0.0018
+127.0.0.1 - - [12/Feb/2014 11:09:22] "GET /assets/garamondno8/med-webfont.woff HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:09:22] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:09:22] "GET /favicon.png HTTP/1.1" 416 25 0.0006
+127.0.0.1 - - [12/Feb/2014 11:09:22] "GET /favicon.png HTTP/1.1" 200 - 0.0009
+127.0.0.1 - - [12/Feb/2014 11:09:22] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:11:35] "GET / HTTP/1.1" 206 - 0.0008
+127.0.0.1 - - [12/Feb/2014 11:11:35] "GET / HTTP/1.1" 200 - 0.0045
+127.0.0.1 - - [12/Feb/2014 11:11:35] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0007
+[2014-02-12 11:11:35] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:11:35] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:11:35] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:11:35] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 11:11:35] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:11:35] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 11:11:35] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:11:35] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:11:35] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:11:36] "GET /favicon.png HTTP/1.1" 416 25 0.0007
+127.0.0.1 - - [12/Feb/2014 11:11:36] "GET /favicon.png HTTP/1.1" 200 - 0.0013
+127.0.0.1 - - [12/Feb/2014 11:11:47] "GET / HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:11:47] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0007
+[2014-02-12 11:11:47] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:11:47] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:11:47] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:11:47] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0005
+127.0.0.1 - - [12/Feb/2014 11:11:47] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 11:11:47] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+[2014-02-12 11:11:47] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:11:47] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:11:47] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:11:47] "GET /favicon.png HTTP/1.1" 200 - 0.0017
+127.0.0.1 - - [12/Feb/2014 11:11:48] "GET /favicon.png HTTP/1.1" 416 25 0.0010
+127.0.0.1 - - [12/Feb/2014 11:11:48] "GET /favicon.png HTTP/1.1" 200 - 0.0015
+127.0.0.1 - - [12/Feb/2014 11:11:48] "GET /favicon.png HTTP/1.1" 200 - 0.0014
+127.0.0.1 - - [12/Feb/2014 11:11:48] "GET /favicon.png HTTP/1.1" 416 25 0.0008
+127.0.0.1 - - [12/Feb/2014 11:11:48] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:13:04] "GET / HTTP/1.1" 200 - 0.0012
+127.0.0.1 - - [12/Feb/2014 11:13:04] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:13:04] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:13:04] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 11:13:04] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:13:04] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0005
+127.0.0.1 - - [12/Feb/2014 11:13:04] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0005
+[2014-02-12 11:13:04] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+[2014-02-12 11:13:04] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:13:04] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:13:04] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:13:05] "GET /favicon.png HTTP/1.1" 200 - 0.0012
+127.0.0.1 - - [12/Feb/2014 11:13:05] "GET /favicon.png HTTP/1.1" 416 25 0.0012
+127.0.0.1 - - [12/Feb/2014 11:13:05] "GET /favicon.png HTTP/1.1" 200 - 0.0017
+127.0.0.1 - - [12/Feb/2014 11:13:05] "GET /favicon.png HTTP/1.1" 200 - 0.0064
+127.0.0.1 - - [12/Feb/2014 11:13:05] "GET /favicon.png HTTP/1.1" 416 25 0.0007
+127.0.0.1 - - [12/Feb/2014 11:13:05] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:40:03] "GET / HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 11:40:03] "GET /stylesheets/screen.css HTTP/1.1" 200 - 0.0025
+127.0.0.1 - - [12/Feb/2014 11:40:03] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 200 - 0.0040
+127.0.0.1 - - [12/Feb/2014 11:40:03] "GET /javascripts/octopress.js HTTP/1.1" 416 25 0.0006
+127.0.0.1 - - [12/Feb/2014 11:40:03] "GET /javascripts/github.js HTTP/1.1" 416 25 0.0006
+127.0.0.1 - - [12/Feb/2014 11:40:03] "GET /javascripts/octopress.js HTTP/1.1" 200 - 0.0013
+127.0.0.1 - - [12/Feb/2014 11:40:03] "GET /javascripts/github.js HTTP/1.1" 200 - 0.0008
+127.0.0.1 - - [12/Feb/2014 11:40:03] "GET /images/line-tile.png?1392151054 HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 11:40:03] "GET /images/noise.png?1392151054 HTTP/1.1" 200 - 0.0063
+127.0.0.1 - - [12/Feb/2014 11:40:03] "GET /javascripts/libs/jXHR.js HTTP/1.1" 416 25 0.0006
+127.0.0.1 - - [12/Feb/2014 11:40:03] "GET /javascripts/libs/jXHR.js HTTP/1.1" 200 - 0.0007
+127.0.0.1 - - [12/Feb/2014 11:40:03] "GET /images/rss.png?1392151054 HTTP/1.1" 200 - 0.0013
+127.0.0.1 - - [12/Feb/2014 11:40:03] "GET /assets/garamondno8/assets/garamondNo8-Regular.otf HTTP/1.1" 404 - 0.0011
+127.0.0.1 - - [12/Feb/2014 11:40:03] "GET /assets/garamondno8/assets/garamondNo8-Medium.otf HTTP/1.1" 404 - 0.0011
+127.0.0.1 - - [12/Feb/2014 11:40:04] "GET /assets/garamondno8/reg-webfont.woff HTTP/1.1" 200 - 0.0043
+127.0.0.1 - - [12/Feb/2014 11:40:04] "GET /assets/garamondno8/med-webfont.woff HTTP/1.1" 200 - 0.0049
+127.0.0.1 - - [12/Feb/2014 11:40:04] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:40:04] "GET /favicon.png HTTP/1.1" 200 - 0.0012
+127.0.0.1 - - [12/Feb/2014 11:40:05] "GET /favicon.png HTTP/1.1" 200 - 0.0015
+127.0.0.1 - - [12/Feb/2014 11:40:07] "GET / HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 11:40:07] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0009
+[2014-02-12 11:40:07] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:40:07] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:40:07] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:40:07] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0005
+127.0.0.1 - - [12/Feb/2014 11:40:07] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0036
+[2014-02-12 11:40:07] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+[2014-02-12 11:40:07] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:40:07] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:40:07] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:40:08] "GET /favicon.png HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 11:40:08] "GET /favicon.png HTTP/1.1" 200 - 0.0016
+127.0.0.1 - - [12/Feb/2014 11:40:08] "GET /favicon.png HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 11:46:39] "GET / HTTP/1.1" 200 - 0.0017
+127.0.0.1 - - [12/Feb/2014 11:46:39] "GET /javascripts/github.js HTTP/1.1" 200 - 0.0007
+127.0.0.1 - - [12/Feb/2014 11:46:39] "GET /javascripts/octopress.js HTTP/1.1" 200 - 0.0007
+127.0.0.1 - - [12/Feb/2014 11:46:39] "GET /stylesheets/screen.css HTTP/1.1" 200 - 0.0086
+127.0.0.1 - - [12/Feb/2014 11:46:39] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 200 - 0.0006
+127.0.0.1 - - [12/Feb/2014 11:46:39] "GET /images/line-tile.png?1392151054 HTTP/1.1" 200 - 0.0008
+127.0.0.1 - - [12/Feb/2014 11:46:39] "GET /images/noise.png?1392151054 HTTP/1.1" 200 - 0.0023
+127.0.0.1 - - [12/Feb/2014 11:46:39] "GET /images/code_bg.png?1392151054 HTTP/1.1" 200 - 0.0007
+127.0.0.1 - - [12/Feb/2014 11:46:40] "GET /javascripts/libs/jXHR.js HTTP/1.1" 200 - 0.0045
+127.0.0.1 - - [12/Feb/2014 11:46:40] "GET /images/rss.png?1392151054 HTTP/1.1" 200 - 0.0009
+127.0.0.1 - - [12/Feb/2014 11:46:40] "GET /assets/garamondno8/assets/garamondNo8-Regular.otf HTTP/1.1" 404 - 0.0007
+127.0.0.1 - - [12/Feb/2014 11:46:40] "GET /assets/garamondno8/assets/garamondNo8-Medium.otf HTTP/1.1" 404 - 0.0008
+127.0.0.1 - - [12/Feb/2014 11:46:40] "GET /assets/garamondno8/med-webfont.woff HTTP/1.1" 200 - 0.0042
+127.0.0.1 - - [12/Feb/2014 11:46:40] "GET /assets/garamondno8/reg-webfont.woff HTTP/1.1" 200 - 0.0102
+127.0.0.1 - - [12/Feb/2014 11:46:40] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:46:40] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:46:40] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:47:12] "GET / HTTP/1.1" 200 - 0.0009
+127.0.0.1 - - [12/Feb/2014 11:47:12] "GET /stylesheets/screen.css HTTP/1.1" 200 - 0.0015
+127.0.0.1 - - [12/Feb/2014 11:47:12] "GET /javascripts/octopress.js HTTP/1.1" 200 - 0.0009
+127.0.0.1 - - [12/Feb/2014 11:47:12] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 200 - 0.0088
+127.0.0.1 - - [12/Feb/2014 11:47:12] "GET /javascripts/github.js HTTP/1.1" 200 - 0.0016
+127.0.0.1 - - [12/Feb/2014 11:47:12] "GET /images/line-tile.png?1392151054 HTTP/1.1" 200 - 0.0008
+127.0.0.1 - - [12/Feb/2014 11:47:12] "GET /images/noise.png?1392151054 HTTP/1.1" 200 - 0.0021
+127.0.0.1 - - [12/Feb/2014 11:47:12] "GET /images/code_bg.png?1392151054 HTTP/1.1" 200 - 0.0007
+127.0.0.1 - - [12/Feb/2014 11:47:12] "GET /assets/garamondno8/assets/garamondNo8-Regular.otf HTTP/1.1" 404 - 0.0009
+127.0.0.1 - - [12/Feb/2014 11:47:12] "GET /assets/garamondno8/assets/garamondNo8-Medium.otf HTTP/1.1" 404 - 0.0008
+127.0.0.1 - - [12/Feb/2014 11:47:12] "GET /javascripts/libs/jXHR.js HTTP/1.1" 200 - 0.0041
+127.0.0.1 - - [12/Feb/2014 11:47:12] "GET /images/rss.png?1392151054 HTTP/1.1" 200 - 0.0009
+127.0.0.1 - - [12/Feb/2014 11:47:12] "GET /assets/garamondno8/reg-webfont.woff HTTP/1.1" 200 - 0.0041
+127.0.0.1 - - [12/Feb/2014 11:47:12] "GET /assets/garamondno8/med-webfont.woff HTTP/1.1" 200 - 0.0044
+127.0.0.1 - - [12/Feb/2014 11:47:13] "GET /favicon.png HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 11:49:09] "GET / HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:49:09] "GET /stylesheets/screen.css HTTP/1.1" 200 - 0.0055
+127.0.0.1 - - [12/Feb/2014 11:49:09] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 200 - 0.0008
+127.0.0.1 - - [12/Feb/2014 11:49:09] "GET /javascripts/octopress.js HTTP/1.1" 200 - 0.0008
+127.0.0.1 - - [12/Feb/2014 11:49:09] "GET /javascripts/github.js HTTP/1.1" 200 - 0.0006
+127.0.0.1 - - [12/Feb/2014 11:49:09] "GET /images/line-tile.png?1392151054 HTTP/1.1" 200 - 0.0008
+127.0.0.1 - - [12/Feb/2014 11:49:09] "GET /images/noise.png?1392151054 HTTP/1.1" 200 - 0.0022
+127.0.0.1 - - [12/Feb/2014 11:49:09] "GET /images/code_bg.png?1392151054 HTTP/1.1" 200 - 0.0007
+127.0.0.1 - - [12/Feb/2014 11:49:09] "GET /assets/garamondno8/assets/garamondNo8-Regular.otf HTTP/1.1" 404 - 0.0052
+127.0.0.1 - - [12/Feb/2014 11:49:09] "GET /assets/garamondno8/assets/garamondNo8-Medium.otf HTTP/1.1" 404 - 0.0011
+127.0.0.1 - - [12/Feb/2014 11:49:09] "GET /javascripts/libs/jXHR.js HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:49:09] "GET /images/rss.png?1392151054 HTTP/1.1" 200 - 0.0009
+127.0.0.1 - - [12/Feb/2014 11:49:10] "GET /assets/garamondno8/reg-webfont.woff HTTP/1.1" 200 - 0.0104
+127.0.0.1 - - [12/Feb/2014 11:49:10] "GET /assets/garamondno8/med-webfont.woff HTTP/1.1" 200 - 0.0139
+127.0.0.1 - - [12/Feb/2014 11:49:10] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:52:45] "GET / HTTP/1.1" 200 - 0.0009
+127.0.0.1 - - [12/Feb/2014 11:52:45] "GET /stylesheets/screen.css HTTP/1.1" 200 - 0.0019
+127.0.0.1 - - [12/Feb/2014 11:52:45] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 200 - 0.0007
+127.0.0.1 - - [12/Feb/2014 11:52:45] "GET /javascripts/octopress.js HTTP/1.1" 200 - 0.0024
+127.0.0.1 - - [12/Feb/2014 11:52:45] "GET /javascripts/github.js HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:52:45] "GET /images/line-tile.png?1392151054 HTTP/1.1" 200 - 0.0041
+127.0.0.1 - - [12/Feb/2014 11:52:45] "GET /images/noise.png?1392151054 HTTP/1.1" 200 - 0.0024
+127.0.0.1 - - [12/Feb/2014 11:52:45] "GET /assets/garamondno8/assets/garamondNo8-Regular.otf HTTP/1.1" 404 - 0.0009
+127.0.0.1 - - [12/Feb/2014 11:52:45] "GET /assets/garamondno8/assets/garamondNo8-Medium.otf HTTP/1.1" 404 - 0.0009
+127.0.0.1 - - [12/Feb/2014 11:52:45] "GET /javascripts/libs/jXHR.js HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 11:52:45] "GET /images/rss.png?1392151054 HTTP/1.1" 200 - 0.0008
+127.0.0.1 - - [12/Feb/2014 11:52:45] "GET /assets/garamondno8/reg-webfont.woff HTTP/1.1" 200 - 0.0050
+127.0.0.1 - - [12/Feb/2014 11:52:45] "GET /assets/garamondno8/med-webfont.woff HTTP/1.1" 200 - 0.0041
+127.0.0.1 - - [12/Feb/2014 11:52:46] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:52:46] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:52:46] "GET /favicon.png HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 11:52:47] "GET / HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:52:48] "GET /stylesheets/screen.css HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:52:48] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:52:48] "GET /javascripts/modernizr-2.0.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:52:48] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:52:48] "GET /javascripts/github.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:52:48] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:52:48] "GET /javascripts/octopress.js HTTP/1.1" 304 - 0.0004
+[2014-02-12 11:52:48] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:52:48] "GET /javascripts/libs/jXHR.js HTTP/1.1" 304 - 0.0006
+[2014-02-12 11:52:48] WARN  Could not determine content-length of response body. Set content-length of the response or set Response#chunked = true
+127.0.0.1 - - [12/Feb/2014 11:52:48] "GET /favicon.png HTTP/1.1" 200 - 0.0011
+127.0.0.1 - - [12/Feb/2014 11:52:48] "GET /favicon.png HTTP/1.1" 200 - 0.0010
+127.0.0.1 - - [12/Feb/2014 11:52:49] "GET /favicon.png HTTP/1.1" 200 - 0.0011

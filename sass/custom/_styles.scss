@@ -37,7 +37,7 @@ a.davidadlink:hover span {
     text-shadow: 0 0 4px $solar-orange;
 }
 
-div, span {
+div {
     @include fontyGoodness;
     font-family: "GaramondNo8",serif;
 }
