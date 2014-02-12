@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-02-11T19:49:23-05:00</updated>
+  <updated>2014-02-11T20:10:11-05:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -16,9 +16,9 @@
   <entry>
     <title type="html"><![CDATA[Testing Workflow]]></title>
     <link href="http://davidad.github.io/blog/2014/02/11/testing-workflow/"/>
-    <updated>2014-02-11T19:47:47-05:00</updated>
+    <updated>2014-02-11T20:09:41-05:00</updated>
     <id>http://davidad.github.io/blog/2014/02/11/testing-workflow</id>
-    <content type="html"><![CDATA[<p>This is only a test. If this were a real post, there would be content.</p>
+    <content type="html"><![CDATA[<p>Nothing to see here</p>
 ]]></content>
   </entry>
   
