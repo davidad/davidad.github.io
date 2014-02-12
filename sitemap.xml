@@ -1,10 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://davidad.github.io/blog/2014/02/11/foo/</loc>
-        <lastmod>2014-02-12T10:19:13-05:00</lastmod>
-    </url>
-    <url>
         <loc>http://davidad.github.io/blog/2014/02/11/octopress-workflow/</loc>
         <lastmod>2014-02-12T10:19:31-05:00</lastmod>
     </url>
