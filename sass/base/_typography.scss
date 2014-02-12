@@ -163,6 +163,7 @@ del, s { text-decoration: line-through; }
 abbr, acronym { border-bottom: 1px dotted; cursor: help; }
 
 pre, code, tt { @extend .mono; }
+figure.code pre div.line { @extend .mono; }
 
 hr { margin-bottom: 0.2em; }
 
