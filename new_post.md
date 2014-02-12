@@ -1,1 +1,1 @@
-source/_posts/2014-02-12-deploy.markdown
+source/_posts/2014-02-12-foo.markdown
