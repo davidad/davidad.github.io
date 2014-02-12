@@ -1,4 +1,4 @@
-delay 0.25
+delay 0.5
 tell application "Google Chrome"
     
     if (count every window) = 0 then
