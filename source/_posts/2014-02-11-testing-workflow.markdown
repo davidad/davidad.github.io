@@ -1,8 +1,8 @@
 ---
 layout: post
 title: "Testing workflow"
-date: 2014-02-11 19:47:47 -0500
+date: 2014-02-11 20:09:41 -0500
 comments: true
 categories: 
 ---
-This is only a test. If this were a real post, there would be content.
+Nothing to see here
