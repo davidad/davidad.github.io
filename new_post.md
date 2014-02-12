@@ -1,1 +1,1 @@
-source/_posts/2014-02-11-test-n.markdown
+source/_posts/2014-02-11-foo.markdown

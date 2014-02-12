@@ -1,0 +1,8 @@
+---
+layout: post
+title: "foo"
+date: 2014-02-11 20:40:10 -0500
+comments: true
+categories: 
+---
+bar
