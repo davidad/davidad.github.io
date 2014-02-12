@@ -87,7 +87,7 @@ pre {
   border: 1px solid $pre-border;
   line-height: 1.45em;
   font-size: 13px;
-  margin-bottom: 2.1em;
+  margin-bottom: 1.9em;
   padding: .8em 1em;
   color: $pre-color;
   overflow: auto;
@@ -97,18 +97,22 @@ h3.filename {
   + pre { @include border-top-radius(0px); }
 }
 
+figure.code > div {
+    @include border-radius(.4em);
+}
+
 p, li {
   code {
     @extend .mono;
-    display: inline-block;
+    display: inline;
     white-space: no-wrap;
     background: #fff;
     font-size: .8em;
     line-height: 1.5em;
-    color: #555;
-    border: 1px solid #ddd;
+    color: #3a403a;
+    box-shadow: -2px 1px 4px #e8e8e8, 2px 0px 5px #ececec;
     @include border-radius(.4em);
-    padding: 0 .3em;
+    padding: .15em;
     margin: -1px 0;
   }
   pre code { font-size: 1em !important; background: none; border: none; }
@@ -239,7 +243,8 @@ figure.code {
   text-shadow: #cbcccc 0 1px 0;
   color: #474747;
   font-weight: normal;
-  margin-bottom: 0;
+  margin-bottom: -4px;
+  z-index: 2;
   @include border-top-radius(5px);
   font-family: "Helvetica Neue", Arial, "Lucida Grande", "Lucida Sans Unicode", Lucida, sans-serif;
   background: #aaaaaa image-url("code_bg.png") top repeat-x;
