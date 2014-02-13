@@ -360,11 +360,6 @@ VIM_STATUS=$?
     && sleep 0.4 && osascript ./.reload.scpt
 {% endcodeblock %}
 
-### Phew!
-
-Future blog posts will probably be somewhat less detailed, unless someone really likes
-all this info.
-
 [^1]: All of the files for theming etc. are available [here](https://github.com/davidad/davidad.github.io/tree/source). I've spent way too much time tweaking the CSS, and fixing various peeves with the way Octopress renders -- I could write an entire other blog post about that, but I probably won't.
 [^2]: Or `:x`. My muscle memory has been `:wq` for many years and I haven't yet made a serious effort to retrain.
 [^3]: One example where we don't want these actions is if the blog post was aborted. Then there's no sense in tabbing back to the preview just to show that it's gone, but if the user is looking at the preview anyway, may as well refresh it to reflect the abort.
