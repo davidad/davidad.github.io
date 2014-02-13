@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-02-13T00:09:55-05:00</updated>
+  <updated>2014-02-13T00:12:59-05:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -23,12 +23,14 @@ decided to set up a little bit of tooling for blogging about what I do here.
 The first tool I set up (following the recommendations of many Hacker Schoolers
 and alums) was <a href="http://octopress.org">Octopress</a>, a static site generator
 designed for <a href="pages.github.com">GitHub Pages</a> and implemented atop
-<a href="http://jekyllrb.com">Jekyll</a>. I followed the admirably thorough Octopress
-documentation for <a href="http://octopress.org/docs/setup/">installation</a>,
-<a href="http://octopress.org/docs/configuring/">initial configuration</a>,
-<a href="http://octopress.org/docs/deploying/github/">deployment with Github Pages</a>, and
-<a href="http://octopress.org/docs/theme/">theme customization</a><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. But I wanted even more
-convenience. So, I&rsquo;m here to introduce you to the <code>blog</code> command.</p>
+<a href="http://jekyllrb.com">Jekyll</a>. (The page you&rsquo;re reading right now is
+Octopress-generated.) I followed the admirably thorough Octopress documentation
+for <a href="http://octopress.org/docs/setup/">installation</a>, <a href="http://octopress.org/docs/configuring/">initial
+configuration</a>, <a href="http://octopress.org/docs/deploying/github/">deployment with Github
+Pages</a>, and <a href="http://octopress.org/docs/theme/">theme
+customization</a><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. But I wanted even more
+convenience. So, I&rsquo;m here to introduce you to the <code>blog</code> command (the same one
+I used to write this very post).</p>
 
 <pre><code>davidad@zayin ~/octopress&gt; blog
 Enter a title for your post:
