@@ -11,12 +11,14 @@ decided to set up a little bit of tooling for blogging about what I do here.
 The first tool I set up (following the recommendations of many Hacker Schoolers
 and alums) was [Octopress](http://octopress.org), a static site generator
 designed for [GitHub Pages](pages.github.com) and implemented atop
-[Jekyll](http://jekyllrb.com). I followed the admirably thorough Octopress
-documentation for [installation](http://octopress.org/docs/setup/),
-[initial configuration](http://octopress.org/docs/configuring/),
-[deployment with Github Pages](http://octopress.org/docs/deploying/github/), and
-[theme customization](http://octopress.org/docs/theme/)[^1]. But I wanted even more
-convenience. So, I'm here to introduce you to the `blog` command.
+[Jekyll](http://jekyllrb.com). (The page you're reading right now is
+Octopress-generated.) I followed the admirably thorough Octopress documentation
+for [installation](http://octopress.org/docs/setup/), [initial
+configuration](http://octopress.org/docs/configuring/), [deployment with Github
+Pages](http://octopress.org/docs/deploying/github/), and [theme
+customization](http://octopress.org/docs/theme/)[^1]. But I wanted even more
+convenience. So, I'm here to introduce you to the `blog` command (the same one
+I used to write this very post).
 
     davidad@zayin ~/octopress> blog
     Enter a title for your post:
