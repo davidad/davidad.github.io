@@ -103,12 +103,8 @@ article + article {
     text-decoration: none;
     color: mix($text-color, $text-color-light);
     @extend .serif;
-    @include transition(background-color .5s);
-    &:hover {
-      background: $link-color-hover;
-      text-shadow: none;
-      color: $main-bg;
-    }
+    //@include transition(background-color .5s);
+    &:hover { text-shadow: 0 0 0.5px $solar-blue; color: $solar-blue; background-color: #444; }
   }
   footer {
     @extend .sans;

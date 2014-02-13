@@ -67,6 +67,7 @@ module Jekyll
           lang: $1,
         }
       end
+      puts @options
 
       # grab lang from filename in title
       if @options[:title] =~ /\S[\S\s]*\w+\.(\w+)/ && @options[:lang].nil?
@@ -74,6 +75,7 @@ module Jekyll
       end
 
       @options = Octopress::Pygments.parse_markup(markup, @options)
+      puts @options
 
       super
     end

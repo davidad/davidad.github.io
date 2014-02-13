@@ -5,10 +5,12 @@ a:active {color: $solar-cyan}
 a:visited {color: $solar-violet}
 a {
     @media screen {
-        @include transition(color 220ms linear, text-shadow 120ms cubic-bezier(.1,.83,.83,.67))
+        @include transition(color 220ms linear, text-shadow 120ms cubic-bezier(.1,.83,.83,.67), background-color 200ms linear)
     }
 }
 a:hover {text-shadow: 0 0 0.22em $solar-blue;}
+.gist .gist-file .gist-meta a:hover { text-shadow: none; color: $solar-blue; }
+.gist .gist-file .gist-data { background: none !important; }
 aside.sidebar, nav, footer { a:hover {text-shadow: none;} }
 a.davidadlink {
     background: $base02;
@@ -54,3 +56,4 @@ p {
 aside.sidebar p {
     text-align: left;
 }
+

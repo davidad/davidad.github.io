@@ -24,20 +24,21 @@ I used to write this very post).
     Enter a title for your post:
 
 `blog` is a `bash` script, pretty specific to my own setup (vim, chrome, OSX),
-but it could be adapted to other environments. `blog` can create a post using
-Octopress' `new_post[]` Rake target (and you can specify a title on the command
-line if you want), then it opens `vim` in sort of `git commit`-ish fashion, with
-your cursor on the last line ready to press `o` and start typing your post, and
-with magical deployment when you `:wq`[^2]. It also implements `blog deploy`
-(runs both generate and deploy), `blog delete`, and editing existing posts. Most
-importantly, whenever editing the script sets up a keybinding for `C-g` that
-saves your draft post and refreshes the local preview in a Chrome window. It
-does this even if you don't have a tab open to refresh, but it also won't open a
-new one if you do. And it keeps your `vim` window in the foreground. How does
-this work?  You might expect that Chrome has a nice command-line remote
-interface for exactly this sort of thing. Sadly, that is not the case. However,
-Apple has had the foresight to allow command-driven automation of actions which
-can typically only be carried out graphically.  Sadly again, that mechanism is
+but it could be adapted to other environments. <!-- more --> `blog` can create a
+post using Octopress' `new_post[]` Rake target (and you can specify a title on
+the command line if you want), then it opens `vim` in sort of `git commit`-ish
+fashion, with your cursor on the last line ready to press `o` and start typing
+your post, and with magical deployment when you `:wq`[^2]. It also implements
+`blog deploy` (runs both generate and deploy), `blog delete`, and editing
+existing posts. Most importantly, whenever editing the script sets up a
+keybinding for `C-g` that saves your draft post and refreshes the local preview
+in a Chrome window. It does this even if you don't have a tab open to refresh,
+but it also won't open a new one if you do. And it keeps your `vim` window in
+the foreground. How does this work?  You might expect that Chrome has a nice
+command-line remote interface for exactly this sort of thing. Sadly, that is not
+the case. However, Apple has had the foresight to allow command-driven
+automation of actions which can typically only be carried out graphically.
+Sadly again, that mechanism is
 [**AppleScript**](http://en.wikipedia.org/wiki/AppleScript), a historical relic
 of a programming language.
 
@@ -268,6 +269,96 @@ Once `vim` exits, we capture its return code with `$?`. Then we check if the
 file has actually been saved. Either it has, _or_ (`||`) the status really ought
 to be nonzero. If the status is still `0`, then we do one final preview and
 shift into deploy mode. Otherwise, we remove the file that `new_post.md` points to, remove `new_post.md` itself, and reload[^6].
+
+### Putting it all together
+
+{% codeblock lang:bash /usr/bin/blog https://gist.github.com/davidad/8981964 link-text:gist %}
+#!/bin/bash
+
+ORIGDIR=`pwd | sed 's/\ /\\ /g'`
+cd ~/octopress
+
+URL="http://davidad.github.io/"
+
+function wrs() {
+    if [[ $2 = "y" ]]; then
+        L1="set theWindow's active tab index to theTabIndex"
+        L2="tell window 1 to make new tab with properties {URL:\"$1\"}"
+    else
+        L1=""
+        L2=""
+    fi
+    cat >.reload.scpt <<EOF
+delay 0.8
+tell application "Google Chrome"
+    
+    if (count every window) = 0 then
+        make new window
+    end if
+    
+    set found to false
+    set theTabIndex to -1
+    repeat with theWindow in every window
+        set theTabIndex to 0
+        repeat with theTab in every tab of theWindow
+            set theTabIndex to theTabIndex + 1
+            if theTab's URL contains "$1" then
+                set found to true
+                exit
+            end if
+        end repeat
+        
+        if found then
+            exit repeat
+        end if
+    end repeat
+    
+    if found then
+        tell theTab to reload
+        $L1
+    else
+        $L2
+    end if
+end tell
+EOF
+}
+wrs 'http://localhost:4000/' y
+
+
+if [[ $1 = delete ]]; then
+    [[ -f $2 ]] && rm -i $2 && bundle exec rake generate && exec $0 deploy
+    exit 0
+elif [[ $1 = deploy ]]; then
+    bundle exec rake deploy \
+    && wrs $URL y && sleep 3 && osascript ./.reload.scpt \
+    && rm -f ./.reload.scpt .timeref rake_preview.log \
+    && git add . \
+    && git commit -m "Site updated at `date -u +"%Y-%m-%d %H:%M:%S UTC"`" \
+    && git push
+    exit 0
+fi
+
+[[ -f $1 ]] && rm -f new_post.md && ln -s $1 new_post.md
+[[ -f $1 ]] || bundle exec rake "new_post[$1]"
+
+touch -m .timeref
+ps x | egrep 'rake|rackup|jekyll|sass|compass' | grep -v grep | awk '{ print $1 }' | xargs kill
+ps x | egrep 'rackup' | grep -v grep | awk '{ print $1 }' | xargs kill -9
+sleep 0.15
+bundle exec rake preview < /dev/zero > rake_preview.log 2>&1 &
+sleep 0.3
+osascript ./.reload.scpt
+
+vim -c 'set tw=80' -c 'map <C-G> :w<CR>:!osascript ./.reload.scpt<CR><CR>' \
+    -c "cd $ORIGDIR" + new_post.md 
+VIM_STATUS=$?
+[[ `readlink new_post.md` -nt .timeref ]] || VIM_STATUS=1
+[ $VIM_STATUS -eq 0 ] && osascript ./.reload.scpt && exec $0 deploy && exit 0
+[ $VIM_STATUS -ne 0 ] && wrs 'http://localhost:4000/' n \
+    && [ -f new_post.md ] && rm -i `readlink new_post.md` \
+    && git rm --ignore-unmatch new_post.md \
+    && sleep 0.4 && osascript ./.reload.scpt
+{% endcodeblock %}
 
 ### Phew!
 
