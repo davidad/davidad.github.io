@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-02-13T00:12:59-05:00</updated>
+  <updated>2014-02-13T16:01:54-05:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -37,20 +37,21 @@ Enter a title for your post:
 </code></pre>
 
 <p><code>blog</code> is a <code>bash</code> script, pretty specific to my own setup (vim, chrome, OSX),
-but it could be adapted to other environments. <code>blog</code> can create a post using
-Octopress' <code>new_post[]</code> Rake target (and you can specify a title on the command
-line if you want), then it opens <code>vim</code> in sort of <code>git commit</code>-ish fashion, with
-your cursor on the last line ready to press <code>o</code> and start typing your post, and
-with magical deployment when you <code>:wq</code><sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>. It also implements <code>blog deploy</code>
-(runs both generate and deploy), <code>blog delete</code>, and editing existing posts. Most
-importantly, whenever editing the script sets up a keybinding for <code>C-g</code> that
-saves your draft post and refreshes the local preview in a Chrome window. It
-does this even if you don&rsquo;t have a tab open to refresh, but it also won&rsquo;t open a
-new one if you do. And it keeps your <code>vim</code> window in the foreground. How does
-this work?  You might expect that Chrome has a nice command-line remote
-interface for exactly this sort of thing. Sadly, that is not the case. However,
-Apple has had the foresight to allow command-driven automation of actions which
-can typically only be carried out graphically.  Sadly again, that mechanism is
+but it could be adapted to other environments. <!-- more --> <code>blog</code> can create a
+post using Octopress' <code>new_post[]</code> Rake target (and you can specify a title on
+the command line if you want), then it opens <code>vim</code> in sort of <code>git commit</code>-ish
+fashion, with your cursor on the last line ready to press <code>o</code> and start typing
+your post, and with magical deployment when you <code>:wq</code><sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>. It also implements
+<code>blog deploy</code> (runs both generate and deploy), <code>blog delete</code>, and editing
+existing posts. Most importantly, whenever editing the script sets up a
+keybinding for <code>C-g</code> that saves your draft post and refreshes the local preview
+in a Chrome window. It does this even if you don&rsquo;t have a tab open to refresh,
+but it also won&rsquo;t open a new one if you do. And it keeps your <code>vim</code> window in
+the foreground. How does this work?  You might expect that Chrome has a nice
+command-line remote interface for exactly this sort of thing. Sadly, that is not
+the case. However, Apple has had the foresight to allow command-driven
+automation of actions which can typically only be carried out graphically.
+Sadly again, that mechanism is
 <a href="http://en.wikipedia.org/wiki/AppleScript"><strong>AppleScript</strong></a>, a historical relic
 of a programming language.</p>
 
@@ -267,6 +268,87 @@ forcing a normal-mode mapping of <code>C-g</code> to the reload script!</p>
 file has actually been saved. Either it has, <em>or</em> (<code>||</code>) the status really ought
 to be nonzero. If the status is still <code>0</code>, then we do one final preview and
 shift into deploy mode. Otherwise, we remove the file that <code>new_post.md</code> points to, remove <code>new_post.md</code> itself, and reload<sup id="fnref:6"><a href="#fn:6" rel="footnote">6</a></sup>.</p>
+
+<h3>Putting it all together</h3>
+
+<p><figure class='code'><figcaption>/usr/bin/blog<a href='https://gist.github.com/davidad/8981964'>gist</a></figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div><div data-line='14' class='line-number'></div><div data-line='15' class='line-number'></div><div data-line='16' class='line-number'></div><div data-line='17' class='line-number'></div><div data-line='18' class='line-number'></div><div data-line='19' class='line-number'></div><div data-line='20' class='line-number'></div><div data-line='21' class='line-number'></div><div data-line='22' class='line-number'></div><div data-line='23' class='line-number'></div><div data-line='24' class='line-number'></div><div data-line='25' class='line-number'></div><div data-line='26' class='line-number'></div><div data-line='27' class='line-number'></div><div data-line='28' class='line-number'></div><div data-line='29' class='line-number'></div><div data-line='30' class='line-number'></div><div data-line='31' class='line-number'></div><div data-line='32' class='line-number'></div><div data-line='33' class='line-number'></div><div data-line='34' class='line-number'></div><div data-line='35' class='line-number'></div><div data-line='36' class='line-number'></div><div data-line='37' class='line-number'></div><div data-line='38' class='line-number'></div><div data-line='39' class='line-number'></div><div data-line='40' class='line-number'></div><div data-line='41' class='line-number'></div><div data-line='42' class='line-number'></div><div data-line='43' class='line-number'></div><div data-line='44' class='line-number'></div><div data-line='45' class='line-number'></div><div data-line='46' class='line-number'></div><div data-line='47' class='line-number'></div><div data-line='48' class='line-number'></div><div data-line='49' class='line-number'></div><div data-line='50' class='line-number'></div><div data-line='51' class='line-number'></div><div data-line='52' class='line-number'></div><div data-line='53' class='line-number'></div><div data-line='54' class='line-number'></div><div data-line='55' class='line-number'></div><div data-line='56' class='line-number'></div><div data-line='57' class='line-number'></div><div data-line='58' class='line-number'></div><div data-line='59' class='line-number'></div><div data-line='60' class='line-number'></div><div data-line='61' class='line-number'></div><div data-line='62' class='line-number'></div><div data-line='63' class='line-number'></div><div data-line='64' class='line-number'></div><div data-line='65' class='line-number'></div><div data-line='66' class='line-number'></div><div data-line='67' class='line-number'></div><div data-line='68' class='line-number'></div><div data-line='69' class='line-number'></div><div data-line='70' class='line-number'></div><div data-line='71' class='line-number'></div><div data-line='72' class='line-number'></div><div data-line='73' class='line-number'></div><div data-line='74' class='line-number'></div><div data-line='75' class='line-number'></div><div data-line='76' class='line-number'></div><div data-line='77' class='line-number'></div><div data-line='78' class='line-number'></div><div data-line='79' class='line-number'></div><div data-line='80' class='line-number'></div><div data-line='81' class='line-number'></div><div data-line='82' class='line-number'></div><div data-line='83' class='line-number'></div><div data-line='84' class='line-number'></div><div data-line='85' class='line-number'></div></pre></td><td class='main  bash'><pre><div class='line'><code><span class="c">#!/bin/bash</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code><span class="nv">ORIGDIR</span><span class="o">=</span><span class="sb">&#x60;</span><span class="nb">pwd</span> <span class="p">|</span> sed <span class="s1">&#39;s/&#92; /&#92;&#92; /g&#39;</span><span class="sb">&#x60;</span>
+</code></div><div class='line'><code><span class="nb">cd</span> ~/octopress
+</code></div><div class='line'><code> </code></div><div class='line'><code><span class="nv">URL</span><span class="o">=</span><span class="s2">&quot;<a href="http://davidad.github.io/">http://davidad.github.io/</a>&quot;</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code><span class="k">function </span>wrs<span class="o">()</span> <span class="o">{</span>
+</code></div><div class='line'><code>    <span class="k">if</span> <span class="o">[[</span> <span class="nv">$2</span> <span class="o">=</span> <span class="s2">&quot;y&quot;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</code></div><div class='line'><code><span class="k">        </span><span class="nv">L1</span><span class="o">=</span><span class="s2">&quot;set theWindow&#39;s active tab index to theTabIndex&quot;</span>
+</code></div><div class='line'><code>        <span class="nv">L2</span><span class="o">=</span><span class="s2">&quot;tell window 1 to make new tab with properties {URL:&#92;&quot;$1&#92;&quot;}&quot;</span>
+</code></div><div class='line'><code>    <span class="k">else</span>
+</code></div><div class='line'><code><span class="k">        </span><span class="nv">L1</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+</code></div><div class='line'><code>        <span class="nv">L2</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+</code></div><div class='line'><code>    <span class="k">fi</span>
+</code></div><div class='line'><code><span class="k">    </span>cat &gt;.reload.scpt <span class="s">&lt;&lt;EOF</span>
+</code></div><div class='line'><code><span class="s">delay 0.8</span>
+</code></div><div class='line'><code><span class="s">tell application &quot;Google Chrome&quot;</span>
+</code></div><div class='line'><code><span class="s">    </span>
+</code></div><div class='line'><code><span class="s">    if (count every window) = 0 then</span>
+</code></div><div class='line'><code><span class="s">        make new window</span>
+</code></div><div class='line'><code><span class="s">    end if</span>
+</code></div><div class='line'><code><span class="s">    </span>
+</code></div><div class='line'><code><span class="s">    set found to false</span>
+</code></div><div class='line'><code><span class="s">    set theTabIndex to -1</span>
+</code></div><div class='line'><code><span class="s">    repeat with theWindow in every window</span>
+</code></div><div class='line'><code><span class="s">        set theTabIndex to 0</span>
+</code></div><div class='line'><code><span class="s">        repeat with theTab in every tab of theWindow</span>
+</code></div><div class='line'><code><span class="s">            set theTabIndex to theTabIndex + 1</span>
+</code></div><div class='line'><code><span class="s">            if theTab&#39;s URL contains &quot;$1&quot; then</span>
+</code></div><div class='line'><code><span class="s">                set found to true</span>
+</code></div><div class='line'><code><span class="s">                exit</span>
+</code></div><div class='line'><code><span class="s">            end if</span>
+</code></div><div class='line'><code><span class="s">        end repeat</span>
+</code></div><div class='line'><code><span class="s">        </span>
+</code></div><div class='line'><code><span class="s">        if found then</span>
+</code></div><div class='line'><code><span class="s">            exit repeat</span>
+</code></div><div class='line'><code><span class="s">        end if</span>
+</code></div><div class='line'><code><span class="s">    end repeat</span>
+</code></div><div class='line'><code><span class="s">    </span>
+</code></div><div class='line'><code><span class="s">    if found then</span>
+</code></div><div class='line'><code><span class="s">        tell theTab to reload</span>
+</code></div><div class='line'><code><span class="s">        $L1</span>
+</code></div><div class='line'><code><span class="s">    else</span>
+</code></div><div class='line'><code><span class="s">        $L2</span>
+</code></div><div class='line'><code><span class="s">    end if</span>
+</code></div><div class='line'><code><span class="s">end tell</span>
+</code></div><div class='line'><code><span class="s">EOF</span>
+</code></div><div class='line'><code><span class="o">}</span>
+</code></div><div class='line'><code>wrs <span class="s1">&#39;<a href="http://localhost:4000/">http://localhost:4000/</a>&#39;</span> y
+</code></div><div class='line'><code> </code></div><div class='line'><code> </code></div><div class='line'><code><span class="k">if</span> <span class="o">[[</span> <span class="nv">$1</span> <span class="o">=</span> delete <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</code></div><div class='line'><code>    <span class="o">[[</span> -f <span class="nv">$2</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> rm -i <span class="nv">$2</span> <span class="o">&amp;&amp;</span> bundle <span class="nb">exec </span>rake generate <span class="o">&amp;&amp;</span> <span class="nb">exec</span> <span class="nv">$0</span> deploy
+</code></div><div class='line'><code>    <span class="nb">exit </span>0
+</code></div><div class='line'><code><span class="k">elif</span> <span class="o">[[</span> <span class="nv">$1</span> <span class="o">=</span> deploy <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</code></div><div class='line'><code><span class="k">    </span>bundle <span class="nb">exec </span>rake deploy <span class="se">&#92;</span>
+</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> wrs <span class="nv">$URL</span> y <span class="o">&amp;&amp;</span> sleep 3 <span class="o">&amp;&amp;</span> osascript ./.reload.scpt <span class="se">&#92;</span>
+</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> rm -f ./.reload.scpt .timeref rake_preview.log <span class="se">&#92;</span>
+</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> git add . <span class="se">&#92;</span>
+</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> git commit -m <span class="s2">&quot;Site updated at &#x60;date -u +&quot;</span>%Y-%m-%d %H:%M:%S UTC<span class="s2">&quot;&#x60;&quot;</span> <span class="se">&#92;</span>
+</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> git push
+</code></div><div class='line'><code>    <span class="nb">exit </span>0
+</code></div><div class='line'><code><span class="k">fi</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code><span class="o">[[</span> -f <span class="nv">$1</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> rm -f new_post.md <span class="o">&amp;&amp;</span> ln -s <span class="nv">$1</span> new_post.md
+</code></div><div class='line'><code><span class="o">[[</span> -f <span class="nv">$1</span> <span class="o">]]</span> <span class="o">||</span> bundle <span class="nb">exec </span>rake <span class="s2">&quot;new_post[$1]&quot;</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code>touch -m .timeref
+</code></div><div class='line'><code>ps x <span class="p">|</span> egrep <span class="s1">&#39;rake|rackup|jekyll|sass|compass&#39;</span> <span class="p">|</span> grep -v grep <span class="p">|</span> awk <span class="s1">&#39;{ print $1 }&#39;</span> <span class="p">|</span> xargs <span class="nb">kill</span>
+</code></div><div class='line'><code>ps x <span class="p">|</span> egrep <span class="s1">&#39;rackup&#39;</span> <span class="p">|</span> grep -v grep <span class="p">|</span> awk <span class="s1">&#39;{ print $1 }&#39;</span> <span class="p">|</span> xargs <span class="nb">kill</span> -9
+</code></div><div class='line'><code>sleep 0.15
+</code></div><div class='line'><code>bundle <span class="nb">exec </span>rake preview &lt; /dev/zero &gt; rake_preview.log 2&gt;<span class="p">&amp;</span>1 <span class="p">&amp;</span>
+</code></div><div class='line'><code>sleep 0.3
+</code></div><div class='line'><code>osascript ./.reload.scpt
+</code></div><div class='line'><code> </code></div><div class='line'><code>vim -c <span class="s1">&#39;set tw=80&#39;</span> -c <span class="s1">&#39;map &lt;C-G&gt; :w&lt;CR&gt;:!osascript ./.reload.scpt&lt;CR&gt;&lt;CR&gt;&#39;</span> <span class="se">&#92;</span>
+</code></div><div class='line'><code>    -c <span class="s2">&quot;cd $ORIGDIR&quot;</span> + new_post.md
+</code></div><div class='line'><code><span class="nv">VIM_STATUS</span><span class="o">=</span><span class="nv">$?</span>
+</code></div><div class='line'><code><span class="o">[[</span> <span class="sb">&#x60;</span>readlink new_post.md<span class="sb">&#x60;</span> -nt .timeref <span class="o">]]</span> <span class="o">||</span> <span class="nv">VIM_STATUS</span><span class="o">=</span>1
+</code></div><div class='line'><code><span class="o">[</span> <span class="nv">$VIM_STATUS</span> -eq 0 <span class="o">]</span> <span class="o">&amp;&amp;</span> osascript ./.reload.scpt <span class="o">&amp;&amp;</span> <span class="nb">exec</span> <span class="nv">$0</span> deploy <span class="o">&amp;&amp;</span> <span class="nb">exit </span>0
+</code></div><div class='line'><code><span class="o">[</span> <span class="nv">$VIM_STATUS</span> -ne 0 <span class="o">]</span> <span class="o">&amp;&amp;</span> wrs <span class="s1">&#39;<a href="http://localhost:4000/">http://localhost:4000/</a>&#39;</span> n <span class="se">&#92;</span>
+</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> <span class="o">[</span> -f new_post.md <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -i <span class="sb">&#x60;</span>readlink new_post.md<span class="sb">&#x60;</span> <span class="se">&#92;</span>
+</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> git rm &mdash;ignore-unmatch new_post.md <span class="se">&#92;</span>
+</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> sleep 0.4 <span class="o">&amp;&amp;</span> osascript ./.reload.scpt
+</code></div></pre></td></tr></table></div></figure></p>
 
 <h3>Phew!</h3>
 
