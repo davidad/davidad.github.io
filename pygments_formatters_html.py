@@ -30,7 +30,7 @@ _escape_html_table = {
     ord('&'): u'&amp;',
     ord('<'): u'&lt;',
     ord('>'): u'&gt;',
-    ord('"'): u'&quot;',
+#    ord('"'): u'&quot;',
 #    ord("'"): u'&#39;',
     ord('\\'): u'&#92;',
 }
