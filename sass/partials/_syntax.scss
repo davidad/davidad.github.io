@@ -1,10 +1,11 @@
 p, li {
   code {
     @extend .mono;
+    vertical-align: baseline;
     display: inline;
     white-space: no-wrap;
     background: #fff;
-    font-size: .8em;
+    font-size: .82em;
     line-height: 1.5em;
     color: #3a403a;
     box-shadow: -2px 1px 4px #e8e8e8, 2px 0px 5px #ececec;

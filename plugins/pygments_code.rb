@@ -47,7 +47,6 @@ module Octopress
         code = "<figure class='code'>#{title}#{code}</figure>"
         File.open(path, 'w') {|f| f.print(code) } unless options[:no_cache]
       end
-      puts code
       cache || code
     end
 
