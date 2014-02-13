@@ -2,18 +2,18 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://davidad.github.io/blog/2014/02/11/octopress-workflow/</loc>
-        <lastmod>2014-02-12T10:19:31-05:00</lastmod>
+        <lastmod>2014-02-13T00:09:55-05:00</lastmod>
     </url>
     <url>
-        <loc>http://davidad.github.io/blog/archives/</loc>
-        <lastmod>2014-02-12T10:19:31-05:00</lastmod>
+        <loc>http://davidad.github.io/blog/archives/blog/archives/</loc>
+        <lastmod>2014-02-13T00:09:55-05:00</lastmod>
     </url>
     <url>
         <loc>http://davidad.github.io/</loc>
-        <lastmod>2014-02-12T10:19:31-05:00</lastmod>
+        <lastmod>2014-02-13T00:09:55-05:00</lastmod>
     </url>
     <url>
         <loc>http://davidad.github.io/robots.txt</loc>
-        <lastmod>2014-02-11T15:37:34-05:00</lastmod>
+        <lastmod>2014-02-12T16:27:57-05:00</lastmod>
     </url>
 </urlset>

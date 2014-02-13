@@ -105,15 +105,266 @@ designed for <a href="pages.github.com">GitHub Pages</a> and implemented atop
 documentation for <a href="http://octopress.org/docs/setup/">installation</a>,
 <a href="http://octopress.org/docs/configuring/">initial configuration</a>,
 <a href="http://octopress.org/docs/deploying/github/">deployment with Github Pages</a>, and
-<a href="http://octopress.org/docs/theme/">theme customization</a>. But I wanted even more
+<a href="http://octopress.org/docs/theme/">theme customization</a><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. But I wanted even more
 convenience. So, I&rsquo;m here to introduce you to the <code>blog</code> command.</p>
 
-<div>
-  <pre><code class='shell-session'>davidad@zayin ~/octopress&gt; blog
-Enter a title for your post:</code></pre>
+<pre><code>davidad@zayin ~/octopress&gt; blog
+Enter a title for your post:
+</code></pre>
+
+<p><code>blog</code> is a <code>bash</code> script, pretty specific to my own setup (vim, chrome, OSX),
+but it could be adapted to other environments. <code>blog</code> can create a post using
+Octopress' <code>new_post[]</code> Rake target (and you can specify a title on the command
+line if you want), then it opens <code>vim</code> in sort of <code>git commit</code>-ish fashion, with
+your cursor on the last line ready to press <code>o</code> and start typing your post, and
+with magical deployment when you <code>:wq</code><sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>. It also implements <code>blog deploy</code>
+(runs both generate and deploy), <code>blog delete</code>, and editing existing posts. Most
+importantly, whenever editing the script sets up a keybinding for <code>C-g</code> that
+saves your draft post and refreshes the local preview in a Chrome window. It
+does this even if you don&rsquo;t have a tab open to refresh, but it also won&rsquo;t open a
+new one if you do. And it keeps your <code>vim</code> window in the foreground. How does
+this work?  You might expect that Chrome has a nice command-line remote
+interface for exactly this sort of thing. Sadly, that is not the case. However,
+Apple has had the foresight to allow command-driven automation of actions which
+can typically only be carried out graphically.  Sadly again, that mechanism is
+<a href="http://en.wikipedia.org/wiki/AppleScript"><strong>AppleScript</strong></a>, a historical relic
+of a programming language.</p>
+
+<p><figure class='code'><figcaption>Reloading a website in Chrome from AppleScript</figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div><div data-line='14' class='line-number'></div><div data-line='15' class='line-number'></div><div data-line='16' class='line-number'></div><div data-line='17' class='line-number'></div><div data-line='18' class='line-number'></div><div data-line='19' class='line-number'></div><div data-line='20' class='line-number'></div><div data-line='21' class='line-number'></div><div data-line='22' class='line-number'></div><div data-line='23' class='line-number'></div><div data-line='24' class='line-number'></div><div data-line='25' class='line-number'></div><div data-line='26' class='line-number'></div><div data-line='27' class='line-number'></div><div data-line='28' class='line-number'></div><div data-line='29' class='line-number'></div></pre></td><td class='main  applescript'><pre><div class='line'><code><span class="k">tell</span> <span class="nb">application</span> <span class="s2">&quot;Google Chrome&quot;</span>
+</code></div><div class='line'><code>    <span class="k">if</span> <span class="p">(</span><span class="nb">count</span> <span class="nb">every</span> <span class="na">window</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">then</span>
+</code></div><div class='line'><code>        <span class="nb">make</span> <span class="nb">new</span> <span class="na">window</span>
+</code></div><div class='line'><code>    <span class="k">end</span> <span class="k">if</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code>    <span class="k">set</span> <span class="nv">found</span> <span class="k">to</span> <span class="no">false</span>
+</code></div><div class='line'><code>    <span class="k">set</span> <span class="nv">theTabIndex</span> <span class="k">to</span> <span class="o">&ndash;</span><span class="mi">1</span>
+</code></div><div class='line'><code>    <span class="k">repeat</span> <span class="nv">with</span> <span class="nv">theWindow</span> <span class="k">in</span> <span class="nb">every</span> <span class="na">window</span>
+</code></div><div class='line'><code>        <span class="k">set</span> <span class="nv">theTabIndex</span> <span class="k">to</span> <span class="mi">0</span>
+</code></div><div class='line'><code>        <span class="k">repeat</span> <span class="nv">with</span> <span class="nv">theTab</span> <span class="k">in</span> <span class="nb">every</span> <span class="no">tab</span> <span class="k">of</span> <span class="nv">theWindow</span>
+</code></div><div class='line'><code>            <span class="k">set</span> <span class="nv">theTabIndex</span> <span class="k">to</span> <span class="nv">theTabIndex</span> <span class="o">+</span> <span class="mi">1</span>
+</code></div><div class='line'><code>            <span class="k">if</span> <span class="nv">theTab</span>&#39;s <span class="nv">URL</span> <span class="ow">contains</span> <span class="s2">&quot;$1&quot;</span> <span class="k">then</span>
+</code></div><div class='line'><code>                <span class="k">set</span> <span class="nv">found</span> <span class="k">to</span> <span class="no">true</span>
+</code></div><div class='line'><code>                <span class="k">exit</span>
+</code></div><div class='line'><code>            <span class="k">end</span> <span class="k">if</span>
+</code></div><div class='line'><code>        <span class="k">end</span> <span class="k">repeat</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code>        <span class="k">if</span> <span class="nv">found</span> <span class="k">then</span>
+</code></div><div class='line'><code>            <span class="k">exit</span> <span class="k">repeat</span>
+</code></div><div class='line'><code>        <span class="k">end</span> <span class="k">if</span>
+</code></div><div class='line'><code>    <span class="k">end</span> <span class="k">repeat</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code>    <span class="k">if</span> <span class="nv">found</span> <span class="k">then</span>
+</code></div><div class='line'><code>        <span class="k">tell</span> <span class="nv">theTab</span> <span class="k">to</span> <span class="nv">reload</span>
+</code></div><div class='line'><code>        <span class="err">$</span><span class="nv">L1</span>
+</code></div><div class='line'><code>    <span class="k">else</span>
+</code></div><div class='line'><code>        <span class="err">$</span><span class="nv">L2</span>
+</code></div><div class='line'><code>    <span class="k">end</span> <span class="k">if</span>
+</code></div><div class='line'><code><span class="k">end</span> <span class="k">tell</span>
+</code></div></pre></td></tr></table></div></figure></p>
+
+<p>In this snippet, <code>$1</code> is going to get replaced with the site&rsquo;s top-level URL
+(like <code>http://localhost:4000/</code> for the local preview server, or
+<code>http://davidad.github.io/</code> for the deployment). <code>$L1</code> and <code>$L2</code> are
+placeholders for two actions that we might not always <nobr>want<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>:</nobr>
+changing the current tab to the tab we just refreshed, and opening up a new tab
+if there wasn&rsquo;t already one for this site. It&rsquo;s also worth noting that this
+script will reload the first tab that  <em>contains</em> the URL &mdash; so if you have an
+open tab pointed at a particular page on the site, you won&rsquo;t lose your
+place<sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup>.</p>
+
+<p>The interface to AppleScript is the <code>osascript</code> command, which accepts an
+AppleScript file as its argument<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup>. So, the first big chunk of the <code>blog</code>
+script is dedicated to producing script files. It&rsquo;s implemented as a function
+which fills in the &ldquo;holes&rdquo; in the script described above.</p>
+
+<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div><div data-line='14' class='line-number'></div><div data-line='15' class='line-number'></div><div data-line='16' class='line-number'></div><div data-line='17' class='line-number'></div><div data-line='18' class='line-number'></div><div data-line='19' class='line-number'></div><div data-line='20' class='line-number'></div><div data-line='21' class='line-number'></div><div data-line='22' class='line-number'></div><div data-line='23' class='line-number'></div><div data-line='24' class='line-number'></div><div data-line='25' class='line-number'></div><div data-line='26' class='line-number'></div><div data-line='27' class='line-number'></div><div data-line='28' class='line-number'></div><div data-line='29' class='line-number'></div><div data-line='30' class='line-number'></div><div data-line='31' class='line-number'></div><div data-line='32' class='line-number'></div><div data-line='33' class='line-number'></div><div data-line='34' class='line-number'></div><div data-line='35' class='line-number'></div><div data-line='36' class='line-number'></div><div data-line='37' class='line-number'></div><div data-line='38' class='line-number'></div><div data-line='39' class='line-number'></div><div data-line='40' class='line-number'></div><div data-line='41' class='line-number'></div><div data-line='42' class='line-number'></div><div data-line='43' class='line-number'></div><div data-line='44' class='line-number'></div><div data-line='45' class='line-number'></div><div data-line='46' class='line-number'></div><div data-line='47' class='line-number'></div><div data-line='48' class='line-number'></div><div data-line='49' class='line-number'></div><div data-line='50' class='line-number'></div></pre></td><td class='main  bash'><pre><div class='line'><code><span class="k">function </span>wrs<span class="o">()</span> <span class="o">{</span>
+</code></div><div class='line'><code>    <span class="k">if</span> <span class="o">[[</span> <span class="nv">$2</span> <span class="o">=</span> <span class="s2">&quot;y&quot;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</code></div><div class='line'><code><span class="k">        </span><span class="nv">L1</span><span class="o">=</span><span class="s2">&quot;set theWindow&#39;s active tab index to theTabIndex&quot;</span>
+</code></div><div class='line'><code>        <span class="nv">L2</span><span class="o">=</span><span class="s2">&quot;tell window 1 to make new tab with properties {URL:&#92;&quot;$1&#92;&quot;}&quot;</span>
+</code></div><div class='line'><code>    <span class="k">else</span>
+</code></div><div class='line'><code><span class="k">        </span><span class="nv">L1</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+</code></div><div class='line'><code>        <span class="nv">L2</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+</code></div><div class='line'><code>    <span class="k">fi</span>
+</code></div><div class='line'><code><span class="k">    </span>cat &gt;.reload.scpt <span class="s">&lt;&lt;EOF</span>
+</code></div><div class='line'><code><span class="s">delay 0.9</span>
+</code></div><div class='line'><code><span class="s">tell application &quot;Google Chrome&quot;</span>
+</code></div><div class='line'><code><span class="s">    </span>
+</code></div><div class='line'><code><span class="s">    if (count every window) = 0 then</span>
+</code></div><div class='line'><code><span class="s">        make new window</span>
+</code></div><div class='line'><code><span class="s">    end if</span>
+</code></div><div class='line'><code><span class="s">    </span>
+</code></div><div class='line'><code><span class="s">    set found to false</span>
+</code></div><div class='line'><code><span class="s">    set theTabIndex to -1</span>
+</code></div><div class='line'><code><span class="s">    repeat with theWindow in every window</span>
+</code></div><div class='line'><code><span class="s">        set theTabIndex to 0</span>
+</code></div><div class='line'><code><span class="s">        repeat with theTab in every tab of theWindow</span>
+</code></div><div class='line'><code><span class="s">            set theTabIndex to theTabIndex + 1</span>
+</code></div><div class='line'><code><span class="s">            if theTab&#39;s URL contains &quot;$1&quot; then</span>
+</code></div><div class='line'><code><span class="s">                set found to true</span>
+</code></div><div class='line'><code><span class="s">                exit</span>
+</code></div><div class='line'><code><span class="s">            end if</span>
+</code></div><div class='line'><code><span class="s">        end repeat</span>
+</code></div><div class='line'><code><span class="s">        </span>
+</code></div><div class='line'><code><span class="s">        if found then</span>
+</code></div><div class='line'><code><span class="s">            exit repeat</span>
+</code></div><div class='line'><code><span class="s">        end if</span>
+</code></div><div class='line'><code><span class="s">    end repeat</span>
+</code></div><div class='line'><code><span class="s">    </span>
+</code></div><div class='line'><code><span class="s">    if found then</span>
+</code></div><div class='line'><code><span class="s">        tell theTab to reload</span>
+</code></div><div class='line'><code><span class="s">        $L1</span>
+</code></div><div class='line'><code><span class="s">    else</span>
+</code></div><div class='line'><code><span class="s">        $L2</span>
+</code></div><div class='line'><code><span class="s">    end if</span>
+</code></div><div class='line'><code><span class="s">end tell</span>
+</code></div><div class='line'><code><span class="s">EOF</span>
+</code></div><div class='line'><code><span class="o">}</span>
+</code></div><div class='line'><code>wrs <span class="s1">&#39;<a href="http://localhost:4000/">http://localhost:4000/</a>&#39;</span> y
+</code></div></pre></td></tr></table></div></figure></p>
+
+<p>The <code>delay 0.9</code> line exists to give Octopress enough time to do its thing before
+trying to reload Chrome. Octopress is pretty slow.</p>
+
+<p>In the next chunk, we handle the <code>delete</code> and <code>deploy</code> actions:</p>
+
+<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div></pre></td><td class='main  bash'><pre><div class='line'><code><span class="nv">ORIGDIR</span><span class="o">=</span><span class="sb">&#x60;</span><span class="nb">pwd</span> <span class="p">|</span> sed <span class="s1">&#39;s/&#92; /&#92;&#92; /g&#39;</span><span class="sb">&#x60;</span>
+</code></div><div class='line'><code><span class="nb">cd</span> ~/octopress
+</code></div><div class='line'><code> </code></div><div class='line'><code><span class="nv">URL</span><span class="o">=</span><span class="s2">&quot;<a href="http://davidad.github.io/">http://davidad.github.io/</a>&quot;</span>
+</code></div></pre></td></tr></table></div></figure></p>
+
+<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='53' class='line-number'></div><div data-line='54' class='line-number'></div><div data-line='55' class='line-number'></div><div data-line='56' class='line-number'></div><div data-line='57' class='line-number'></div><div data-line='58' class='line-number'></div><div data-line='59' class='line-number'></div><div data-line='60' class='line-number'></div><div data-line='61' class='line-number'></div><div data-line='62' class='line-number'></div><div data-line='63' class='line-number'></div><div data-line='64' class='line-number'></div></pre></td><td class='main  bash'><pre><div class='line'><code><span class="k">if</span> <span class="o">[[</span> <span class="nv">$1</span> <span class="o">=</span> delete <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</code></div><div class='line'><code>    <span class="o">[[</span> -f <span class="nv">$2</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> rm -i <span class="nv">$2</span> <span class="o">&amp;&amp;</span> bundle <span class="nb">exec </span>rake generate <span class="o">&amp;&amp;</span> <span class="nb">exec</span> <span class="nv">$0</span> deploy
+</code></div><div class='line'><code>    <span class="nb">exit </span>0
+</code></div><div class='line'><code><span class="k">elif</span> <span class="o">[[</span> <span class="nv">$1</span> <span class="o">=</span> deploy <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</code></div><div class='line'><code><span class="k">    </span>bundle <span class="nb">exec </span>rake deploy <span class="se">&#92;</span>
+</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> wrs <span class="nv">$URL</span> y <span class="o">&amp;&amp;</span> sleep 3 <span class="o">&amp;&amp;</span> osascript ./.reload.scpt <span class="se">&#92;</span>
+</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> rm -f ./.reload.scpt .timeref rake_preview.log <span class="se">&#92;</span>
+</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> git add . <span class="se">&#92;</span>
+</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> git commit -m <span class="s2">&quot;Site updated at &#x60;date -u +&quot;</span>%Y-%m-%d %H:%M:%S UTC<span class="s2">&quot;&#x60;&quot;</span> <span class="se">&#92;</span>
+</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> git push
+</code></div><div class='line'><code>    <span class="nb">exit </span>0
+</code></div><div class='line'><code><span class="k">fi</span>
+</code></div></pre></td></tr></table></div></figure></p>
+
+<p>In the case of <code>delete</code>, we use <code>rm -i</code> to ask the user to confirm the deletion,
+and if they do, we generate and then call the script itself (<code>$0</code>) with the
+deploy action (so as not to duplicate code). The deploy action deploys the
+generated site (to GitHub Pages), writes out a refresh script for the deployed
+site, waits an extra few seconds for GitHub Pages to do its thing, and then runs
+the reload script. Finally,<code>blog</code> commits and pushes the <code>source</code> branch of the
+repository, after cleaning up its temporary files &mdash; the reload script, the log
+from Octopress' local preview server, and the time reference (which we&rsquo;ll come
+to shortly).</p>
+
+<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='66' class='line-number'></div><div data-line='67' class='line-number'></div></pre></td><td class='main  bash'><pre><div class='line'><code><span class="o">[[</span> -f <span class="nv">$1</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> rm -f new_post.md <span class="o">&amp;&amp;</span> ln -s <span class="nv">$1</span> new_post.md
+</code></div><div class='line'><code><span class="o">[[</span> -f <span class="nv">$1</span> <span class="o">]]</span> <span class="o">||</span> bundle <span class="nb">exec </span>rake <span class="s2">&quot;new_post[$1]&quot;</span>
+</code></div></pre></td></tr></table></div></figure></p>
+
+<p>We&rsquo;re managing a symbolic link called <code>new_post.md</code> here, which is what we&rsquo;re
+going to call <code>vim</code> on. If a filename is specified, we point the link directly
+at that file. Otherwise, we&rsquo;re going to call <code>rake</code> to set up the file. By
+default, <code>rake</code> won&rsquo;t give any indication to our script of what file it made, so
+we&rsquo;re going to make a tweak to the <code>Rakefile</code>:</p>
+
+<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div><div data-line='14' class='line-number'></div><div data-line='15' class='line-number'></div><div data-line='16' class='line-number'></div><div data-line='17' class='line-number'></div><div data-line='18' class='line-number'></div><div data-line='19' class='line-number'></div><div data-line='20' class='line-number'></div><div data-line='21' class='line-number'></div><div data-line='22' class='line-number'></div></pre></td><td class='main  diff'><pre><div class='line'><code><span class="gu">@@ -104,9 +89,7 @@ task :new_post, :title do |t, args|</span>
+</code></div><div class='line'><code>   raise &quot;### You haven&#39;t set anything up yet. First run &#x60;rake install&#x60; to set up an Octopress theme.&quot; unless File.directory?(source_dir)
+</code></div><div class='line'><code>   mkdir_p &quot;#{source_dir}/#{posts_dir}&quot;
+</code></div><div class='line'><code>   filename = &quot;#{source_dir}/#{posts_dir}/#{Time.now.strftime(&#39;%Y-%m-%d&#39;)}&ndash;#{title.to_url}.#{new_post_ext}&quot;
+</code></div><div class='line'><code><span class="gd">&ndash;  if File.exist?(filename)</span>
+</code></div><div class='line'><code><span class="gd">&ndash;    abort(&quot;rake aborted!&quot;) if ask(&quot;#{filename} already exists. Do you want to overwrite?&quot;, [&#39;y&#39;, &#39;n&#39;]) == &#39;n&#39;</span>
+</code></div><div class='line'><code><span class="gd">&ndash;  end</span>
+</code></div><div class='line'><code><span class="gi">+  if not (File.exist?(filename) and ask(&quot;#{filename} already exists. Do you want to overwrite?&quot;, [&#39;y&#39;, &#39;n&#39;]) == &#39;n&#39;)</span>
+</code></div><div class='line'><code>     puts &quot;Creating new post: #{filename}&quot;
+</code></div><div class='line'><code>     open(filename, &#39;w&#39;) do |post|
+</code></div><div class='line'><code>       post.puts &quot;&mdash;&ndash;&quot;
+</code></div><div class='line'><code>       post.puts &quot;layout: post&quot;
+</code></div><div class='line'><code>       post.puts &quot;title: &#92;&quot;#{title.gsub(/&amp;/,&#39;&amp;amp;&#39;)}&#92;&quot;&quot;
+</code></div><div class='line'><code>       post.puts &quot;date: #{Time.now.strftime(&#39;%Y-%m-%d %H:%M:%S %z&#39;)}&quot;
+</code></div><div class='line'><code>       post.puts &quot;comments: true&quot;
+</code></div><div class='line'><code>       post.puts &quot;categories: &quot;
+</code></div><div class='line'><code>       post.puts &quot;&mdash;&ndash;&quot;
+</code></div><div class='line'><code>     end
+</code></div><div class='line'><code><span class="gi">+  end</span>
+</code></div><div class='line'><code><span class="gi">+  system &quot;rm -f new_post.md&quot;</span>
+</code></div><div class='line'><code><span class="gi">+  system &quot;ln -s #{filename} new_post.md&quot;</span>
+</code></div><div class='line'><code> end
+</code></div></pre></td></tr></table></div></figure></p>
+
+<p>The first changeset handles the case where I don&rsquo;t want to overwrite the
+existing post, but I <em>do</em> want to proceed to edit it (and deploy the edits).
+The last two lines simply point <code>new_post.md</code> at the right spot so our script
+can call <code>vim</code> on it.  Before we call vim, though, we have to set up the
+deploy-on-save feature and the live(ish)-preview feature&hellip;</p>
+
+<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='69' class='line-number'></div></pre></td><td class='main  bash'><pre><div class='line'><code>touch -m .timeref
+</code></div></pre></td></tr></table></div></figure></p>
+
+<p><code>.timeref</code> is an empty file which keeps track of the time slightly before vim
+was launched. In a &ldquo;successful&rdquo; session, the modification time of the post file
+should be newer than <code>.timeref</code>, whereas if you <code>:q!</code> immediately, it won&rsquo;t be.
+Now, it&rsquo;s worth pointing out that the live-preview requires saving along the
+way, so <strong>if you want to abort after previewing, use <code>:cq</code></strong>, <code>vim</code>&rsquo;s command
+for exiting with a nonzero status code (so the shell script knows what&rsquo;s up).
+The script supports both mechanisms, so that if you are aborting immediately
+but forget to <code>:cq</code>, The Right Thing should happen.</p>
+
+<p><figure class='code'><figcaption>manage preview processes </figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='70' class='line-number'></div><div data-line='71' class='line-number'></div><div data-line='72' class='line-number'></div></pre></td><td class='main  bash'><pre><div class='line'><code>ps x <span class="p">|</span> egrep <span class="s1">&#39;rake|rackup|jekyll|sass|compass&#39;</span> <span class="p">|</span> grep -v grep <span class="p">|</span> awk <span class="s1">&#39;{ print $1 }&#39;</span> <span class="p">|</span> xargs <span class="nb">kill</span>
+</code></div><div class='line'><code>ps x <span class="p">|</span> egrep <span class="s1">&#39;rackup&#39;</span> <span class="p">|</span> grep -v grep <span class="p">|</span> awk <span class="s1">&#39;{ print $1 }&#39;</span> <span class="p">|</span> xargs <span class="nb">kill</span> -9
+</code></div><div class='line'><code>bundle <span class="nb">exec </span>rake preview &gt; rake_preview.log 2&gt;<span class="p">&amp;</span>1 <span class="p">&amp;</span>
+</code></div></pre></td></tr></table></div></figure></p>
+
+<p>Now we&rsquo;re going to kill off any existing preview processes (they really start
+to pile up otherwise!) and launch a new one. We also log its <code>stdout</code> and
+<code>stderr</code> so you can see what the preview process is up to if you want (<code>tail -f
+rake_preview.log</code>).</p>
+
+<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='73' class='line-number'></div><div data-line='74' class='line-number'></div></pre></td><td class='main  bash'><pre><div class='line'><code>sleep 0.3
+</code></div><div class='line'><code>osascript ./.reload.scpt
+</code></div></pre></td></tr></table></div></figure></p>
+
+<p>We give the preview process a little time to get started and then display the
+preview in the browser so the user knows what they&rsquo;re working from.</p>
+
+<p><figure class='code'><figcaption>Run vim </figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='76' class='line-number'></div><div data-line='77' class='line-number'></div><div data-line='78' class='line-number'></div><div data-line='79' class='line-number'></div><div data-line='80' class='line-number'></div><div data-line='81' class='line-number'></div><div data-line='82' class='line-number'></div><div data-line='83' class='line-number'></div><div data-line='84' class='line-number'></div></pre></td><td class='main  bash'><pre><div class='line'><code>vim -c <span class="s1">&#39;set tw=80&#39;</span> -c <span class="s1">&#39;map &lt;C-G&gt; :w&lt;CR&gt;:!osascript ./.reload.scpt&lt;CR&gt;&lt;CR&gt;&#39;</span> <span class="se">&#92;</span>
+</code></div><div class='line'><code>    -c <span class="s2">&quot;cd $ORIGDIR&quot;</span> + new_post.md
+</code></div><div class='line'><code><span class="nv">VIM_STATUS</span><span class="o">=</span><span class="nv">$?</span>
+</code></div><div class='line'><code><span class="o">[[</span> <span class="sb">&#x60;</span>readlink new_post.md<span class="sb">&#x60;</span> -nt .timeref <span class="o">]]</span> <span class="o">||</span> <span class="nv">VIM_STATUS</span><span class="o">=</span>1
+</code></div><div class='line'><code><span class="o">[</span> <span class="nv">$VIM_STATUS</span> -eq 0 <span class="o">]</span> <span class="o">&amp;&amp;</span> osascript ./.reload.scpt <span class="o">&amp;&amp;</span> <span class="nb">exec</span> <span class="nv">$0</span> deploy <span class="o">&amp;&amp;</span> <span class="nb">exit </span>0
+</code></div><div class='line'><code><span class="o">[</span> <span class="nv">$VIM_STATUS</span> -ne 0 <span class="o">]</span> <span class="o">&amp;&amp;</span> wrs <span class="s1">&#39;<a href="http://localhost:4000/">http://localhost:4000/</a>&#39;</span> n <span class="se">&#92;</span>
+</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> <span class="o">[</span> -f new_post.md <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -i <span class="sb">&#x60;</span>readlink new_post.md<span class="sb">&#x60;</span> <span class="se">&#92;</span>
+</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> git rm &mdash;ignore-unmatch new_post.md <span class="se">&#92;</span>
+</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> sleep 0.4 <span class="o">&amp;&amp;</span> osascript ./.reload.scpt
+</code></div></pre></td></tr></table></div></figure></p>
+
+<p>This is the last piece of the script, where we actually run <code>vim</code> and then take
+the appropriate action after it exits. We&rsquo;re giving <code>vim</code> a number of commands
+on the command line, including setting auto-wrapping at 80 columns (<code>tw=80</code>),
+scrolling to the bottom of the file (<code>+</code>), and changing to the directory the
+script was run from (set all the way back on line 3). Most importantly, we&rsquo;re
+forcing a normal-mode mapping of <code>C-g</code> to the reload script!</p>
+
+<p>Once <code>vim</code> exits, we capture its return code with <code>$?</code>. Then we check if the
+file has actually been saved. Either it has, <em>or</em> (<code>||</code>) the status really ought
+to be nonzero. If the status is still <code>0</code>, then we do one final preview and
+shift into deploy mode. Otherwise, we remove the file that <code>new_post.md</code> points to, remove <code>new_post.md</code> itself, and reload<sup id="fnref:6"><a href="#fn:6" rel="footnote">6</a></sup>.</p>
+
+<h3>Phew!</h3>
+
+<p>Future blog posts will probably be somewhat less detailed, unless someone really likes
+all this info.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>All of the files for theming etc. are available <a href="https://github.com/davidad/davidad.github.io/tree/source">here</a>. I&rsquo;ve spent way too much time tweaking the CSS, and fixing various peeves with the way Octopress renders &mdash; I could write an entire other blog post about that, but I probably won&rsquo;t.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>Or <code>:x</code>. My muscle memory has been <code>:wq</code> for many years and I haven&rsquo;t yet made a serious effort to retrain.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<li id="fn:3">
+<p>One example where we don&rsquo;t want these actions is if the blog post was aborted. Then there&rsquo;s no sense in tabbing back to the preview just to show that it&rsquo;s gone, but if the user is looking at the preview anyway, may as well refresh it to reflect the abort.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
+<li id="fn:4">
+<p>Chrome will even restore your scroll position once the refresh is finished.<a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
+<li id="fn:5">
+<p>You can also pass AppleScript on <code>osascript</code>&rsquo;s command line using the <code>-e</code> option, but only one line of AppleScript at a time. And since there&rsquo;s no statement separator in AppleScript, we can&rsquo;t easily transform an arbitrary script into a one-liner (like we could in <code>bash</code>, or many other more sensible languages).<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
+<li id="fn:6">
+<p>using a newly generated AppleScript which won&rsquo;t cause Chrome to switch the active tab, in case the abort was related to something else having come up.<a href="#fnref:6" rev="footnote">&#8617;</a></p></li>
+</ol>
 </div>
-
-
 
 </div>
 
