@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-02-13T16:01:54-05:00</updated>
+  <updated>2014-02-13T16:04:44-05:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -349,11 +349,6 @@ shift into deploy mode. Otherwise, we remove the file that <code>new_post.md</co
 </code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> git rm &mdash;ignore-unmatch new_post.md <span class="se">&#92;</span>
 </code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> sleep 0.4 <span class="o">&amp;&amp;</span> osascript ./.reload.scpt
 </code></div></pre></td></tr></table></div></figure></p>
-
-<h3>Phew!</h3>
-
-<p>Future blog posts will probably be somewhat less detailed, unless someone really likes
-all this info.</p>
 <div class="footnotes">
 <hr/>
 <ol>
