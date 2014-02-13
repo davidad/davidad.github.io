@@ -26,9 +26,8 @@ pre {
   @include border-radius(.4em);
   @extend .mono;
   color: $pre-color;
-  overflow: scroll;
   overflow-y: hidden;
-  overflow-x: auto;
+  overflow-x: overlay;
   border: 1px solid $pre-border;
   margin-bottom: 1.9em;
   padding: 1em .8em;
@@ -37,15 +36,21 @@ pre {
 }
 
 figure.code > div {
-    @include border-radius(.4em);
+    z-index: -1;
+    position: relative;
 }
 
 figure.code {
-  @include box-shadow(rgba(#000, .06) 0 0 10px);
   background: none;
   padding: 0;
   border: 0;
+  overflow: hidden;
   margin-bottom: 1.5em;
+  box-shadow: inset 0 0 2px 4px rgba(240,240,240,0.5), inset 0 0 4px 4px rgba(255,255,255,1);
+  @include border-radius(0.9em);
+  pointer-events: none;
+  padding: 1px;
+  table {table-layout: fixed; width: 100%;}
   pre {
     @include border-radius(0px);
     @include box-shadow(none);
@@ -54,9 +59,17 @@ figure.code {
     border: none;
     padding: 0;
     margin-bottom: 0;
-    overflow: visible;
+    overflow-x: overlay;
+    overflow-y: hidden;
     font-style: normal;
     font-weight: normal;
+  }
+  .main pre {
+      pointer-events: auto;
+      margin-bottom: -0.34em;
+      margin-right: 0.5em;
+      padding-left: 0.85em;
+      padding-top: 6.33px;
   }
   figcaption {
     position: relative;
@@ -64,9 +77,10 @@ figure.code {
     font-size: 13px;
     line-height: 2em;
     font-weight: normal;
-    margin-bottom: -4px;
+    margin-bottom: -6px;
     z-index: 2;
-    @include border-top-radius(5px);
+    @include border-top-radius(14px);
+    @include border-bottom-radius(3px);
     font-family: "Helvetica Neue", Arial, "Lucida Grande", "Lucida Sans Unicode", Lucida, sans-serif;
     background-color: #aaaaaa;
     @if lightness($base03) <= lightness(#555) {
@@ -124,10 +138,11 @@ figure.code {
 }
 
 figure .highlight {
-  border: 1px solid $pre-border;
-  background: $base03;
+  //border: 1px solid $pre-border;
+  //background: $base03;
   overflow-y: hidden;
-  overflow-x: auto;
+  overflow-x: hidden;
+  @include border-radius(14px);
 
   // allows line number to be read by screen readers but won't be selected when copying code
   [data-line]:before { content: attr(data-line); }
@@ -135,17 +150,23 @@ figure .highlight {
   td {
     line-height: 1.45em;
     font-size: 13px;
-    pre { padding: .8em; }
+    pre { padding: 0.8em 0.6em 0.8em 1.2em; }
   }
 
   .main {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
     width: 100%;
     background: $base03 $noise-bg;
   }
 
   .line-numbers {
+    @include border-top-left-radius(15px);
+    @include border-bottom-left-radius(15px);
     text-align: right;
-    pre { color: $base01; }
+    width: 3em;
+    font-weight: bold;
+    pre { color: $base00; }
 
     @if lightness($base03) > lightness(#555) {
       background: lighten($base03, 1) $noise-bg;
@@ -226,15 +247,15 @@ figure .highlight {
   div { .gd, .gd .x, .gi, .gi .x { display: inline-block; width: 100%; }}
 }
 
-$solar-scroll-bg: rgba(#fff, .15);
-$solar-scroll-thumb: rgba(#fff, .2);
+$solar-scroll-bg: rgba(#fff, .1);
+$solar-scroll-thumb: rgba(#fff, .4);
 @if lightness($base03) > lightness(#555) {
   $solar-scroll-bg: rgba(#000, .15);
   $solar-scroll-thumb: rgba(#000, .15);
 }
 
 pre, figure .highlight {
-  &::-webkit-scrollbar {  height: .5em; background: $solar-scroll-bg; }
+  &::-webkit-scrollbar {  background: $solar-scroll-bg; height:0.85em; }
   &::-webkit-scrollbar-thumb:horizontal { background: $solar-scroll-thumb;  -webkit-border-radius: 4px; border-radius: 4px }
 }
 

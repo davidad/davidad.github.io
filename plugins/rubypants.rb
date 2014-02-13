@@ -242,6 +242,7 @@ class RubyPants < String
       convert_quotes =           @options.include? :convertquotes
       do_stupefy =               @options.include? :stupefy
     end
+    do_dashes = :oldschool # how it should be  (-- davidad)
 
     # Parse the HTML
     tokens = tokenize
@@ -271,7 +272,7 @@ class RubyPants < String
         last_char = t[-1].chr
 
         unless in_pre
-          t = process_escapes t
+          #t = process_escapes t
 
           t.gsub!(/&quot;/, '"')  if convert_quotes
 
@@ -334,7 +335,7 @@ class RubyPants < String
   def process_escapes(str)
     str.gsub('\\\\', '&#92;').
       gsub('\"', '&#34;').
-      gsub("\\\'", '&#39;').
+      #gsub("\\\'", '&#39;').
       gsub('\.', '&#46;').
       gsub('\-', '&#45;').
       gsub('\`', '&#96;')

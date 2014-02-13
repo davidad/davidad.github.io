@@ -34,10 +34,6 @@ module BacktickCodeBlock
           }
         end
 
-        @options[:linenos] = true
-        @options[:marks]=[]
-        @options[:start]=1
-        @options[:end]=nil
         @options = Octopress::Pygments.parse_markup(markup, @options)
 
         begin

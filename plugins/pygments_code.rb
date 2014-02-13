@@ -47,6 +47,7 @@ module Octopress
         code = "<figure class='code'>#{title}#{code}</figure>"
         File.open(path, 'w') {|f| f.print(code) } unless options[:no_cache]
       end
+      puts code
       cache || code
     end
 
@@ -79,7 +80,7 @@ module Octopress
           classes += ' end' unless marks.include? index + 1 + start
         end
         line = line.strip.empty? ? ' ' : line
-        table += "<div class='#{classes}'>#{line}</div>"
+        table += "<div class='#{classes}'><code>#{line}</code></div>"
       end
       table +="</pre></td></tr></table></div>"
     end
@@ -141,6 +142,8 @@ module Octopress
       }
 
       defaults.each { |k,v| options[k] ||= defaults[k] }
+
+      options
     end
 
     def self.clean_markup (input)

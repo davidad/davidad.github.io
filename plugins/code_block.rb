@@ -48,9 +48,11 @@ module Jekyll
   class CodeBlock < Liquid::Block
     TitleUrlLinkText = /(\S[\S\s]*)\s+(https?:\/\/\S+|\/\S+)\s*(.+)?/i
     Title = /(\S[\S\s]*)/
+    OnlyLang = /([^\s]+)/
     def initialize(tag_name, markup, tokens)
 
       @markup = markup
+      @options = {}
       clean_markup = Octopress::Pygments.clean_markup(markup)
       if clean_markup =~ TitleUrlLinkText
         @options = {
@@ -60,6 +62,10 @@ module Jekyll
         }
       elsif clean_markup =~ Title
         @options = { title: $1 }
+      elsif markup =~ OnlyLang
+        @options = {
+          lang: $1,
+        }
       end
 
       # grab lang from filename in title
