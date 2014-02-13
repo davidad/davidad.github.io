@@ -99,7 +99,7 @@ function wrs() {
         L2=""
     fi
     cat >.reload.scpt <<EOF
-delay 0.9
+delay 1.5
 tell application "Google Chrome"
     
     if (count every window) = 0 then
@@ -135,7 +135,7 @@ EOF
 wrs 'http://localhost:4000/' y
 {% endcodeblock %}
 
-The `delay 0.9` line exists to give Octopress enough time to do its thing before
+The `delay 1.5` line exists to give Octopress enough time to do its thing before
 trying to reload Chrome. Octopress is pretty slow.
 
 In the next chunk, we handle the `delete` and `deploy` actions:
@@ -153,7 +153,7 @@ if [[ $1 = delete ]]; then
     exit 0
 elif [[ $1 = deploy ]]; then
     bundle exec rake deploy \
-    && wrs $URL y && sleep 3 && osascript ./.reload.scpt \
+    && wrs $URL y && sleep 5 && osascript ./.reload.scpt \
     && rm -f ./.reload.scpt .timeref rake_preview.log \
     && git add . \
     && git commit -m "Site updated at `date -u +"%Y-%m-%d %H:%M:%S UTC"`" \
@@ -289,7 +289,7 @@ function wrs() {
         L2=""
     fi
     cat >.reload.scpt <<EOF
-delay 0.8
+delay 1.5
 tell application "Google Chrome"
     
     if (count every window) = 0 then
@@ -330,7 +330,7 @@ if [[ $1 = delete ]]; then
     exit 0
 elif [[ $1 = deploy ]]; then
     bundle exec rake deploy \
-    && wrs $URL y && sleep 3 && osascript ./.reload.scpt \
+    && wrs $URL y && sleep 5 && osascript ./.reload.scpt \
     && rm -f ./.reload.scpt .timeref rake_preview.log \
     && git add . \
     && git commit -m "Site updated at `date -u +"%Y-%m-%d %H:%M:%S UTC"`" \
