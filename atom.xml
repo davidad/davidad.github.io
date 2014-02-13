@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-02-13T16:04:44-05:00</updated>
+  <updated>2014-02-13T16:07:45-05:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -107,7 +107,7 @@ which fills in the &ldquo;holes&rdquo; in the script described above.</p>
 </code></div><div class='line'><code>        <span class="nv">L2</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
 </code></div><div class='line'><code>    <span class="k">fi</span>
 </code></div><div class='line'><code><span class="k">    </span>cat &gt;.reload.scpt <span class="s">&lt;&lt;EOF</span>
-</code></div><div class='line'><code><span class="s">delay 0.9</span>
+</code></div><div class='line'><code><span class="s">delay 1.5</span>
 </code></div><div class='line'><code><span class="s">tell application &quot;Google Chrome&quot;</span>
 </code></div><div class='line'><code><span class="s">    </span>
 </code></div><div class='line'><code><span class="s">    if (count every window) = 0 then</span>
@@ -143,7 +143,7 @@ which fills in the &ldquo;holes&rdquo; in the script described above.</p>
 </code></div><div class='line'><code>wrs <span class="s1">&#39;<a href="http://localhost:4000/">http://localhost:4000/</a>&#39;</span> y
 </code></div></pre></td></tr></table></div></figure></p>
 
-<p>The <code>delay 0.9</code> line exists to give Octopress enough time to do its thing before
+<p>The <code>delay 1.5</code> line exists to give Octopress enough time to do its thing before
 trying to reload Chrome. Octopress is pretty slow.</p>
 
 <p>In the next chunk, we handle the <code>delete</code> and <code>deploy</code> actions:</p>
