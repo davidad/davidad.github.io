@@ -14,7 +14,8 @@ one down, two to go.
 <!-- more -->
 
 The NASM/x64 assembly code is listed below, with copious comments for your
-pleasure. Building and running this is as simple as
+pleasure. (It's 136 lines including comments; 75 lines with comments removed.)
+Building and running this is as simple as
 
     $ nasm boot.asm -o bootable.bin
     $ qemu-system-x86_64 bootable.bin
