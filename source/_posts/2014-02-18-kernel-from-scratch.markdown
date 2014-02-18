@@ -14,8 +14,12 @@ one down, two to go.
 <!-- more -->
 
 The NASM/x64 assembly code is listed below, with copious comments for your
-pleasure. (It's 136 lines including comments; 75 lines with comments removed.)
-Building and running this is as simple as
+pleasure.  It comprises 136 lines including comments; 75 with comments
+removed.  You may wish to refer to the [Intel&reg; 64 Software Developers'
+Manual (16.5MB
+PDF)](http://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-manual-325462.pdf),
+especially if you're interested in doing something similar yourself.
+Building and running is as simple as
 
     $ nasm boot.asm -o bootable.bin
     $ qemu-system-x86_64 bootable.bin
