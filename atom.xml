@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-02-18T03:32:32-05:00</updated>
+  <updated>2014-02-18T03:39:30-05:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -28,7 +28,8 @@ one down, two to go.</p>
 
 
 <p>The NASM/x64 assembly code is listed below, with copious comments for your
-pleasure. Building and running this is as simple as</p>
+pleasure. (It&rsquo;s 136 lines including comments; 75 lines with comments removed.)
+Building and running this is as simple as</p>
 
 <pre><code>$ nasm boot.asm -o bootable.bin
 $ qemu-system-x86_64 bootable.bin
