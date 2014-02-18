@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-02-13T16:07:45-05:00</updated>
+  <updated>2014-02-18T03:32:32-05:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -12,6 +12,156 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Kernel From Scratch]]></title>
+    <link href="http://davidad.github.io/blog/2014/02/18/kernel-from-scratch/"/>
+    <updated>2014-02-18T02:58:08-05:00</updated>
+    <id>http://davidad.github.io/blog/2014/02/18/kernel-from-scratch</id>
+    <content type="html"><![CDATA[<p>One of my three major goals for Hacker School was to create a bootable, 64-bit
+kernel image from scratch, using only <code>nasm</code> and my text editor. Well, folks,
+one down, two to go.</p>
+
+<p><img src="http://i.imgur.com/vnYFaFZ.png" alt="Hello, kernel!" /></p>
+
+<!-- more -->
+
+
+<p>The NASM/x64 assembly code is listed below, with copious comments for your
+pleasure. Building and running this is as simple as</p>
+
+<pre><code>$ nasm boot.asm -o bootable.bin
+$ qemu-system-x86_64 bootable.bin
+</code></pre>
+
+<p>That is, assuming that you have recent versions of
+<a href="http://www.nasm.us/pub/nasm/releasebuilds/2.11/macosx/">nasm</a> and
+<a href="http://wiki.qemu.org/Download">qemu</a> installed.</p>
+
+<p>Let&rsquo;s get to the code!</p>
+
+<p><figure class='code'><figcaption>boot.asm<a href='https://raw.github.com/davidad/mesh/ffbd5935d7218eddbaa43b991d1eaa4e277ecf86/boot.asm'>raw</a></figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div><div data-line='14' class='line-number'></div><div data-line='15' class='line-number'></div><div data-line='16' class='line-number'></div><div data-line='17' class='line-number'></div><div data-line='18' class='line-number'></div><div data-line='19' class='line-number'></div><div data-line='20' class='line-number'></div><div data-line='21' class='line-number'></div><div data-line='22' class='line-number'></div><div data-line='23' class='line-number'></div><div data-line='24' class='line-number'></div><div data-line='25' class='line-number'></div><div data-line='26' class='line-number'></div><div data-line='27' class='line-number'></div><div data-line='28' class='line-number'></div><div data-line='29' class='line-number'></div><div data-line='30' class='line-number'></div><div data-line='31' class='line-number'></div><div data-line='32' class='line-number'></div><div data-line='33' class='line-number'></div><div data-line='34' class='line-number'></div><div data-line='35' class='line-number'></div><div data-line='36' class='line-number'></div><div data-line='37' class='line-number'></div><div data-line='38' class='line-number'></div><div data-line='39' class='line-number'></div><div data-line='40' class='line-number'></div><div data-line='41' class='line-number'></div><div data-line='42' class='line-number'></div><div data-line='43' class='line-number'></div><div data-line='44' class='line-number'></div><div data-line='45' class='line-number'></div><div data-line='46' class='line-number'></div><div data-line='47' class='line-number'></div><div data-line='48' class='line-number'></div><div data-line='49' class='line-number'></div><div data-line='50' class='line-number'></div><div data-line='51' class='line-number'></div><div data-line='52' class='line-number'></div><div data-line='53' class='line-number'></div><div data-line='54' class='line-number'></div><div data-line='55' class='line-number'></div><div data-line='56' class='line-number'></div><div data-line='57' class='line-number'></div><div data-line='58' class='line-number'></div><div data-line='59' class='line-number'></div><div data-line='60' class='line-number'></div><div data-line='61' class='line-number'></div><div data-line='62' class='line-number'></div><div data-line='63' class='line-number'></div><div data-line='64' class='line-number'></div><div data-line='65' class='line-number'></div><div data-line='66' class='line-number'></div><div data-line='67' class='line-number'></div><div data-line='68' class='line-number'></div><div data-line='69' class='line-number'></div><div data-line='70' class='line-number'></div><div data-line='71' class='line-number'></div><div data-line='72' class='line-number'></div><div data-line='73' class='line-number'></div><div data-line='74' class='line-number'></div><div data-line='75' class='line-number'></div><div data-line='76' class='line-number'></div><div data-line='77' class='line-number'></div><div data-line='78' class='line-number'></div><div data-line='79' class='line-number'></div><div data-line='80' class='line-number'></div><div data-line='81' class='line-number'></div><div data-line='82' class='line-number'></div><div data-line='83' class='line-number'></div><div data-line='84' class='line-number'></div><div data-line='85' class='line-number'></div><div data-line='86' class='line-number'></div><div data-line='87' class='line-number'></div><div data-line='88' class='line-number'></div><div data-line='89' class='line-number'></div><div data-line='90' class='line-number'></div><div data-line='91' class='line-number'></div><div data-line='92' class='line-number'></div><div data-line='93' class='line-number'></div><div data-line='94' class='line-number'></div><div data-line='95' class='line-number'></div><div data-line='96' class='line-number'></div><div data-line='97' class='line-number'></div><div data-line='98' class='line-number'></div><div data-line='99' class='line-number'></div><div data-line='100' class='line-number'></div><div data-line='101' class='line-number'></div><div data-line='102' class='line-number'></div><div data-line='103' class='line-number'></div><div data-line='104' class='line-number'></div><div data-line='105' class='line-number'></div><div data-line='106' class='line-number'></div><div data-line='107' class='line-number'></div><div data-line='108' class='line-number'></div><div data-line='109' class='line-number'></div><div data-line='110' class='line-number'></div><div data-line='111' class='line-number'></div><div data-line='112' class='line-number'></div><div data-line='113' class='line-number'></div><div data-line='114' class='line-number'></div><div data-line='115' class='line-number'></div><div data-line='116' class='line-number'></div><div data-line='117' class='line-number'></div><div data-line='118' class='line-number'></div><div data-line='119' class='line-number'></div><div data-line='120' class='line-number'></div><div data-line='121' class='line-number'></div><div data-line='122' class='line-number'></div><div data-line='123' class='line-number'></div><div data-line='124' class='line-number'></div><div data-line='125' class='line-number'></div><div data-line='126' class='line-number'></div><div data-line='127' class='line-number'></div><div data-line='128' class='line-number'></div><div data-line='129' class='line-number'></div><div data-line='130' class='line-number'></div><div data-line='131' class='line-number'></div><div data-line='132' class='line-number'></div><div data-line='133' class='line-number'></div><div data-line='134' class='line-number'></div><div data-line='135' class='line-number'></div><div data-line='136' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="k">bits</span> <span class="mi">16</span>
+</code></div><div class='line'><code><span class="k">org</span> <span class="mh">0x7c00</span>
+</code></div><div class='line'><code><span class="nl">k_boot_start:</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code>  <span class="c1">; The cli instruction disables maskable external interrupts.</span>
+</code></div><div class='line'><code>  <span class="nf">cli</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code>  <span class="c1">; Fetch Control Register 0, set bit 0 to 1 (Protection Enable bit)</span>
+</code></div><div class='line'><code>  <span class="c1">; This basically enables 32-bit mode</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span> <span class="nb">cr0</span>
+</code></div><div class='line'><code>  <span class="nf">or</span> <span class="nb">al</span><span class="p">,</span> <span class="mi">1</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">cr0</span><span class="p">,</span> <span class="nb">eax</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code>  <span class="c1">; Now we have to jump into the 32-bit zone. The 0x08 is a 386-style segment</span>
+</code></div><div class='line'><code>  <span class="c1">; descriptor, which theoretically references the Global Descriptor Table,</span>
+</code></div><div class='line'><code>  <span class="c1">; though in this bare-bones bootloader we haven&#39;t even bothered to set that</span>
+</code></div><div class='line'><code>  <span class="c1">; up yet and it works anyway.</span>
+</code></div><div class='line'><code>  <span class="nf">jmp</span> <span class="mh">0x08</span><span class="p">:</span><span class="nv">k_32_bits</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code><span class="k">bits</span> <span class="mi">32</span>
+</code></div><div class='line'><code><span class="nl">k_32_bits:</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code>  <span class="c1">; Now we&#39;re going to set up the page tables for 64-bit mode.</span>
+</code></div><div class='line'><code>  <span class="c1">; Since this is a minimal example, we&#39;re just going to set up a single page.</span>
+</code></div><div class='line'><code>  <span class="c1">; The 64-bit page table uses four levels of paging,</span>
+</code></div><div class='line'><code>  <span class="c1">;    PML4E table =&gt; PDPTE table =&gt; PDE table =&gt; PTE table =&gt; physical addr</span>
+</code></div><div class='line'><code>  <span class="c1">; You don&#39;t have to use all of them, but you have to use at least the first</span>
+</code></div><div class='line'><code>  <span class="c1">; three. So we&#39;re going to set up PML4E, PDPTE, and PDE tables here, each</span>
+</code></div><div class='line'><code>  <span class="c1">; with a single entry.</span>
+</code></div><div class='line'><code><span class="cp">%define PML4E_ADDR 0x8000</span>
+</code></div><div class='line'><code><span class="cp">%define PDPTE_ADDR 0x9000</span>
+</code></div><div class='line'><code><span class="cp">%define PDE_ADDR 0xa000</span>
+</code></div><div class='line'><code>  <span class="c1">; Set up PML4 entry, which will point to PDPT entry.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="kt">dword</span> <span class="nb">eax</span><span class="p">,</span> <span class="nv">PDPTE_ADDR</span>
+</code></div><div class='line'><code>  <span class="c1">; The low 12 bits of the PML4E entry are zeroed out when it&#39;s dereferenced,</span>
+</code></div><div class='line'><code>  <span class="c1">; and used to encode metadata instead. Here we&#39;re setting the Present and</span>
+</code></div><div class='line'><code>  <span class="c1">; Read/Write bits. You might also want to set the User bit, if you want a</span>
+</code></div><div class='line'><code>  <span class="c1">; page to remain accessible in user-mode code.</span>
+</code></div><div class='line'><code>  <span class="nf">or</span> <span class="kt">dword</span> <span class="nb">eax</span><span class="p">,</span> <span class="m">0b</span><span class="mi">011</span>  <span class="c1">; Would be 0b111 to set User bit also</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="kt">dword</span> <span class="p">[</span><span class="nv">PML4E_ADDR</span><span class="p">],</span> <span class="nb">eax</span>
+</code></div><div class='line'><code>  <span class="c1">; Although we&#39;re in 32-bit mode, the table entry is 64 bits. We can just zero</span>
+</code></div><div class='line'><code>  <span class="c1">; out the upper bits in this case.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="kt">dword</span> <span class="p">[</span><span class="nv">PML4E_ADDR</span><span class="o">+</span><span class="mi">4</span><span class="p">],</span> <span class="mi">0</span>
+</code></div><div class='line'><code>  <span class="c1">; Set up PDPT entry, which will point to PD entry.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="kt">dword</span> <span class="nb">eax</span><span class="p">,</span> <span class="nv">PDE_ADDR</span>
+</code></div><div class='line'><code>  <span class="nf">or</span> <span class="kt">dword</span> <span class="nb">eax</span><span class="p">,</span> <span class="m">0b</span><span class="mi">011</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="kt">dword</span> <span class="p">[</span><span class="nv">PDPTE_ADDR</span><span class="p">],</span> <span class="nb">eax</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="kt">dword</span> <span class="p">[</span><span class="nv">PDPTE_ADDR</span><span class="o">+</span><span class="mi">4</span><span class="p">],</span> <span class="mi">0</span>
+</code></div><div class='line'><code>  <span class="c1">; Set up PD entry, which will point to the first 2MB page (0).  But we</span>
+</code></div><div class='line'><code>  <span class="c1">; need to set three bits this time, Present, Read/Write and Page Size (to</span>
+</code></div><div class='line'><code>  <span class="c1">; indicate that this is the last level of paging in use).</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="kt">dword</span> <span class="p">[</span><span class="nv">PDE_ADDR</span><span class="p">],</span> <span class="m">0b</span><span class="mi">10000011</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="kt">dword</span> <span class="p">[</span><span class="nv">PDE_ADDR</span><span class="o">+</span><span class="mi">4</span><span class="p">],</span> <span class="mi">0</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code>  <span class="c1">; Enable PGE and PAE bits of CR4 to get 64-bit paging available.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span> <span class="m">0b</span><span class="mi">10100000</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">cr4</span><span class="p">,</span> <span class="nb">eax</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code>  <span class="c1">; Set master (PML4) page table in CR3.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span> <span class="nv">PML4E_ADDR</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">cr3</span><span class="p">,</span> <span class="nb">eax</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code>  <span class="c1">; Set IA-32e Mode Enable (read: 64-bit mode enable) in the &quot;model-specific</span>
+</code></div><div class='line'><code>  <span class="c1">; register&quot; (MSR) called Extended Features Enable (EFER).</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">ecx</span><span class="p">,</span> <span class="mh">0xc0000080</span>
+</code></div><div class='line'><code>  <span class="nf">rdmsr</span> <span class="c1">; takes ecx as argument, deposits contents of MSR into eax</span>
+</code></div><div class='line'><code>  <span class="nf">or</span> <span class="nb">eax</span><span class="p">,</span> <span class="m">0b</span><span class="mi">100000000</span>
+</code></div><div class='line'><code>  <span class="nf">wrmsr</span> <span class="c1">; exactly the reverse of rdmsr</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code>  <span class="c1">; Enable PG flag of CR0 to actually turn on paging.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span> <span class="nb">cr0</span>
+</code></div><div class='line'><code>  <span class="nf">or</span> <span class="nb">eax</span><span class="p">,</span> <span class="mh">0x80000000</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">cr0</span><span class="p">,</span> <span class="nb">eax</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code>  <span class="c1">; Load Global Descriptor Table (outdated access control, but needs to be set)</span>
+</code></div><div class='line'><code>  <span class="nf">lgdt</span> <span class="p">[</span><span class="nv">gdt_hdr</span><span class="p">]</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code>  <span class="c1">; Jump into 64-bit zone.</span>
+</code></div><div class='line'><code>  <span class="nf">jmp</span> <span class="mh">0x08</span><span class="p">:</span><span class="nv">k_64_bits</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code><span class="k">bits</span> <span class="mi">64</span>
+</code></div><div class='line'><code><span class="nl">k_64_bits:</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdi</span><span class="p">,</span> <span class="mh">0xb8000</span> <span class="c1">; This is the beginning of &quot;video memory.&quot;</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdx</span><span class="p">,</span> <span class="nb">rdi</span>     <span class="c1">; We&#39;ll save that value for later, too.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rcx</span><span class="p">,</span> <span class="mi">80</span><span class="o">*</span><span class="mi">25</span>   <span class="c1">; This is how many characters are on the screen.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span> <span class="mh">0x7400</span>   <span class="c1">; Video memory uses 2 bytes per character. The high byte</span>
+</code></div><div class='line'><code>                   <span class="c1">; determines foreground and background colors. See also</span>
+</code></div><div class='line'><code><span class="c1">; <a href="http://en.wikipedia.org/wiki/List_of_8-bit_computer_hardware_palettes#CGA">http://en.wikipedia.org/wiki/List_of_8-bit_computer_hardware_palettes#CGA</a></span>
+</code></div><div class='line'><code>                   <span class="c1">; In this case, we&#39;re setting red-on-gray (MIT colors!)</span>
+</code></div><div class='line'><code>  <span class="nf">rep</span> <span class="nv">stosw</span>        <span class="c1">; Copies whatever is in ax to [rdi], rcx times.</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdi</span><span class="p">,</span> <span class="nb">rdx</span>       <span class="c1">; Restore rdi to the beginning of video memory.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rsi</span><span class="p">,</span> <span class="nv">hello</span>     <span class="c1">; Point rsi (&quot;source&quot; of string instructions) at string.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rbx</span><span class="p">,</span> <span class="nv">hello_end</span> <span class="c1">; Put end of string in rbx for comparison purposes.</span>
+</code></div><div class='line'><code><span class="nl">hello_loop:</span>
+</code></div><div class='line'><code>  <span class="nf">movsb</span>              <span class="c1">; Moves a byte from [rsi] to [rdi], increments rsi and rdi.</span>
+</code></div><div class='line'><code>  <span class="nf">inc</span> <span class="nb">rdi</span>            <span class="c1">; Increment rdi again to skip over the color-control byte.</span>
+</code></div><div class='line'><code>  <span class="nf">cmp</span> <span class="nb">rsi</span><span class="p">,</span> <span class="nb">rbx</span>       <span class="c1">; Check if we&#39;ve reached the end of the string.</span>
+</code></div><div class='line'><code>  <span class="nf">jne</span> <span class="nv">hello_loop</span>     <span class="c1">; If not, loop.</span>
+</code></div><div class='line'><code>  <span class="nf">hlt</span>                <span class="c1">; If so, halt.</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code><span class="nl">hello:</span>
+</code></div><div class='line'><code>  <span class="kd">db</span> <span class="s">&quot;Hello, kernel!&quot;</span>
+</code></div><div class='line'><code><span class="nl">hello_end:</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code><span class="c1">; Global descriptor table entry format</span>
+</code></div><div class='line'><code><span class="c1">; See Intel 64 Software Developers&#39; Manual, Vol. 3A, Figure 3-8</span>
+</code></div><div class='line'><code><span class="c1">; or <a href="http://en.wikipedia.org/wiki/Global_Descriptor_Table">http://en.wikipedia.org/wiki/Global_Descriptor_Table</a></span>
+</code></div><div class='line'><code><span class="cp">%macro GDT_ENTRY 4</span>
+</code></div><div class='line'><code>  <span class="c1">; %1 is base address, %2 is segment limit, %3 is flags, %4 is type.</span>
+</code></div><div class='line'><code>  <span class="kd">dw</span> <span class="o">%</span><span class="mi">2</span> <span class="o">&amp;</span> <span class="mh">0xffff</span>
+</code></div><div class='line'><code>  <span class="kd">dw</span> <span class="o">%</span><span class="mi">1</span> <span class="o">&amp;</span> <span class="mh">0xffff</span>
+</code></div><div class='line'><code>  <span class="kd">db</span> <span class="p">(</span><span class="o">%</span><span class="mi">1</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span>
+</code></div><div class='line'><code>  <span class="kd">db</span> <span class="o">%</span><span class="mi">4</span> <span class="o">|</span> <span class="p">((</span><span class="o">%</span><span class="mi">3</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xf0</span><span class="p">)</span>
+</code></div><div class='line'><code>  <span class="kd">db</span> <span class="p">(</span><span class="o">%</span><span class="mi">3</span> <span class="o">&amp;</span> <span class="mh">0xf0</span><span class="p">)</span> <span class="o">|</span> <span class="p">((</span><span class="o">%</span><span class="mi">2</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0x0f</span><span class="p">)</span>
+</code></div><div class='line'><code>  <span class="kd">db</span> <span class="o">%</span><span class="mi">1</span> <span class="o">&gt;&gt;</span> <span class="mi">24</span>
+</code></div><div class='line'><code><span class="cp">%endmacro</span>
+</code></div><div class='line'><code><span class="cp">%define EXECUTE_READ 0b1010</span>
+</code></div><div class='line'><code><span class="cp">%define READ_WRITE 0b0010</span>
+</code></div><div class='line'><code><span class="cp">%define RING0 0b10101001 </span><span class="c1">; Flags set: Granularity, 64-bit, Present, S; Ring=00</span>
+</code></div><div class='line'><code>                   <span class="c1">; Note: Ring is determined by bits 1 and 2 (the only &quot;00&quot;)</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code><span class="c1">; Global descriptor table (loaded by lgdt instruction)</span>
+</code></div><div class='line'><code><span class="nl">gdt_hdr:</span>
+</code></div><div class='line'><code>  <span class="kd">dw</span> <span class="nv">gdt_end</span> <span class="o">&ndash;</span> <span class="nv">gdt</span> <span class="o">&ndash;</span> <span class="mi">1</span>
+</code></div><div class='line'><code>  <span class="kd">dd</span> <span class="nv">gdt</span>
+</code></div><div class='line'><code><span class="nl">gdt:</span>
+</code></div><div class='line'><code>  <span class="nf">GDT_ENTRY</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+</code></div><div class='line'><code>  <span class="nf">GDT_ENTRY</span> <span class="mi">0</span><span class="p">,</span> <span class="mh">0xffffff</span><span class="p">,</span> <span class="nv">RING0</span><span class="p">,</span> <span class="nv">EXECUTE_READ</span>
+</code></div><div class='line'><code>  <span class="nf">GDT_ENTRY</span> <span class="mi">0</span><span class="p">,</span> <span class="mh">0xffffff</span><span class="p">,</span> <span class="nv">RING0</span><span class="p">,</span> <span class="nv">READ_WRITE</span>
+</code></div><div class='line'><code>  <span class="c1">; You&#39;d want to have entries for other rings here, if you were using them.</span>
+</code></div><div class='line'><code><span class="nl">gdt_end:</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code><span class="c1">; Very important &ndash; mark the sector as bootable.</span>
+</code></div><div class='line'><code><span class="kd">times</span> <span class="mi">512</span> <span class="o">&ndash;</span> <span class="mi">2</span> <span class="o">&ndash;</span> <span class="p">(</span><span class="kc">$</span> <span class="o">&ndash;</span> <span class="kc">$$</span><span class="p">)</span> <span class="nv">db</span> <span class="mi">0</span> <span class="c1">; zero-pad the 512-byte sector to the last 2 bytes</span>
+</code></div><div class='line'><code><span class="kd">dw</span> <span class="mh">0xaa55</span> <span class="c1">; Magic &quot;boot signature&quot;</span>
+</code></div></pre></td></tr></table></div></figure></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Octopress Workflow]]></title>
@@ -158,7 +308,7 @@ trying to reload Chrome. Octopress is pretty slow.</p>
 </code></div><div class='line'><code>    <span class="nb">exit </span>0
 </code></div><div class='line'><code><span class="k">elif</span> <span class="o">[[</span> <span class="nv">$1</span> <span class="o">=</span> deploy <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
 </code></div><div class='line'><code><span class="k">    </span>bundle <span class="nb">exec </span>rake deploy <span class="se">&#92;</span>
-</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> wrs <span class="nv">$URL</span> y <span class="o">&amp;&amp;</span> sleep 3 <span class="o">&amp;&amp;</span> osascript ./.reload.scpt <span class="se">&#92;</span>
+</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> wrs <span class="nv">$URL</span> y <span class="o">&amp;&amp;</span> sleep 5 <span class="o">&amp;&amp;</span> osascript ./.reload.scpt <span class="se">&#92;</span>
 </code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> rm -f ./.reload.scpt .timeref rake_preview.log <span class="se">&#92;</span>
 </code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> git add . <span class="se">&#92;</span>
 </code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> git commit -m <span class="s2">&quot;Site updated at &#x60;date -u +&quot;</span>%Y-%m-%d %H:%M:%S UTC<span class="s2">&quot;&#x60;&quot;</span> <span class="se">&#92;</span>
@@ -284,7 +434,7 @@ shift into deploy mode. Otherwise, we remove the file that <code>new_post.md</co
 </code></div><div class='line'><code>        <span class="nv">L2</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
 </code></div><div class='line'><code>    <span class="k">fi</span>
 </code></div><div class='line'><code><span class="k">    </span>cat &gt;.reload.scpt <span class="s">&lt;&lt;EOF</span>
-</code></div><div class='line'><code><span class="s">delay 0.8</span>
+</code></div><div class='line'><code><span class="s">delay 1.5</span>
 </code></div><div class='line'><code><span class="s">tell application &quot;Google Chrome&quot;</span>
 </code></div><div class='line'><code><span class="s">    </span>
 </code></div><div class='line'><code><span class="s">    if (count every window) = 0 then</span>
@@ -323,7 +473,7 @@ shift into deploy mode. Otherwise, we remove the file that <code>new_post.md</co
 </code></div><div class='line'><code>    <span class="nb">exit </span>0
 </code></div><div class='line'><code><span class="k">elif</span> <span class="o">[[</span> <span class="nv">$1</span> <span class="o">=</span> deploy <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
 </code></div><div class='line'><code><span class="k">    </span>bundle <span class="nb">exec </span>rake deploy <span class="se">&#92;</span>
-</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> wrs <span class="nv">$URL</span> y <span class="o">&amp;&amp;</span> sleep 3 <span class="o">&amp;&amp;</span> osascript ./.reload.scpt <span class="se">&#92;</span>
+</code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> wrs <span class="nv">$URL</span> y <span class="o">&amp;&amp;</span> sleep 5 <span class="o">&amp;&amp;</span> osascript ./.reload.scpt <span class="se">&#92;</span>
 </code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> rm -f ./.reload.scpt .timeref rake_preview.log <span class="se">&#92;</span>
 </code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> git add . <span class="se">&#92;</span>
 </code></div><div class='line'><code>    <span class="o">&amp;&amp;</span> git commit -m <span class="s2">&quot;Site updated at &#x60;date -u +&quot;</span>%Y-%m-%d %H:%M:%S UTC<span class="s2">&quot;&#x60;&quot;</span> <span class="se">&#92;</span>
