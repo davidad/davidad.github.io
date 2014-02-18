@@ -48,6 +48,10 @@ h1, h2 {
     font-family: "GaramondNo8",serif;
 }
 
+footer p.meta a.left {
+  text-align: left;
+  font-family: "GaramondNo8",serif;
+}
 
 p {
     @include stdFont;
