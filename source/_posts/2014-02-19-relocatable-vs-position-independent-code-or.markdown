@@ -28,7 +28,7 @@ memory" makes possible.
 This fact became very real to me this week as I made a [kernel from
 scratch](/blog/2014/02/18/kernel-from-scratch/): I was moderately surprised
 that I _needed_ to set up a page table, when I had always thought of virtual
-memory as a mildly advanced kernel feature. Today, I learned how "relocatable"
+memory as a somewhat advanced kernel feature. Today, I learned how "relocatable"
 and "PIC" -- terms I'd encountered in the past and never really understood --
 suddenly make sense in this context.  <!-- more -->
 
