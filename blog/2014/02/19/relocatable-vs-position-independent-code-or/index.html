@@ -197,7 +197,7 @@ and the linker gets a lot simpler.</p>
 <li id="fn:4">
 <p>unlike a stand-alone executable, which can request (almost) any virtual memory address that it wants (since it has the whole page table to itself)<a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
 <li id="fn:5">
-<p>In fact, in most operating systems, if multiple processes map the same file into their virtual memory, and none of them write to it, those processes' page tables will point each of their process-specific addresses at the <strong>same pages</strong> of physical memory.<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
+<p>In fact, in most operating systems, if multiple processes map the same file into their virtual memory, and none of them write to it, those processes' page tables will translate each of their process-specific addresses for that file to the <strong>same pages</strong> of physical memory.<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
