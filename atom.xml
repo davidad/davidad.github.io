@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-02-19T22:15:49-05:00</updated>
+  <updated>2014-02-19T23:52:30-05:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -28,7 +28,7 @@ that swapping pages to disk is merely one of the many things that &ldquo;virtual
 memory&rdquo; makes possible.</p>
 
 <blockquote><p><strong>Fact</strong>: &ldquo;Virtual memory&rdquo; is a <em>hardware</em> (CPU) mechanism, which, every
-single time memory is accessed, references a kernel-specified region of memory
+single time memory is accessed, references a kernel-specified data structure
 called a &ldquo;page table&rdquo; to arbitrarily
 <a href="http://www.catb.org/jargon/html/F/frobnicate.html">frobnicate</a> the high bits
 of the address, which is called &ldquo;translating&rdquo; from a &ldquo;linear addresss&rdquo; to a
