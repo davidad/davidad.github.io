@@ -1,1 +1,1 @@
-source/_posts/2014-02-18-kernel-from-scratch.markdown
+source/_posts/2014-02-19-relocatable-vs-position-independent-code-or.markdown

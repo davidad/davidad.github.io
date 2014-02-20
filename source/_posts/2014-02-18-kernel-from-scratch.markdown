@@ -6,7 +6,7 @@ comments: true
 categories: 
 ---
 
-One of my three major goals for Hacker School was to create a bootable, 64-bit
+One of my 3 major goals for Hacker School was to create a bootable, 64-bit
 kernel image from scratch, using only `nasm` and my text editor. Well, folks,
 one down, two to go.
 
@@ -165,7 +165,7 @@ gdt:
   ; You'd want to have entries for other rings here, if you were using them.
 gdt_end:
 
-; Very important - mark the sector as bootable.
+; Very important - mark the sector as bootable. 
 times 512 - 2 - ($ - $$) db 0 ; zero-pad the 512-byte sector to the last 2 bytes
 dw 0xaa55 ; Magic "boot signature"
 

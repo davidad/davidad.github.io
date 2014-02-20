@@ -56,6 +56,16 @@ $header-subtitle-font-family: $heading-font-family !default;
     line-height: 1.40em;
 }
 
+article ul {
+  padding-left: 1.09em;
+  padding-right: 1.09em;
+  margin-top: -10px;
+  li {
+    @include stdFont;
+    margin-bottom: 1ex;
+  }
+}
+
 .heading {
   font-family: $heading-font-family;
 }
@@ -167,26 +177,36 @@ figure.code pre div.line { @extend .mono; }
 
 hr { margin-bottom: 0.2em; }
 
+article .entry-content > hr {
+  border-top-style: none;
+  border-bottom-style: dotted;
+  margin-top: 0.75em;
+  margin-bottom: 1.0em;
+  border-bottom-color: #7e7e7e;
+  opacity: 0.7;
+}
+
 small { font-size: .8em; }
 
 big { font-size: 1.2em; }
 
 article blockquote {
   $bq-margin: 1.2em;
-  font-style: italic;
+  //font-style: italic;
   position: relative;
-  font-size: 1.2em;
-  line-height: 1.5em;
-  padding-left: 1em;
-  border-left: 4px solid rgba($text-color-light, .5);
+  //font-size: 1.2em;
+  //line-height: 1.5em;
+  padding-left: 1.7em;
+  padding-right: 1.7em;
+  //border-left: 4px solid rgba($text-color-light, .5);
   cite {
     font-style: italic;
     a { color: $text-color-light !important; word-wrap: break-word; }
     &:before { content: '\2014'; padding:{right: .3em; left: .3em;} color: $text-color-light; }
   }
   @media only screen and (min-width: 992px) {
-    padding-left: 1.5em;
-    border-left-width: 4px;
+    //padding-left: 1.5em;
+    //border-left-width: 4px;
   }
 }
 
