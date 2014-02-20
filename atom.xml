@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-02-19T23:58:08-05:00</updated>
+  <updated>2014-02-20T00:00:06-05:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -39,7 +39,7 @@ lookup is usually quite efficient!)</p></blockquote>
 <p>This fact became very real to me this week as I made a <a href="http://davidad.github.io/blog/2014/02/18/kernel-from-scratch/">kernel from
 scratch</a>: I was moderately surprised
 that I <em>needed</em> to set up a page table, when I had always thought of virtual
-memory as a mildly advanced kernel feature. Today, I learned how &ldquo;relocatable&rdquo;
+memory as a somewhat advanced kernel feature. Today, I learned how &ldquo;relocatable&rdquo;
 and &ldquo;PIC&rdquo; &mdash; terms I&rsquo;d encountered in the past and never really understood &mdash;
 suddenly make sense in this context.  <!-- more --></p>
 
