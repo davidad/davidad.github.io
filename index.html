@@ -9,8 +9,8 @@
   <meta name="author" content="davidad (David A. Dalrymple)">
 
   
-  <meta name="description" content="One of my three major goals for Hacker School was to create a bootable, 64-bit
-kernel image from scratch, using only nasm and my text editor. Well, &hellip;">
+  <meta name="description" content="Myth: &ldquo;Virtual memory&rdquo; is the mechanism that a kernel uses to make more
+memory available than is actually physically installed, by &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -72,6 +72,71 @@ kernel image from scratch, using only nasm and my text editor. Well, &hellip;">
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/02/19/relocatable-vs-position-independent-code-or/">Relocatable vs. Position-Independent Code (or, Virtual Memory Isn't Just for Swap)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-19T17:12:50-05:00" pubdate data-updated="true">Feb 19<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/02/19/relocatable-vs-position-independent-code-or/#disqus_thread"
+             data-disqus-identifier="http://davidad.github.io/blog/2014/02/19/relocatable-vs-position-independent-code-or/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><strong>Myth</strong>: &ldquo;Virtual memory&rdquo; is the mechanism that a kernel uses to make more
+memory available than is actually physically installed, by setting aside a
+disk partition for the overflow and copying pages between memory and disk as
+needed.</p></blockquote>
+
+<p>I acquired this belief very early in my programming career, but it turns out
+that swapping pages to disk is merely one of the many things that &ldquo;virtual
+memory&rdquo; makes possible.</p>
+
+<blockquote><p><strong>Fact</strong>: &ldquo;Virtual memory&rdquo; is a <em>hardware</em> (CPU) mechanism, which, every
+single time memory is accessed, references a kernel-specified region of memory
+called a &ldquo;page table&rdquo; to arbitrarily
+<a href="http://www.catb.org/jargon/html/F/frobnicate.html">frobnicate</a> the high bits
+of the address, which is called &ldquo;translating&rdquo; from a &ldquo;linear addresss&rdquo; to a
+&ldquo;physical address&rdquo;. (The page table gets cached by a <a href="http://en.wikipedia.org/wiki/Translation_lookaside_buffer">translation lookaside
+buffer</a>, so the
+lookup is usually quite efficient!)</p></blockquote>
+
+<p>This fact became very real to me this week as I made a <a href="/blog/2014/02/18/kernel-from-scratch/">kernel from
+scratch</a>: I was moderately surprised
+that I <em>needed</em> to set up a page table, when I had always thought of virtual
+memory as a mildly advanced kernel feature. Today, I learned how &ldquo;relocatable&rdquo;
+and &ldquo;PIC&rdquo; &mdash; terms I&rsquo;d encountered in the past and never really understood &mdash;
+suddenly make sense in this context.  </div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/02/19/relocatable-vs-position-independent-code-or/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/02/18/kernel-from-scratch/">Kernel From Scratch</a></h1>
     
     
@@ -98,7 +163,7 @@ kernel image from scratch, using only nasm and my text editor. Well, &hellip;">
   </header>
 
 
-  <div class="entry-content"><p>One of my three major goals for Hacker School was to create a bootable, 64-bit
+  <div class="entry-content"><p>One of my 3 major goals for Hacker School was to create a bootable, 64-bit
 kernel image from scratch, using only <code>nasm</code> and my text editor. Well, folks,
 one down, two to go.</p>
 
@@ -187,6 +252,10 @@ but it could be adapted to other environments. </div>
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/02/19/relocatable-vs-position-independent-code-or/">Relocatable vs. Position-Independent Code (or, Virtual Memory Isn't Just for Swap)</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/02/18/kernel-from-scratch/">Kernel From Scratch</a>

@@ -9,8 +9,8 @@
   <meta name="author" content="davidad (David A. Dalrymple)">
 
   
-  <meta name="description" content="One of my three major goals for Hacker School was to create a bootable, 64-bit
-kernel image from scratch, using only nasm and my text editor. Well, &hellip;">
+  <meta name="description" content="One of my 3 major goals for Hacker School was to create a bootable, 64-bit
+kernel image from scratch, using only nasm and my text editor. Well, folks &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,7 +95,7 @@ kernel image from scratch, using only nasm and my text editor. Well, &hellip;">
   </header>
 
 
-<div class="entry-content"><p>One of my three major goals for Hacker School was to create a bootable, 64-bit
+<div class="entry-content"><p>One of my 3 major goals for Hacker School was to create a bootable, 64-bit
 kernel image from scratch, using only <code>nasm</code> and my text editor. Well, folks,
 one down, two to go.</p>
 
@@ -105,7 +105,7 @@ one down, two to go.</p>
 
 
 <p>The NASM/x64 assembly code is listed below, with copious comments for your
-pleasure.  It comprises 136 lines including comments; 75 lines with comments
+pleasure.  It comprises 136 lines including comments; 75 with comments
 removed.  You may wish to refer to the <a href="http://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-manual-325462.pdf">Intel&reg; 64 Software Developers'
 Manual (16.5MB
 PDF)</a>,
@@ -238,7 +238,7 @@ $ qemu-system-x86_64 bootable.bin
 </code></div><div class='line'><code>  <span class="nf">GDT_ENTRY</span> <span class="mi">0</span><span class="p">,</span> <span class="mh">0xffffff</span><span class="p">,</span> <span class="nv">RING0</span><span class="p">,</span> <span class="nv">READ_WRITE</span>
 </code></div><div class='line'><code>  <span class="c1">; You&#39;d want to have entries for other rings here, if you were using them.</span>
 </code></div><div class='line'><code><span class="nl">gdt_end:</span>
-</code></div><div class='line'><code> </code></div><div class='line'><code><span class="c1">; Very important &ndash; mark the sector as bootable.</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code><span class="c1">; Very important &ndash; mark the sector as bootable. </span>
 </code></div><div class='line'><code><span class="kd">times</span> <span class="mi">512</span> <span class="o">&ndash;</span> <span class="mi">2</span> <span class="o">&ndash;</span> <span class="p">(</span><span class="kc">$</span> <span class="o">&ndash;</span> <span class="kc">$$</span><span class="p">)</span> <span class="nv">db</span> <span class="mi">0</span> <span class="c1">; zero-pad the 512-byte sector to the last 2 bytes</span>
 </code></div><div class='line'><code><span class="kd">dw</span> <span class="mh">0xaa55</span> <span class="c1">; Magic &quot;boot signature&quot;</span>
 </code></div></pre></td></tr></table></div></figure></p>
@@ -288,6 +288,8 @@ $ qemu-system-x86_64 bootable.bin
         <a class="basic-alignment left" href="/blog/2014/02/11/octopress-workflow/" title="Previous Post: Octopress workflow">&laquo; Octopress workflow</a>
       
       
+        <a class="basic-alignment right" href="/blog/2014/02/19/relocatable-vs-position-independent-code-or/" title="Next Post: Relocatable vs. Position-Independent Code (or, Virtual Memory isn't Just For Swap)">Relocatable vs. Position-Independent Code (or, Virtual Memory isn't Just For Swap) &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -305,6 +307,10 @@ $ qemu-system-x86_64 bootable.bin
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/02/19/relocatable-vs-position-independent-code-or/">Relocatable vs. Position-Independent Code (or, Virtual Memory Isn't Just for Swap)</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/02/18/kernel-from-scratch/">Kernel From Scratch</a>

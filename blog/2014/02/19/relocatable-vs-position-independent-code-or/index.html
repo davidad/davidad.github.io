@@ -1,0 +1,385 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Relocatable vs. Position-Independent Code (or, Virtual Memory Isn't Just for Swap) - Technical Journal</title>
+  <meta name="author" content="davidad (David A. Dalrymple)">
+
+  
+  <meta name="description" content="Myth: &ldquo;Virtual memory&rdquo; is the mechanism that a kernel uses to make more
+memory available than is actually physically installed, by &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://davidad.github.io/blog/2014/02/19/relocatable-vs-position-independent-code-or">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Technical Journal" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Technical Journal</a></h1>
+  
+    <h2>Stuff I hack</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:davidad.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Relocatable vs. Position-Independent Code (or, Virtual Memory Isn't Just for Swap)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-19T17:12:50-05:00" pubdate data-updated="true">Feb 19<span>th</span>, 2014</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://davidad.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><blockquote><p><strong>Myth</strong>: &ldquo;Virtual memory&rdquo; is the mechanism that a kernel uses to make more
+memory available than is actually physically installed, by setting aside a
+disk partition for the overflow and copying pages between memory and disk as
+needed.</p></blockquote>
+
+<p>I acquired this belief very early in my programming career, but it turns out
+that swapping pages to disk is merely one of the many things that &ldquo;virtual
+memory&rdquo; makes possible.</p>
+
+<blockquote><p><strong>Fact</strong>: &ldquo;Virtual memory&rdquo; is a <em>hardware</em> (CPU) mechanism, which, every
+single time memory is accessed, references a kernel-specified region of memory
+called a &ldquo;page table&rdquo; to arbitrarily
+<a href="http://www.catb.org/jargon/html/F/frobnicate.html">frobnicate</a> the high bits
+of the address, which is called &ldquo;translating&rdquo; from a &ldquo;linear addresss&rdquo; to a
+&ldquo;physical address&rdquo;. (The page table gets cached by a <a href="http://en.wikipedia.org/wiki/Translation_lookaside_buffer">translation lookaside
+buffer</a>, so the
+lookup is usually quite efficient!)</p></blockquote>
+
+<p>This fact became very real to me this week as I made a <a href="/blog/2014/02/18/kernel-from-scratch/">kernel from
+scratch</a>: I was moderately surprised
+that I <em>needed</em> to set up a page table, when I had always thought of virtual
+memory as a mildly advanced kernel feature. Today, I learned how &ldquo;relocatable&rdquo;
+and &ldquo;PIC&rdquo; &mdash; terms I&rsquo;d encountered in the past and never really understood &mdash;
+suddenly make sense in this context.  <!-- more --></p>
+
+<p>Here&rsquo;s another fact that surprised me: in conventional operating systems,
+<strong>every process has its own page table</strong>. The pointer <code>0x7fff8000</code> does not
+necessarily translate to the same physical address in one process as it does in
+another<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>.</p>
+
+<p>Now, let&rsquo;s talk about libraries. Libraries are code, but they don&rsquo;t run as
+processes of their own. They&rsquo;re going to wind up under someone else&rsquo;s page
+table. There&rsquo;s two ways that can happen: static linking and dynamic linking<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>.</p>
+
+<ul>
+<li>If a library is statically linked, the linker finds some place in a code
+segment of the executable to situate the library. The loader will then place
+this segment in virtual memory (wherever it&rsquo;s explicitly specified to go) when
+the executable is run.</li>
+<li>If a library is dynamically
+linked, then when the loader sets up the executable, it will invoke the dynamic
+linker to make sure that the
+required library shows up some place in the process&rsquo;s virtual memory<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>.</li>
+</ul>
+
+
+<p>Whether static or dynamic, a linked library is going to be situated in virtual
+memory somewhere that the library can&rsquo;t predict<sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup>, which is problematic for
+accessing its own memory.  Fortunately, the linker (whether static or dynamic)
+can help us out by <strong>relocating</strong> the library&rsquo;s code, so that it knows where it
+is.  Unfortunately, library writers have to help the linker out by specifying,
+in the object file, the set of instructions or initialized data that need to be
+modified to properly relocate it. As long as all that &ldquo;relocation information&rdquo;
+is present, the object file is said to be <strong>relocatable</strong>.</p>
+
+<p>On the other hand, <strong>position-independent code</strong> (<strong>PIC</strong>), as the name
+suggests, doesn&rsquo;t even need to be relocated. None of its instructions or
+initialized data encode any assumptions about the region of virtual memory the
+program will be loaded into; it figures out where it is (usually by referencing
+the instruction pointer) and makes all memory accesses based on what it finds
+out.</p>
+
+<p>So why do all that work when the linker can relocate for us?</p>
+
+<p>Here&rsquo;s the kicker. The whole motivation for dynamic linking was <strong>shared
+libraries</strong>. <strong>Shared</strong> doesn&rsquo;t just mean that multiple programs reference the
+same library file on disk. It means those processes share that library <strong>in
+physical memory</strong><sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup>.  Since every process has its own page table, the exact
+same library code winds up executing as if it were loaded into multiple,
+inconsistent virtual memory locations.  If we relocated it for one process, it
+wouldn&rsquo;t necessarily be valid for another. <strong>This is why weird things sometimes
+happen where the solution is &ldquo;recompile <code>blah</code> with <code>-fPIC</code>&rdquo;</strong>.</p>
+
+<hr />
+
+<p>Perhaps the most interesting thing about all this is that in today&rsquo;s 64-bit age,
+position-independent code may not even be necessary. The available virtual
+memory address space with 64 bits is so large that an OS may be able to afford
+blocking off a region of <em>every</em> process&rsquo;s virtual memory space to host <em>every</em>
+shared library on the system, so that their linear locations are guaranteed to
+be consistent from process to process. That means shared libraries would still
+have to be relocatable, but they wouldn&rsquo;t have to be PIC.</p>
+
+<p>On the other hand, x86_64 makes it <a href="http://eli.thegreenplace.net/2011/11/11/position-independent-code-pic-in-shared-libraries-on-x64/">significantly
+easier</a>
+to write position-independent code, by referring addresses to the current
+program counter (so no matter what virtual memory offset the code is at, it&rsquo;s
+internally consistent). If we adopt a policy that <em>all</em> libraries (static and
+dynamic) are PIC, then libraries don&rsquo;t ever have to worry about being relocated
+and the linker gets a lot simpler.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>This is one of the things that differentiates a &ldquo;process&rdquo; from a &ldquo;thread&rdquo;: <strong>threads</strong> don&rsquo;t have their own page tables.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>Just as with static typechecking and dynamic typechecking, &ldquo;static&rdquo; means that it happens before the program is invoked, and &ldquo;dynamic&rdquo; means that happens after the program is invoked.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<li id="fn:3">
+<p>The loader also needs to populate a series of &ldquo;slots&rdquo; at fixed addresses with instructions that jump into where the library is (since the executable won&rsquo;t know in advance where the library will show up, unlike with static linking). But that part of dynamic linking is a distraction for the discussion of relocatable vs. PIC.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
+<li id="fn:4">
+<p>unlike a stand-alone executable, which can request (almost) any virtual memory address that it wants (since it has the whole page table to itself)<a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
+<li id="fn:5">
+<p>In fact, in most operating systems, if multiple processes map the same file into their virtual memory, and none of them write to it, those processes' page tables will point each of their process-specific addresses at the <strong>same pages</strong> of physical memory.<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">davidad (David A. Dalrymple)</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-19T17:12:50-05:00" pubdate data-updated="true">Feb 19<span>th</span>, 2014</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://davidad.github.io/blog/2014/02/19/relocatable-vs-position-independent-code-or/" data-via="davidad" data-counturl="http://davidad.github.io/blog/2014/02/19/relocatable-vs-position-independent-code-or/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/02/18/kernel-from-scratch/" title="Previous Post: Kernel from Scratch">&laquo; Kernel from Scratch</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/02/19/relocatable-vs-position-independent-code-or/">Relocatable vs. Position-Independent Code (or, Virtual Memory Isn't Just for Swap)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/18/kernel-from-scratch/">Kernel From Scratch</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/11/octopress-workflow/">Octopress Workflow</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/davidad">@davidad</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'davidad',
+            count: 10,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+Copyright &copy; 2014 - <a href="http://davidad.org">davidad</a> (David A. Dalrymple) -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'davidad';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://davidad.github.io/blog/2014/02/19/relocatable-vs-position-independent-code-or/';
+        var disqus_url = 'http://davidad.github.io/blog/2014/02/19/relocatable-vs-position-independent-code-or/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+<a class="davidadlink" href="http://davidad.org" target="_blank"><div>a <span>davidad</span> production</div></a>
+
+
+</body>
+</html>

@@ -6,15 +6,21 @@
     </url>
     <url>
         <loc>http://davidad.github.io/blog/2014/02/18/kernel-from-scratch/</loc>
-        <lastmod>2014-02-18T12:27:30-05:00</lastmod>
+        <lastmod>2014-02-18T12:48:14-05:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://davidad.github.io/blog/2014/02/19/relocatable-vs-position-independent-code-or/
+        </loc>
+        <lastmod>2014-02-19T22:15:49-05:00</lastmod>
     </url>
     <url>
         <loc>http://davidad.github.io/blog/archives/blog/archives/</loc>
-        <lastmod>2014-02-18T12:27:30-05:00</lastmod>
+        <lastmod>2014-02-19T22:15:49-05:00</lastmod>
     </url>
     <url>
         <loc>http://davidad.github.io/</loc>
-        <lastmod>2014-02-18T12:27:30-05:00</lastmod>
+        <lastmod>2014-02-19T22:15:49-05:00</lastmod>
     </url>
     <url>
         <loc>http://davidad.github.io/robots.txt</loc>
