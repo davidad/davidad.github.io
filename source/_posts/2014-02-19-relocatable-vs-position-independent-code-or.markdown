@@ -17,7 +17,7 @@ that swapping pages to disk is merely one of the many things that "virtual
 memory" makes possible.
 
 > **Fact**: "Virtual memory" is a _hardware_ (CPU) mechanism, which, every
-> single time memory is accessed, references a kernel-specified region of memory
+> single time memory is accessed, references a kernel-specified data structure
 > called a "page table" to arbitrarily
 > [frobnicate](http://www.catb.org/jargon/html/F/frobnicate.html) the high bits
 > of the address, which is called "translating" from a "linear addresss" to a
