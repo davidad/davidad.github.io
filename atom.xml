@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-02-20T01:41:10-05:00</updated>
+  <updated>2014-02-23T16:03:14-05:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -31,7 +31,7 @@ memory&rdquo; makes possible.</p>
 single time memory is accessed, references a kernel-specified data structure
 called a &ldquo;page table&rdquo; to arbitrarily
 <a href="http://www.catb.org/jargon/html/F/frobnicate.html">frobnicate</a> the high bits
-of the address, which is called &ldquo;translating&rdquo; from a &ldquo;linear addresss&rdquo; to a
+of the address, which is called &ldquo;translating&rdquo; from a &ldquo;linear address&rdquo; to a
 &ldquo;physical address&rdquo;. (The page table gets cached by a <a href="http://en.wikipedia.org/wiki/Translation_lookaside_buffer">translation lookaside
 buffer</a>, so the
 lookup is usually quite efficient!)</p></blockquote>
