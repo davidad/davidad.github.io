@@ -20,7 +20,7 @@ memory" makes possible.
 > single time memory is accessed, references a kernel-specified data structure
 > called a "page table" to arbitrarily
 > [frobnicate](http://www.catb.org/jargon/html/F/frobnicate.html) the high bits
-> of the address, which is called "translating" from a "linear addresss" to a
+> of the address, which is called "translating" from a "linear address" to a
 > "physical address". (The page table gets cached by a [translation lookaside
 > buffer](http://en.wikipedia.org/wiki/Translation_lookaside_buffer), so the
 > lookup is usually quite efficient!)
