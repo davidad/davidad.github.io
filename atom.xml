@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-02-23T16:03:14-05:00</updated>
+  <updated>2014-02-25T13:35:53-05:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -12,6 +12,284 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Overkilling the 8-queens Problem]]></title>
+    <link href="http://davidad.github.io/blog/2014/02/25/overkilling-the-8-queens-problem/"/>
+    <updated>2014-02-25T10:52:57-05:00</updated>
+    <id>http://davidad.github.io/blog/2014/02/25/overkilling-the-8-queens-problem</id>
+    <content type="html"><![CDATA[<p>Last night, a fellow <a href="http://www.hackerschool.com">Hacker School</a>er challenged
+me to a running-time contest on the classic <a href="http://en.wikipedia.org/wiki/Eight_queens_puzzle">eight queens
+puzzle</a>. Naturally, I pulled
+up my trusty
+<a href="http://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-manual-325462.pdf">Intel® 64 manual</a>
+and got to work. It turned out to be even faster than I expected, churning out
+pretty-printed output in 15ms, which is totally dominated by the time it takes
+the terminal to display it (it takes only 2ms if redirected to a file).</p>
+
+<p><img src="http://i.imgur.com/5dOH49e.png" alt="pretty-printed output" /></p>
+
+<!-- more -->
+
+
+<p>(<a href="http://i.imgur.com/qjckCeo.png">Click here to see the full output.</a>)</p>
+
+<h2>The Approach</h2>
+
+<p>My solution method is heavily inspired by <a href="http://www.cl.cam.ac.uk/~mr10/backtrk.pdf">this
+paper</a> (which, appropriately enough,
+concerns a beautifully insane programming language called MCPL, combining
+features from ML, C, and Prolog). This paper contributes two key insights about
+solving the 8-queens problem:</p>
+
+<ul>
+<li><p>Conceptually, we can model the solution space as the leaves of a tree, where
+each internal node of the tree corresponds to a partial board (with the number
+of queens equal to the tree depth), and each parent-child link represents
+adding another queen at the row number corresponding to the depth of the
+child. Since there can only be one queen per row in a correct solution, this
+tree is a superset of the actual solution set.</p></li>
+<li><p>Instead of actually constructing the tree, we can simply keep track of the
+current traversal state. In particular, this means we keep track of the
+currently occupied columns, the occupied leftward going diagonals, and the
+occupied rightward going diagonals, as they intersect the current row. (Each
+of these three state variables is eight bits of information.) In addition, we
+can keep track of the past traversal history of each level using <del>a</del> the
+stack.</p></li>
+</ul>
+
+
+<p>If any of this is unclear, <a href="http://www.cl.cam.ac.uk/~mr10/backtrk.pdf">check out the
+paper</a>, which has a beautiful diagram
+that there is no need for me to attempt replicating.</p>
+
+<h2>The Code</h2>
+
+<p>I&rsquo;m going to go through the first<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> version of the code, which doesn&rsquo;t
+produce the pretty boards but has most of the clever tricks. (Ironically,
+adding &ldquo;pretty printing&rdquo; made my code uglier. Maybe it&rsquo;s just
+that I was up too late working on it.)</p>
+
+<p>The heart of this algorithm is the sequence that updates the state variables as
+we move from one layer into the next. This whole program is small enough that
+it&rsquo;s still practical to just set aside registers to represent most variables;
+in particular, <code>rdx</code> represents where it&rsquo;s okay to place a queen at the current
+layer (e.g. it starts out as <code>0b11111111</code>), and <code>xmm1</code> (one of those fancy
+128-bit registers that supports fancy new operations) stores the &ldquo;occupied left
+diagonals&rdquo;, &ldquo;occupied right diagonals&rdquo;, and &ldquo;occupied columns&rdquo; states, in that
+order (with &ldquo;occupied columns&rdquo; being the least significant word<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>). <code>xmm2</code>,
+<code>xmm3</code>, and <code>xmm4</code> are just being used as scratch space. Finally, <code>xmm7</code> is a
+constant <code>0xff</code>.</p>
+
+<h3>Instruction Dictionary</h3>
+
+<p>To spare you the effort of searching through the Intel® 64 manual yourself, here
+are brief descriptions of all the fancy instructions I&rsquo;m about to use.</p>
+
+<ul>
+<li><code>vpsllw</code>: <strong>Vector/Packed Shift Left (Logical) Words</strong>. <em>Separately</em> shifts
+left every word of the second argument by the number of bits represented as
+the third argument, and store the result to the first argument.</li>
+<li><code>vpsrlw</code>: <strong>Vector/Packed Shift Right (Logical) Words</strong>. <em>Separately</em> shifts
+right every word of the second argument by the number of bits represented as
+the third argument, and store the result to the first argument.</li>
+<li><code>pblendw</code>: <strong>Packed Blend Words</strong>. Using the third argument as a mask,
+selectively copy words from the second argument to the first argument.</li>
+<li><code>vpsrldq</code>: <strong>Vector/Packed Shift Right (Logical) Double Quadword</strong>. Shifts the
+entire second argument by the number of bytes specified in the third argument,
+and stores the result to the first argument.</li>
+<li><code>por</code>: <strong>Parallel OR</strong>. Bitwise ORs the first and second argument and assigns
+the result to the first argument.</li>
+<li><code>vpandn</code>: <strong>Vector/Parallel AND NOT</strong>. Inverts the second argument, ANDs the
+result with the third argument, and assigns the result of <em>that</em> to the first
+argument.</li>
+<li><code>movq</code>: <strong>Move Quadword</strong>. The standard way to move data between <code>xmm</code> registers and normal
+ registers.</li>
+</ul>
+
+
+<p>Now, let&rsquo;s take this a few lines at a time.
+<figure class='code'><figcaption>8queens.asm<a href='https://github.com/davidad/8queens/blob/1989666c45baa639f152dfc89c70635f7007d20b/8queens.asm#L25'>github</a></figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='25' class='line-number'></div><div data-line='26' class='line-number'></div><div data-line='27' class='line-number'></div><div data-line='28' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code>  <span class="nf">vpsllw</span> <span class="nv">xmm2</span><span class="p">,</span> <span class="nv">xmm1</span><span class="p">,</span> <span class="mi">1</span>      <span class="c1">; shift entire state to left, place in xmm2</span>
+</code></div><div class='line'><code>  <span class="nf">vpsrlw</span> <span class="nv">xmm3</span><span class="p">,</span> <span class="nv">xmm1</span><span class="p">,</span> <span class="mi">1</span>      <span class="c1">; shift entire state to right, place in xmm3</span>
+</code></div><div class='line'><code>  <span class="nf">pblendw</span> <span class="nv">xmm1</span><span class="p">,</span> <span class="nv">xmm2</span><span class="p">,</span> <span class="m">0b</span><span class="mi">100</span> <span class="c1">; only copy &quot;left-attacking&quot; word back from xmm2</span>
+</code></div><div class='line'><code>  <span class="nf">pblendw</span> <span class="nv">xmm1</span><span class="p">,</span> <span class="nv">xmm3</span><span class="p">,</span> <span class="m">0b</span><span class="mi">010</span> <span class="c1">; only copy &quot;right-attacking&quot; word back from xmm3</span>
+</code></div></pre></td></tr></table></div></figure></p>
+
+<p>If you&rsquo;re accustomed to C, you might think of this as functionally equivalent to
+something like <code>xmm1[2] &lt;&lt;= 1; xmm1[1] &gt;&gt;=1</code><sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>. We want the word in position 1 to
+shift right and the word in position 2 to shift left, while the word in position
+0 (occupied columns) stays put.</p>
+
+<p><figure class='code'><figcaption>8queens.asm<a href='https://github.com/davidad/8queens/blob/1989666c45baa639f152dfc89c70635f7007d20b/8queens.asm#L29'>github</a></figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='29' class='line-number'></div><div data-line='30' class='line-number'></div><div data-line='31' class='line-number'></div><div data-line='32' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code>  <span class="nf">vpsrldq</span> <span class="nv">xmm2</span><span class="p">,</span> <span class="nv">xmm1</span><span class="p">,</span> <span class="mi">4</span>     <span class="c1">; shift state right 4 <em>bytes</em>, place in xmm2</span>
+</code></div><div class='line'><code>  <span class="nf">vpsrldq</span> <span class="nv">xmm3</span><span class="p">,</span> <span class="nv">xmm1</span><span class="p">,</span> <span class="mi">2</span>     <span class="c1">; shift state right 2 bytes, place in xmm3</span>
+</code></div><div class='line'><code>  <span class="nf">por</span> <span class="nv">xmm2</span><span class="p">,</span> <span class="nv">xmm3</span>            <span class="c1">; collect bitwise ors in xmm2</span>
+</code></div><div class='line'><code>  <span class="nf">por</span> <span class="nv">xmm2</span><span class="p">,</span> <span class="nv">xmm1</span>
+</code></div></pre></td></tr></table></div></figure></p>
+
+<p>Now, we want to combine the information about which squares in the next layer
+are under attack. It doesn&rsquo;t matter from which direction &mdash; we want to make sure
+not to put a queen there. So, we shift right 2 words (= 4 bytes) and right 1 word
+(= 2 bytes) and OR them all together (accumulating into a scratch register so we
+don&rsquo;t clobber our state).</p>
+
+<p><figure class='code'><figcaption>8queens.asm<a href='https://github.com/davidad/8queens/blob/1989666c45baa639f152dfc89c70635f7007d20b/8queens.asm#L33'>github</a></figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='33' class='line-number'></div><div data-line='34' class='line-number'></div><div data-line='35' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code>  <span class="nf">vpandn</span> <span class="nv">xmm4</span><span class="p">,</span> <span class="nv">xmm2</span><span class="p">,</span> <span class="nv">xmm7</span>   <span class="c1">; invert and select low byte</span>
+</code></div><div class='line'><code>  <span class="nf">movq</span> <span class="nb">rdx</span><span class="p">,</span> <span class="nv">xmm4</span>            <span class="c1">; place in rdx</span>
+</code></div><div class='line'><code>  <span class="nf">jmp</span> <span class="nv">next_state</span>           <span class="c1">; now we&#39;re set up to iterate</span>
+</code></div></pre></td></tr></table></div></figure></p>
+
+<p>But that still contains some stuff in the upper bytes. We only want the lower
+byte. And we also want <code>1</code> bits where queens <em>should</em> be allowed, rather than
+where they&rsquo;re under attack. We can solve both problems with one <code>vpandn</code>
+instruction, which will flip all the bits, but mask out everything except the
+first byte (since <code>xmm7</code>=<code>0xff</code>).</p>
+
+<p>So, now that we&rsquo;re iterating, what happens <em>next</em>?</p>
+
+<h3>Instruction Dictionary</h3>
+
+<ul>
+<li><code>bsf</code>: <strong>Bit Scan Forward</strong>. Finds the least significant <code>1</code> bit in the second
+argument and stores the index of that bit into the first argument. If there is
+no <code>1</code> bit the second argument, the value of the first argument is undefined,
+and the zero flag (<code>ZF</code>) is set.</li>
+<li><code>btc</code>: <strong>Bit Clear</strong>. Clears the bit in the first argument with index given by
+the second argument.</li>
+<li><code>je</code>: <strong>Jump If Equal</strong>. Pretty self-explanatory, when used in conjunction
+with <code>cmp</code> (<strong>Compare</strong>).</li>
+<li><code>jz</code>: <strong>Jump If Zero</strong>. Jumps to the specified address/label if the zero flag
+(ZF) is set.</li>
+<li><code>push</code>: <strong>Push To Stack</strong>. Stores its single argument to the memory location
+pointed by <code>rsp</code>, and decrements <code>rsp</code> (usually by eight at a time, i.e., <code>rsp &lt;- rsp-8</code>).</li>
+<li><code>shl</code>: <strong>Logical Shift Left</strong> for non-<code>xmm</code> registers.</li>
+</ul>
+
+
+<p><figure class='code'><figcaption>8queens.asm<a href='https://github.com/davidad/8queens/blob/1989666c45baa639f152dfc89c70635f7007d20b/8queens.asm#L12'>github</a></figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div><div data-line='14' class='line-number'></div><div data-line='15' class='line-number'></div><div data-line='16' class='line-number'></div><div data-line='17' class='line-number'></div><div data-line='18' class='line-number'></div><div data-line='19' class='line-number'></div><div data-line='20' class='line-number'></div><div data-line='21' class='line-number'></div><div data-line='22' class='line-number'></div><div data-line='23' class='line-number'></div><div data-line='24' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="nl">next_state:</span>
+</code></div><div class='line'><code>  <span class="nf">bsf</span> <span class="nb">rcx</span><span class="p">,</span> <span class="nb">rdx</span>             <span class="c1">; find next available position in current level</span>
+</code></div><div class='line'><code>  <span class="nf">jz</span> <span class="nv">backtrack</span>             <span class="c1">; if there is no available position, we must go back</span>
+</code></div><div class='line'><code>  <span class="nf">btc</span> <span class="nb">rdx</span><span class="p">,</span> <span class="nb">rcx</span>             <span class="c1">; mark position as unavailable</span>
+</code></div><div class='line'><code>  <span class="nf">cmp</span> <span class="nb">rsp</span><span class="p">,</span> <span class="nv">r14</span>             <span class="c1">; check if we&#39;ve done 7 levels already</span>
+</code></div><div class='line'><code>  <span class="nf">je</span> <span class="nv">win</span>                   <span class="c1">; if so, we have a win state. otherwise continue</span>
+</code></div><div class='line'><code>  <span class="nf">movq</span> <span class="nv">r10</span><span class="p">,</span> <span class="nv">xmm1</span>           <span class="c1">; save current state &hellip;</span>
+</code></div><div class='line'><code>  <span class="nf">push</span> <span class="nb">rdx</span>
+</code></div><div class='line'><code>  <span class="nf">push</span> <span class="nv">r10</span>                 <span class="c1">;   &hellip; to stack</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rax</span><span class="p">,</span> <span class="nv">r15</span>             <span class="c1">; set up attack mask</span>
+</code></div><div class='line'><code>  <span class="nf">shl</span> <span class="nb">rax</span><span class="p">,</span> <span class="nb">cl</span>              <span class="c1">; shift into position</span>
+</code></div><div class='line'><code>  <span class="nf">movq</span> <span class="nv">xmm2</span><span class="p">,</span> <span class="nb">rax</span>
+</code></div><div class='line'><code>  <span class="nf">por</span> <span class="nv">xmm1</span><span class="p">,</span> <span class="nv">xmm2</span>           <span class="c1">; mark as attacking in all directions</span>
+</code></div></pre></td></tr></table></div></figure></p>
+
+<p>First we try scanning for an available position on this row &mdash; one that isn&rsquo;t
+under attack from already-placed queens, and that also hasn&rsquo;t already been
+visited. If there is none, then we have no choice but to <code>backtrack</code> (a little
+piece of code which is coming up soon). Assuming we find an available position,
+we first mark it as visited/unavailable. We then check if this is the last
+level that needs to be taken care of, by looking at the stack pointer. Since
+the stack gets deeper by 16 bytes with every level, this test<sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup> is easily set
+up at program initialization. If the test is true, then we&rsquo;ve discovered a
+solution, or &ldquo;win state&rdquo; &mdash; so we go ahead to the &ldquo;win&rdquo; code.</p>
+
+<p>If we&rsquo;ve neither succeeded nor failed, it means we just have to go another
+level down in the tree. In order to have an efficient backtracking capability,
+we store our state variables on the stack, so they can be restored when
+everything fails deeper down in the tree. Finally, we update our model of which
+squares are in danger by adding the queen we&rsquo;re currently placing as a
+column-occupier and diagonal-occupier (modifying all three state variables at
+once with the magic of <code>por</code>). Note here that <code>cl</code> is just a name for the least
+significant byte of the <code>rcx</code> register, which houses the horizontal position of
+the new queen.</p>
+
+<p>What if we have to backtrack?
+<figure class='code'><figcaption>8queens.asm<a href='https://github.com/davidad/8queens/blob/1989666c45baa639f152dfc89c70635f7007d20b/8queens.asm#L37'>github</a></figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='37' class='line-number'></div><div data-line='38' class='line-number'></div><div data-line='39' class='line-number'></div><div data-line='40' class='line-number'></div><div data-line='41' class='line-number'></div><div data-line='42' class='line-number'></div><div data-line='43' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="nl">backtrack:</span>
+</code></div><div class='line'><code>  <span class="nf">cmp</span> <span class="nb">rsp</span><span class="p">,</span> <span class="nv">r13</span>             <span class="c1">; are we done?</span>
+</code></div><div class='line'><code>  <span class="nf">je</span> <span class="nv">done</span>
+</code></div><div class='line'><code>  <span class="nf">pop</span> <span class="nv">r10</span>                  <span class="c1">; restore last state</span>
+</code></div><div class='line'><code>  <span class="nf">pop</span> <span class="nb">rdx</span>
+</code></div><div class='line'><code>  <span class="nf">movq</span> <span class="nv">xmm1</span><span class="p">,</span> <span class="nv">r10</span>
+</code></div><div class='line'><code>  <span class="nf">jmp</span> <span class="nv">next_state</span>           <span class="c1">; try again</span>
+</code></div></pre></td></tr></table></div></figure></p>
+
+<p>First, we have another stack-pointer test &ndash; if we&rsquo;ve tried to backtrack past
+the start of the program, then we know we&rsquo;ve exhausted all possibilities and
+just go to <code>done</code>. Assuming that&rsquo;s not at issue, we simply restore the <code>rdx</code>
+and <code>xmm1</code> variables (using <code>r10</code> as scratch storage since one can&rsquo;t directly
+pop <code>xmm</code> registers). Then we just jump back into our loop, with a new state
+ready to go!</p>
+
+<p>Now we&rsquo;re ready to look at the whole solution in context:
+<figure class='code'><figcaption>8queens.asm<a href='https://github.com/davidad/8queens/blob/1989666c45baa639f152dfc89c70635f7007d20b/8queens.asm'>github</a></figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div><div data-line='14' class='line-number'></div><div data-line='15' class='line-number'></div><div data-line='16' class='line-number'></div><div data-line='17' class='line-number'></div><div data-line='18' class='line-number'></div><div data-line='19' class='line-number'></div><div data-line='20' class='line-number'></div><div data-line='21' class='line-number'></div><div data-line='22' class='line-number'></div><div data-line='23' class='line-number'></div><div data-line='24' class='line-number'></div><div data-line='25' class='line-number'></div><div data-line='26' class='line-number'></div><div data-line='27' class='line-number'></div><div data-line='28' class='line-number'></div><div data-line='29' class='line-number'></div><div data-line='30' class='line-number'></div><div data-line='31' class='line-number'></div><div data-line='32' class='line-number'></div><div data-line='33' class='line-number'></div><div data-line='34' class='line-number'></div><div data-line='35' class='line-number'></div><div data-line='36' class='line-number'></div><div data-line='37' class='line-number'></div><div data-line='38' class='line-number'></div><div data-line='39' class='line-number'></div><div data-line='40' class='line-number'></div><div data-line='41' class='line-number'></div><div data-line='42' class='line-number'></div><div data-line='43' class='line-number'></div><div data-line='44' class='line-number'></div><div data-line='45' class='line-number'></div><div data-line='46' class='line-number'></div><div data-line='47' class='line-number'></div><div data-line='48' class='line-number'></div><div data-line='49' class='line-number'></div><div data-line='50' class='line-number'></div><div data-line='51' class='line-number'></div><div data-line='52' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="cp">%include &quot;os_dependent_stuff.asm&quot;</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdx</span><span class="p">,</span> <span class="m">0b</span><span class="mi">11111111</span>      <span class="c1">; all eight possibilities available</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r8</span><span class="p">,</span> <span class="mh">0x000000000000</span>   <span class="c1">; no squares under attack from anywhere</span>
+</code></div><div class='line'><code>  <span class="nf">movq</span> <span class="nv">xmm1</span><span class="p">,</span> <span class="nv">r8</span>            <span class="c1">; maintain this state in xmm1</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r15</span><span class="p">,</span> <span class="mh">0x000100010001</span>  <span class="c1">; attack mask for one queen (left, right, and center)</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r14</span><span class="p">,</span> <span class="mh">0xff</span>            <span class="c1">; mask for low byte</span>
+</code></div><div class='line'><code>  <span class="nf">movq</span> <span class="nv">xmm7</span><span class="p">,</span> <span class="nv">r14</span>           <span class="c1">; stored in xmm register</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r13</span><span class="p">,</span> <span class="nb">rsp</span>             <span class="c1">; current stack pointer (if we backtrack here, then</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r14</span><span class="p">,</span> <span class="nb">rsp</span>             <span class="c1">;   the entire solution space has been explored)</span>
+</code></div><div class='line'><code>  <span class="nf">sub</span> <span class="nv">r14</span><span class="p">,</span> <span class="mi">2</span><span class="o"><em></span><span class="mi">8</span><span class="o"></em></span><span class="mi">7</span>           <span class="c1">; this is where the stack pointer would be when we&#39;ve</span>
+</code></div><div class='line'><code>                           <span class="c1">;   completed a winning state</span>
+</code></div><div class='line'><code><span class="nl">next_state:</span>
+</code></div><div class='line'><code>  <span class="nf">bsf</span> <span class="nb">rcx</span><span class="p">,</span> <span class="nb">rdx</span>             <span class="c1">; find next available position in current level</span>
+</code></div><div class='line'><code>  <span class="nf">jz</span> <span class="nv">backtrack</span>             <span class="c1">; if there is no available position, we must go back</span>
+</code></div><div class='line'><code>  <span class="nf">btc</span> <span class="nb">rdx</span><span class="p">,</span> <span class="nb">rcx</span>             <span class="c1">; mark position as unavailable</span>
+</code></div><div class='line'><code>  <span class="nf">cmp</span> <span class="nb">rsp</span><span class="p">,</span> <span class="nv">r14</span>             <span class="c1">; check if we&#39;ve done 7 levels already</span>
+</code></div><div class='line'><code>  <span class="nf">je</span> <span class="nv">win</span>                   <span class="c1">; if so, we have a win state. otherwise continue</span>
+</code></div><div class='line'><code>  <span class="nf">movq</span> <span class="nv">r10</span><span class="p">,</span> <span class="nv">xmm1</span>           <span class="c1">; save current state &hellip;</span>
+</code></div><div class='line'><code>  <span class="nf">push</span> <span class="nb">rdx</span>
+</code></div><div class='line'><code>  <span class="nf">push</span> <span class="nv">r10</span>                 <span class="c1">;   &hellip; to stack</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rax</span><span class="p">,</span> <span class="nv">r15</span>             <span class="c1">; set up attack mask</span>
+</code></div><div class='line'><code>  <span class="nf">shl</span> <span class="nb">rax</span><span class="p">,</span> <span class="nb">cl</span>              <span class="c1">; shift into position</span>
+</code></div><div class='line'><code>  <span class="nf">movq</span> <span class="nv">xmm2</span><span class="p">,</span> <span class="nb">rax</span>
+</code></div><div class='line'><code>  <span class="nf">por</span> <span class="nv">xmm1</span><span class="p">,</span> <span class="nv">xmm2</span>           <span class="c1">; mark as attacking in all directions</span>
+</code></div><div class='line'><code>  <span class="nf">vpsllw</span> <span class="nv">xmm2</span><span class="p">,</span> <span class="nv">xmm1</span><span class="p">,</span> <span class="mi">1</span>      <span class="c1">; shift entire state to left, place in xmm2</span>
+</code></div><div class='line'><code>  <span class="nf">vpsrlw</span> <span class="nv">xmm3</span><span class="p">,</span> <span class="nv">xmm1</span><span class="p">,</span> <span class="mi">1</span>      <span class="c1">; shift entire state to right, place in xmm3</span>
+</code></div><div class='line'><code>  <span class="nf">pblendw</span> <span class="nv">xmm1</span><span class="p">,</span> <span class="nv">xmm2</span><span class="p">,</span> <span class="m">0b</span><span class="mi">100</span> <span class="c1">; only copy &quot;left-attacking&quot; word back from xmm2</span>
+</code></div><div class='line'><code>  <span class="nf">pblendw</span> <span class="nv">xmm1</span><span class="p">,</span> <span class="nv">xmm3</span><span class="p">,</span> <span class="m">0b</span><span class="mi">010</span> <span class="c1">; only copy &quot;right-attacking&quot; word back from xmm3</span>
+</code></div><div class='line'><code>  <span class="nf">vpsrldq</span> <span class="nv">xmm2</span><span class="p">,</span> <span class="nv">xmm1</span><span class="p">,</span> <span class="mi">4</span>     <span class="c1">; shift state right 4 <em>bytes</em>, place in xmm2</span>
+</code></div><div class='line'><code>  <span class="nf">vpsrldq</span> <span class="nv">xmm3</span><span class="p">,</span> <span class="nv">xmm1</span><span class="p">,</span> <span class="mi">2</span>     <span class="c1">; shift state right 2 bytes, place in xmm3</span>
+</code></div><div class='line'><code>  <span class="nf">por</span> <span class="nv">xmm2</span><span class="p">,</span> <span class="nv">xmm3</span>            <span class="c1">; collect bitwise ors in xmm2</span>
+</code></div><div class='line'><code>  <span class="nf">por</span> <span class="nv">xmm2</span><span class="p">,</span> <span class="nv">xmm1</span>
+</code></div><div class='line'><code>  <span class="nf">vpandn</span> <span class="nv">xmm4</span><span class="p">,</span> <span class="nv">xmm2</span><span class="p">,</span> <span class="nv">xmm7</span>   <span class="c1">; invert and select low byte</span>
+</code></div><div class='line'><code>  <span class="nf">movq</span> <span class="nb">rdx</span><span class="p">,</span> <span class="nv">xmm4</span>            <span class="c1">; place in rdx</span>
+</code></div><div class='line'><code>  <span class="nf">jmp</span> <span class="nv">next_state</span>           <span class="c1">; now we&#39;re set up to iterate</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code><span class="nl">backtrack:</span>
+</code></div><div class='line'><code>  <span class="nf">cmp</span> <span class="nb">rsp</span><span class="p">,</span> <span class="nv">r13</span>             <span class="c1">; are we done?</span>
+</code></div><div class='line'><code>  <span class="nf">je</span> <span class="nv">done</span>
+</code></div><div class='line'><code>  <span class="nf">pop</span> <span class="nv">r10</span>                  <span class="c1">; restore last state</span>
+</code></div><div class='line'><code>  <span class="nf">pop</span> <span class="nb">rdx</span>
+</code></div><div class='line'><code>  <span class="nf">movq</span> <span class="nv">xmm1</span><span class="p">,</span> <span class="nv">r10</span>
+</code></div><div class='line'><code>  <span class="nf">jmp</span> <span class="nv">next_state</span>           <span class="c1">; try again</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code><span class="nl">win:</span>
+</code></div><div class='line'><code>  <span class="nf">inc</span> <span class="nv">r8</span>                   <span class="c1">; increment solution counter</span>
+</code></div><div class='line'><code>  <span class="nf">jmp</span> <span class="nv">next_state</span>           <span class="c1">; keep going</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code><span class="nl">done:</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdi</span><span class="p">,</span> <span class="nv">r8</span>              <span class="c1">; set system call argument to solution count</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rax</span><span class="p">,</span> <span class="nv">SYSCALL_EXIT</span>    <span class="c1">; set system call to exit</span>
+</code></div><div class='line'><code>  <span class="nf">syscall</span>                  <span class="c1">; this will exit with our solution count as status</span>
+</code></div></pre></td></tr></table></div></figure></p>
+
+<p>If you&rsquo;re curious to investigate further, <a href="https://github.com/davidad/8queens">run the code
+yourself</a><sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup> and/or check out the <a href="https://github.com/davidad/8queens/blob/master/8queens.asm">more
+complicated, pretty-printing
+version</a>.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Somewhat surprisingly, the first version actually <em>worked</em>.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>A word is two bytes. Why did I use words and not just bytes? The answer is that some of the fancy instructions we want to use don&rsquo;t allow us to work with data elements any smaller than words.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<li id="fn:3">
+<p>But it&rsquo;s all taking place in the register file &mdash; no memory accesses here!<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
+<li id="fn:4">
+<p>That is to say, the value of <code>r14</code>.<a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
+<li id="fn:5">
+<p>Requires a recent (Sandy Bridge or later) Intel CPU.<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Relocatable vs. Position-Independent Code (or, Virtual Memory Isn't Just for Swap)]]></title>
