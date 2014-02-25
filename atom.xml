@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-02-25T13:35:53-05:00</updated>
+  <updated>2014-02-25T15:39:16-05:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Overkilling the 8-queens Problem]]></title>
+    <title type="html"><![CDATA[Overkilling the 8-queens problem]]></title>
     <link href="http://davidad.github.io/blog/2014/02/25/overkilling-the-8-queens-problem/"/>
     <updated>2014-02-25T10:52:57-05:00</updated>
     <id>http://davidad.github.io/blog/2014/02/25/overkilling-the-8-queens-problem</id>
@@ -292,7 +292,7 @@ version</a>.</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Relocatable vs. Position-Independent Code (or, Virtual Memory Isn't Just for Swap)]]></title>
+    <title type="html"><![CDATA[Relocatable vs. Position-Independent Code (or, Virtual Memory isn't Just For Swap)]]></title>
     <link href="http://davidad.github.io/blog/2014/02/19/relocatable-vs-position-independent-code-or/"/>
     <updated>2014-02-19T17:12:50-05:00</updated>
     <id>http://davidad.github.io/blog/2014/02/19/relocatable-vs-position-independent-code-or</id>
@@ -406,7 +406,7 @@ and the linker gets a lot simpler.</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Kernel From Scratch]]></title>
+    <title type="html"><![CDATA[Kernel from Scratch]]></title>
     <link href="http://davidad.github.io/blog/2014/02/18/kernel-from-scratch/"/>
     <updated>2014-02-18T02:58:08-05:00</updated>
     <id>http://davidad.github.io/blog/2014/02/18/kernel-from-scratch</id>
@@ -561,7 +561,7 @@ $ qemu-system-x86_64 bootable.bin
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Octopress Workflow]]></title>
+    <title type="html"><![CDATA[Octopress workflow]]></title>
     <link href="http://davidad.github.io/blog/2014/02/11/octopress-workflow/"/>
     <updated>2014-02-11T18:10:58-05:00</updated>
     <id>http://davidad.github.io/blog/2014/02/11/octopress-workflow</id>
