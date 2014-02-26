@@ -9,11 +9,19 @@ categories:
 Last night, a fellow [Hacker School](http://www.hackerschool.com)er challenged
 me to a running-time contest on the classic [eight queens
 puzzle](http://en.wikipedia.org/wiki/Eight_queens_puzzle). Naturally, I pulled
-up my trusty
-[Intel® 64 manual](http://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-manual-325462.pdf)
+up my trusty [Intel® 64
+manual](http://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-manual-325462.pdf)
 and got to work. It turned out to be even faster than I expected, churning out
 pretty-printed output in 15ms, which is totally dominated by the time it takes
 the terminal to display it (it takes only 2ms if redirected to a file).
+
+**Update**: Very slightly more scientific
+[testing](https://github.com/davidad/8queens/tree/%2Bc_comparison), spurred by
+curious [Hacker News commenters](https://news.ycombinator.com/item?id=7301913),
+indicates that, without pretty-printing and other overhead, the solving time is
+actually closer to 11.2&#181;s -- about a factor of 7 speedup over commenter
+[bluecalm](https://news.ycombinator.com/item?id=7302005)'s [C
+implementation](https://github.com/davidad/8queens/blob/%2Bc_comparison/8q_C_bluecalm.c).
 
 ![pretty-printed output](http://i.imgur.com/5dOH49e.png)
 
