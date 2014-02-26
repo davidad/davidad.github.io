@@ -95,11 +95,19 @@ up my trusty &hellip;">
 <div class="entry-content"><p>Last night, a fellow <a href="http://www.hackerschool.com">Hacker School</a>er challenged
 me to a running-time contest on the classic <a href="http://en.wikipedia.org/wiki/Eight_queens_puzzle">eight queens
 puzzle</a>. Naturally, I pulled
-up my trusty
-<a href="http://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-manual-325462.pdf">Intel® 64 manual</a>
+up my trusty <a href="http://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-manual-325462.pdf">Intel® 64
+manual</a>
 and got to work. It turned out to be even faster than I expected, churning out
 pretty-printed output in 15ms, which is totally dominated by the time it takes
 the terminal to display it (it takes only 2ms if redirected to a file).</p>
+
+<p><strong>Update</strong>: Very slightly more scientific
+<a href="https://github.com/davidad/8queens/tree/%2Bc_comparison">testing</a>, spurred by
+curious <a href="https://news.ycombinator.com/item?id=7301913">Hacker News commenters</a>,
+indicates that, without pretty-printing and other overhead, the solving time is
+actually closer to 11.2&#181;s &mdash; about a factor of 7 speedup over commenter
+<a href="https://news.ycombinator.com/item?id=7302005">bluecalm</a>&rsquo;s <a href="https://github.com/davidad/8queens/blob/%2Bc_comparison/8q_C_bluecalm.c">C
+implementation</a>.</p>
 
 <p><img src="http://i.imgur.com/5dOH49e.png" alt="pretty-printed output" /></p>
 
