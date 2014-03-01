@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-03-01T10:51:00-05:00</updated>
+  <updated>2014-03-01T11:03:36-05:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -459,6 +459,11 @@ list) and that termination for any non-minimal element is dependent only on
 termination for some set of smaller elements (e.g. the tail of the list). The
 structure that you need in order to think about termination this way is also
 much clearer with recursion than with iteration constructs.</p>
+
+<hr />
+
+<p>In the next installment of <strong>Python to Scheme to Assembly</strong>, we will look at
+<code>call-with-current-continuation</code>.</p>
 <div class="footnotes">
 <hr/>
 <ol>
