@@ -193,7 +193,7 @@ In this section, we're going to look at the assembly for iteration, non-tail
 recursion, and tail recursion, as emitted by `gcc`, and get to the bottom of
 what the difference is anyway.
 
-At the top of each C file, we have the following:
+At the top of each C file in this section, we have the following:
 
 ```c
 #include <stdint.h>
