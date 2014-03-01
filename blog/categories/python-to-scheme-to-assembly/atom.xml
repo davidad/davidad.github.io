@@ -4,7 +4,7 @@
   <title><![CDATA[Category: python-to-scheme-to-assembly | Technical Journal]]></title>
   <link href="http://davidad.github.io/blog/categories/python-to-scheme-to-assembly/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-03-01T11:03:49-05:00</updated>
+  <updated>2014-03-01T11:07:35-05:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -25,7 +25,7 @@ on a journey with me.</em></p>
 
 <hr />
 
-<p>In this post, we&rsquo;re going to consider a very simple toy problem: recursively
+<p>In this article, we&rsquo;re going to consider a very simple toy problem: recursively
 summing up a list of numbers<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. Let&rsquo;s look at this function in Python.</p>
 
 <p>```python
