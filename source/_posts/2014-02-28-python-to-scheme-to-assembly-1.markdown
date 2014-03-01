@@ -13,7 +13,7 @@ on a journey with me._
 
 * * *
 
-In this post, we're going to consider a very simple toy problem: recursively
+In this article, we're going to consider a very simple toy problem: recursively
 summing up a list of numbers[^1]. Let's look at this function in Python.
 
 ```python
