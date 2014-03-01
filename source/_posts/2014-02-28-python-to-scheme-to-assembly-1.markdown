@@ -453,6 +453,11 @@ termination for some set of smaller elements (e.g. the tail of the list). The
 structure that you need in order to think about termination this way is also
 much clearer with recursion than with iteration constructs.
 
+* * *
+
+In the next installment of **Python to Scheme to Assembly**, we will look at
+`call-with-current-continuation`.
+
 [^1]: If you doubt my ability to productively use assembly for more complicated toy problems, I direct you to my [previous blog post](http://localhost:4000/blog/2014/02/25/overkilling-the-8-queens-problem/).
 [^2]: If we left it out, the final result would always be `0`. Proving this invariant is left as an exercise for the reader.
 [^3]: [Guido van Rossum](http://en.wikipedia.org/wiki/Guido_van_Rossum) is the author of Python, and the "Benevolent Dictator for Life" of its development process.
