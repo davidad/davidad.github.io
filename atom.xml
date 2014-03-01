@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-03-01T11:08:32-05:00</updated>
+  <updated>2014-03-01T13:32:15-05:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -209,7 +209,7 @@ constructs<sup id="fnref:8"><a href="#fn:8" rel="footnote">8</a></sup>. But I do
 recursion, and tail recursion, as emitted by <code>gcc</code>, and get to the bottom of
 what the difference is anyway.</p>
 
-<p>At the top of each C file, we have the following:</p>
+<p>At the top of each C file in this section, we have the following:</p>
 
 <p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div></pre></td><td class='main  c'><pre><div class='line'><code><span class="cp">#include &lt;stdint.h&gt;</span>
 </code></div><div class='line'><code><span class="k">struct</span> <span class="n">number_list</span> <span class="p">{</span>
