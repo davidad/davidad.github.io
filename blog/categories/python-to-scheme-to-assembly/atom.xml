@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: python-to-scheme-to-assembly | Technical Journal]]></title>
+  <link href="http://davidad.github.io/blog/categories/python-to-scheme-to-assembly/atom.xml" rel="self"/>
+  <link href="http://davidad.github.io/"/>
+  <updated>2014-03-01T10:51:31-05:00</updated>
+  <id>http://davidad.github.io/</id>
+  <author>
+    <name><![CDATA[davidad (David A. Dalrymple)]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Python to Scheme to Assembly,<br>Part 1: Named Let]]></title>
+    <link href="http://davidad.github.io/blog/2014/02/28/python-to-scheme-to-assembly-1/"/>
+    <updated>2014-02-28T14:43:58-05:00</updated>
+    <id>http://davidad.github.io/blog/2014/02/28/python-to-scheme-to-assembly-1</id>
+    <content type="html"><![CDATA[<p><em>In 2001, my favorite programming language was Python. In 2008, my favorite
+programming language was Scheme. In 2014, my favorite programming language is
+x64 assembly. For some reason, that progression tends to surprise people. Come
+on a journey with me.</em></p>
+
+<hr />
+
+<p>In this post, we&rsquo;re going to consider a very simple toy problem: recursively
+summing up a list of numbers<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. Let&rsquo;s look at this function in Python.</p>
+
+<p>```python
+def sum_list(list):
+  if len(list) == 0:</p>
+
+<pre><code>return 0
+</code></pre>
+
+<p>  else:</p>
+
+<pre><code>return list[0]+sum_list(list[1:])
+</code></pre>
+
+<p>```</p>
+
+<blockquote><pre><code> &gt;&gt;&gt; sum_list(range(101))
+ 5050
+</code></pre></blockquote>
+
+<p><a href="http://en.wikipedia.org/wiki/Carl_Friedrich_Gauss#Anecdotes">Young Carl Gauss</a>
+would be proud.</p>
+
+<blockquote><pre><code> &gt;&gt;&gt; sum_list(range(1001))
+ RuntimeError: maximum recursion depth exceeded
+</code></pre>
+
+<p>Oops.</p></blockquote>
+
+<p>Young programmers often learn from this type of experience that recursion
+<em>sucks</em>. (Or, as a modern young programmer might say, it <em>doesn&rsquo;t scale</em>.) If
+they Google around a bit, they might find the following &ldquo;solution&rdquo;:</p>
+
+<blockquote><pre><code> &gt;&gt;&gt; import sys
+ &gt;&gt;&gt; sys.setrecursionlimit(1500)
+ &gt;&gt;&gt; sum_list(range(1001))
+ 500500
+</code></pre></blockquote>
+
+<p>If they have a good computer science teacher, though, they&rsquo;ll learn that the
+real solution is to use something called <strong>tail recursion</strong>. <!-- more --> This
+is a somewhat mysterious, seemingly arbitrary concept. If the result of your
+recursive call gets returned <em>immediately</em>, without any intervening expessions,
+then somehow it &ldquo;doesn&rsquo;t count&rdquo; toward the equally arbitrary recursion depth
+limit. In our example above, we have to add <code>list[0]</code> to <code>sum_list(list[1:])</code>
+before we can return the result<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>. In order to make this tail-recursive, we
+have to add an <strong>accumulator</strong> variable, which represents the sum of those
+numbers we&rsquo;ve looked at already.</p>
+
+<p>```python
+def sum_list(list):
+  def sum_sublist(accum,sublist):</p>
+
+<pre><code>if len(sublist) == 0:
+  return accum
+else:
+  return sum_sublist(accum+sublist[0],sublist[1:])
+</code></pre>
+
+<p>  return sum_sublist(0,list)
+```</p>
+
+<blockquote><pre><code> &gt;&gt;&gt; sum_list(range(101))
+ 5050
+</code></pre></blockquote>
+
+<p>So far, so good.</p>
+
+<blockquote><pre><code> &gt;&gt;&gt; sum_list(range(1001))
+ RuntimeError: maximum recursion depth exceeded
+</code></pre></blockquote>
+
+<p>Wait, what?</p>
+
+<blockquote><p>On Wednesday, April 22, 2009, Guido van Rossum
+<a href="http://neopythonic.blogspot.co.uk/2009/04/tail-recursion-elimination.html">wrote</a>:</p>
+
+<blockquote><p>A side remark about not supporting tail recursion elimination (TRE)
+immediately sparked several comments about what a pity it is that Python
+doesn&rsquo;t do this, including links to recent blog entries by others trying to
+&ldquo;prove&rdquo; that TRE can be added to Python easily. So let me defend my position
+(which is that I don&rsquo;t want TRE in the language). If you want a short
+answer, it&rsquo;s simply unpythonic. Here&rsquo;s the long answer:</p></blockquote>
+
+<p><em>[snipped]</em></p>
+
+<blockquote><p>Third, I don&rsquo;t believe in recursion as the basis of all programming. This
+is a fundamental belief of certain computer scientists, especially those who
+love Scheme&hellip;</p></blockquote>
+
+<p><em>[snipped]</em></p>
+
+<blockquote><p>Still, if someone was determined to add TRE to CPython, they could modify
+the compiler roughly as follows&hellip;</p></blockquote></blockquote>
+
+<p>In other words, the <em>only</em> reason this doesn&rsquo;t work is that Guido van Rossum<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>
+<em>prefers it that way</em>. Guido, I respect your right to your opinion, but the
+reader and I are switching to Scheme.</p>
+
+<h2>Scheme</h2>
+
+<p>Here&rsquo;s a line-by-line translation:</p>
+
+<p>```scheme
+(define (sum_list list)
+  (define (sum_sublist accum sublist)</p>
+
+<pre><code>(cond ((null? sublist)                 ; tests if sublist has length 0
+       accum )                         ; don't need return statement in Scheme
+      (else
+       (sum_sublist (+ accum (car sublist)) (cdr sublist)) )))
+</code></pre>
+
+<p>  (sum_sublist 0 list) )
+```</p>
+
+<blockquote><pre><code> guile&gt; (sum_list (iota 1001))
+ 500500
+</code></pre></blockquote>
+
+<p>Phew! Let&rsquo;s make sure that we aren&rsquo;t just getting lucky with a bigger
+recursion limit:</p>
+
+<blockquote><pre><code> guile&gt; (sum_list (iota 10000001))
+ 50000005000000
+</code></pre></blockquote>
+
+<p>Well, isn&rsquo;t that neat? If we go much bigger, it&rsquo;ll take a long time, but as long
+as the output fits into memory, we&rsquo;ll get the right answer<sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup>.</p>
+
+<h3>Named Let</h3>
+
+<p>In our last two versions of <code>sum_list</code>, we defined a helper function
+(<code>sum_sublist</code>), and the rest of the body of <code>sum_list</code> was just a single
+invocation of that helper function. This is an inelegant pattern<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup>, which
+Scheme has a construct to address.</p>
+
+<p><a name="named-let-1"></a>
+```scheme
+(define (sum_list list)
+  (let sum_sublist ((accum 0) (sublist list))  ; the named let!</p>
+
+<pre><code>(cond ((null? sublist)
+       accum )
+      (else
+       (sum_sublist (+ accum (car sublist)) (cdr sublist)) ))))
+</code></pre>
+
+<p>```</p>
+
+<p><a href="http://people.csail.mit.edu/jaffer/r5rs_6.html#IDX130"><strong>Named let</strong></a> creates a
+function and invokes it (with the provided initial values) in one step.  It is
+decidedly my favorite control structure of all time. You can have your <code>while</code>
+loops and your <code>for</code> loops, and your <code>do</code>&hellip;<code>until</code> loops too<sup id="fnref:6"><a href="#fn:6" rel="footnote">6</a></sup>. I&rsquo;ll take
+named let any day, because it provides the abstraction barrier of recursion
+without compromising the conciseness and efficiency of iteration. In case you&rsquo;re
+not sufficiently impressed, I discuss the delightful properties of using
+recursion instead of non-recursive loops <a href="#recursion">below</a>.</p>
+
+<h2>Assembly</h2>
+
+<p><a name="neatly-into-assembly"></a>
+Named let style translates amazingly naturally into assembly.</p>
+
+<p>```nasm
+bits 64
+; macros for readability
+%define list rdi             ; by calling convention, argument shows up here
+%define accum rax            ; accumulator (literally!)
+%define sublist rdx</p>
+
+<p>global sum_list
+sum_list:
+  mov accum, 0               ; these are the let-bindings!
+  mov sublist, list
+.sum_sublist:
+  cmp sublist, 0             ; is it NULL?
+  jnz .else                  ; if not, goto else
+  ret; accum                (because return value is rax by calling convention)
+.else:
+  add accum, [sublist]       ; ~ accum=accum+car(sublist);
+  mov sublist, [sublist+8]   ; ~ sublist=cdr(sublist);
+  jmp .sum_sublist           ; tail-recurse
+```</p>
+
+<blockquote><pre><code>&gt; sum_list(from(1,100))
+5050
+&gt; sum_list(from(1,10000000))
+50000005000000
+</code></pre>
+
+<p>(Sadly, my assembler doesn&rsquo;t come with its own REPL; we&rsquo;re borrowing
+the <a href="http://luajit.org">LuaJIT</a> REPL instead<sup id="fnref:7"><a href="#fn:7" rel="footnote">7</a></sup>.)</p></blockquote>
+
+<p>In fact, if I weren&rsquo;t so comfortable with named let, I doubt I&rsquo;d be an effective
+assembly coder, because assembly doesn&rsquo;t really have any other iteration
+constructs<sup id="fnref:8"><a href="#fn:8" rel="footnote">8</a></sup>. But I don&rsquo;t miss them.  What would they look like, anyway?</p>
+
+<h2>C</h2>
+
+<p>In this section, we&rsquo;re going to look at the assembly for iteration, non-tail
+recursion, and tail recursion, as emitted by <code>gcc</code>, and get to the bottom of
+what the difference is anyway.</p>
+
+<p>At the top of each C file, we have the following:</p>
+
+<p>```c</p>
+
+<h1>include &lt;stdint.h></h1>
+
+<p>struct number_list {
+  uint64_t number;
+  struct number_list *next;
+};
+```</p>
+
+<h3>Iteration</h3>
+
+<p>If I were solving this problem in the context of a C program, this is how I
+would do it.</p>
+
+<p>```c start:6
+uint64_t sum_list(struct number_list* list) {
+  uint64_t accum = 0;
+  while(list) {</p>
+
+<pre><code>accum+=list-&gt;number;
+list=list-&gt;next;
+</code></pre>
+
+<p>  }
+  return accum;
+}
+```</p>
+
+<p>Here&rsquo;s the generated assembly, translated to <code>nasm</code> syntax and commented.</p>
+
+<p>```nasm
+global sum_list
+sum_list:
+  xor eax, eax     ; equivalent to &ldquo;mov rax, 0&rdquo; but faster</p>
+
+<pre><code>               ; in C it's fine to clobber rdi instead of copying it first
+</code></pre>
+
+<p>  test rdi, rdi    ; equivalent to &ldquo;cmp rdi, 0&rdquo;, but more compact in machine code
+  jz done          ; here the &ldquo;if NULL&rdquo; case is at the bottom, accumulation case is right here.
+.else:
+  add rax, [rdi]
+  mov rdi, [rdi+8]
+  test rdi, rdi    ; equivalent to &ldquo;cmp rdi, 0&rdquo;
+  jnz .else
+.done:
+  rep ret          ; equivalent to &ldquo;ret&rdquo;, but faster on old AMD chips for no good reason
+```</p>
+
+<p>This is <em>almost</em> identical to the assembly that I wrote, except that it clobbers
+one of its inputs (which is perfectly allowed by the C calling convention<sup id="fnref:9"><a href="#fn:9" rel="footnote">9</a></sup>),
+it uses <code>xor</code> instead of <code>mov</code> to load <code>0</code> (a solid optimization), it uses
+<code>test</code> in place of <code>cmp</code> (reasonable optimization), it uses <code>rep ret</code> (less
+compact and no benefit on Intel chips) and it shuffles the instructions around
+such that two <code>test</code>s are needed (almost certainly not helpful with modern
+branch prediction and loop detection). I haven&rsquo;t run benchmarks on this, but my
+guess is that it would come out about even. I also think the shuffling makes
+this &ldquo;iterative&rdquo; version more opaque and difficult to reason about (not least
+because of the duplicated <code>test</code>) than my &ldquo;named let&rdquo;-style code.</p>
+
+<h3>Non-Tail Recursion</h3>
+
+<p>```c start:6
+uint64_t sum_list(struct number_list* list) {
+  if(!list) {</p>
+
+<pre><code>return 0;
+</code></pre>
+
+<p>  } else {</p>
+
+<pre><code>return list-&gt;number+sum_list(list-&gt;next);
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p><code>gcc -O3</code> can <em>almost</em> completely convert this version to iteration, so let&rsquo;s
+look at the generated assembly from <code>gcc -O1</code> to get a better sense of what it
+might look like in a language implementation for which the necessary
+optimizations are too complex to be made automatically.</p>
+
+<p><code>nasm
+global sum_list
+sum_list:
+  push rbx          ; preserve the current value of rbx on the stack
+  mov rbx, rdi      ; replace rbx by the argument to the function, list
+  mov eax, 0        ; set up 0 in the result register
+  test rdi, rdi     ; check if rdi is NULL
+  jz .else          ; if so go to else
+  mov rdi, [rdi+8]  ; ~ list=list-&gt;next;
+  call sum_list     ; sum_list(list) -&gt; result register (rax)
+  add rax, [rbx]    ; add list-&gt;number (preserved across function call) to rax
+.else:
+  pop rbx           ; restore the state of rbx
+  ret               ; return rax
+</code></p>
+
+<p>We can see immediately that some new instructions (<code>push</code>, <code>pop</code>, and <code>call</code>)
+have been introduced. These are all <strong>stack manipulation instructions</strong><sup id="fnref:10"><a href="#fn:10" rel="footnote">10</a></sup>. If
+we carefully pretend to be the CPU running this program, we can see that it
+pushes the address of every number in the linked list, and then dereferences and
+adds them up as it pops them from the stack. This is not good; if we wanted our
+entire data structure to be replicated on the stack, we would have passed it by
+value<sup id="fnref:11"><a href="#fn:11" rel="footnote">11</a></sup>! It&rsquo;s generally the amount of memory set aside for the stack that
+we&rsquo;ve actually run out of in the case of a <code>recursion depth exceeded</code> error.</p>
+
+<h3>Tail Recursion</h3>
+
+<p>What about translating the tail-recursive version into C? Like Scheme and
+Python, <code>gcc</code> supports nested function definitions (as a GNU extension to C), so
+this is no problem:</p>
+
+<p>```c start:6
+uint64_t sum_list(struct number_list<em> list) {
+  uint64_t sum_sublist(uint64_t accum, struct number_list</em> sublist) {</p>
+
+<pre><code>if(!sublist) {
+  return accum;
+} else {
+  return sum_sublist(accum+sublist-&gt;number,sublist-&gt;next);
+}
+</code></pre>
+
+<p>  }
+  return sum_sublist(0,list);
+}
+```</p>
+
+<p>Here&rsquo;s what <code>gcc -O1</code> gives us (translated and commented as before):
+```nasm
+sum_sublist.1867:       ; A random constant has been added to avoid polluting the namespace. Not the best solution, but okay.
+  sub rsp, 8            ; Decrement the stack by one 8-byte machine word. Seems unnecessary&hellip;
+  mov rax, rdi          ; Copy first argument (rdi/&ldquo;accum&rdquo;) into result register (rax).
+  test rsi, rsi         ; Test second argument (rsi/&ldquo;sublist&rdquo;) for nullity.
+  jz .else              ; If null, goto else.
+  add rdi, [rsi]        ; ~ accum = accum + sublist->number;
+  mov rsi, [rsi+8]      ; sublist = sublist->next;
+  call sum_sublist.1867 ; recurse. result appears in rax, ready to pass along (as the return value) to the next caller in the stack.
+.else:
+  add rsp, 8            ; seems unnecessary
+  ret                   ; return rax</p>
+
+<p>sum_list:
+  sub rsp, 8
+  mov rsi, rdi          ; first argument (rdi/&ldquo;list&rdquo;) of sum_list becomes 2nd argument (rsi/&ldquo;sublist&rdquo;) of sum_sublist
+  mov rdi, 0            ; first argument (rdi/&ldquo;accum&rdquo;) of sum_sublist is 0
+  call sum_sublist.1867 ; call sum_sublist!
+  add rsp, 8
+  ret
+```</p>
+
+<p>In this mode, the tail <code>call</code> is not being eliminated &mdash; although we&rsquo;re no
+longer <code>push</code>ing <code>rbx</code>, we&rsquo;re still pushing <code>rip</code> to stack with every <code>call</code>,
+and eventually we&rsquo;ll run out of stack that way. The only way to get around this
+is to replace each <code>call</code> with <code>jmp</code>: since we&rsquo;re just going to take the return
+value of the next recursive invocation and then immediately <code>ret</code> back to the
+previous caller on the stack, there&rsquo;s no point in even inserting our own address
+on the stack (as <code>call</code> does); we can just set up the next guy to pass the
+return value straight back to the previous guy, and quietly disappear.</p>
+
+<p><code>gcc -O3</code> does this. In fact, somewhat surprisingly, it generates <em>exactly</em> the
+same assembly, line for line, for this version as for the purely iterative
+version above.  That&rsquo;s &ldquo;<strong>tail call optimization</strong>&rdquo; (TCO) or &ldquo;<strong>tail recursion
+elimination</strong>&rdquo; (TRE) in its most agressive form: it literally just gets rid of
+all calls and recursions and replaces them with an equivalent iteration
+(complete with duplicate <code>test</code>).</p>
+
+<p>The upshot of all this is that <em>not only does Scheme&rsquo;s &ldquo;named let&rdquo; recursion
+form translate <a href="#neatly-into-assembly">neatly into assembly</a>, it provides &mdash;
+penalty-free &mdash; a better abstraction than either iteration</em> (while-loop
+imitation) <em>or stack-driven recursion</em>, the two options <code>gcc</code> appears to pick
+from when dealing with various ways to code a list traversal.</p>
+
+<p>Actually, the real point I&rsquo;m trying to make here is <strong>I can naturally do named
+let in assembly, and that&rsquo;s one of the many reasons working in assembly makes me
+happy</strong>.</p>
+
+<p><a name="recursion"></a></p>
+
+<h2>Addendum: What&rsquo;s so great about recursion, anyway?</h2>
+
+<p>For me, the most important point in favor of a recursive representation is that
+I find it easier to reason about <strong>correctness</strong> that way.</p>
+
+<p>Any function we define ought to implement some ideal mathematical function that
+maps inputs to outputs<sup id="fnref:12"><a href="#fn:12" rel="footnote">12</a></sup>. If our code truly does implement that ideal
+function, we say that the code is <strong>correct</strong>. Generally, we can break down the
+body of a function as a
+<a href="http://en.wikipedia.org/wiki/Function_composition">composition</a> of smaller
+functions; even in imperative languages, we can think of every statement as
+pulling in a state of the world, making well-defined changes, and passing the
+new state of the world into the next statement<sup id="fnref:13"><a href="#fn:13" rel="footnote">13</a></sup>. At each step, we ask
+ourselves, &ldquo;are the outputs of this function going to be what I want them to
+be?&rdquo; For loops, though, <a href="http://en.wikipedia.org/wiki/Loop_invariant#Informal_example">this gets
+tricky</a>.</p>
+
+<p>What recursion does for us as aspiring writers of correct functions is automatic
+translation of the loop verification problem into the much nicer problem of
+function verification.  Intuitively, you can simply assume that all invocations
+of a recursive function within its own body are going to Do The Right Thing,
+ensure that the function as a whole Does The Right Thing under that assumption,
+and then conclude that the function Does The Right Thing in general.  If this
+sounds like circular reasoning, it does<sup id="fnref:14"><a href="#fn:14" rel="footnote">14</a></sup>; but it turns out to be valid
+anyway.</p>
+
+<p>There are many ways to justify this procedure formally, all of which are truly
+mind-bending<sup id="fnref:15"><a href="#fn:15" rel="footnote">15</a></sup>. But once you&rsquo;ve justified this procedure once, you never have
+to do it again (unlike ad-hoc reasoning about loops). I&rsquo;ve determined that the
+most elegant way to explain it is by expanding our <a href="#named-let-1">named let
+example</a> into a non-recursive function, which just happens to
+accept as a parameter a correct<sup id="fnref:16"><a href="#fn:16" rel="footnote">16</a></sup> version of itself.</p>
+
+<p>```scheme
+(define (sum_list list)
+  (define (sum_sublist_nonrec f_correct accum sublist)</p>
+
+<pre><code>(cond ((null? sublist)
+       accum )
+      (else
+       (f_correct f_correct (+ accum (car sublist)) (cdr sublist)) )))
+</code></pre>
+
+<p>  (sum_sublist_nonrec sum_sublist_nonrec 0 list) )
+```</p>
+
+<p>Now, <code>sum_sublist_nonrec</code> is an honest-to-goodness non-recursive function, and
+we can check that it is correct. Given a correct function <code>f_correct</code> (which
+takes as inputs a correct version of itself, a number, and a list, and correctly
+returns the sum of all the elements in the list plus the number), a number, and
+a list, does <code>sum_sublist_nonrec</code> correctly return the sum of all elements in
+the list plus the number? Why yes, it does. (Constructing a formal proof tree
+for this claim is left as an exercise for the self-punishing reader.) Note that
+since <code>f_correct</code> is assumed to already be correct, the correct version of it is
+still just <code>f_correct</code>, so we can safely pass it to itself without violating our
+assumptions or introducing new ones. So, <code>sum_sublist_nonrec</code> is correct.</p>
+
+<p>Now let&rsquo;s consider the correctness of <code>sum_list</code>. It&rsquo;s supposed to add up all
+the numbers in <code>list</code>. What it actually does is to apply the (correct) function
+<code>sum_sublist_nonrec</code>, passing in a correct version of itself (check! it&rsquo;s
+already correct), a number to add the sum of the list to (check! adding zero to
+the sum of the list won&rsquo;t change it), and the list (check! that&rsquo;s what we&rsquo;re
+supposed to sum up).</p>
+
+<p>We&rsquo;ve just proved our program correct! The magic of named let is that it
+generates this clumsy form with a bunch of <code>f_correct</code>s from a compact and
+elegant form. In so doing, it lets us get away with much less formal reasoning
+while still having the confidence that it can be converted into something like
+what we just slogged through. Rest assured that no matter what you do with named
+let, no matter how complicated the construct you create, this &ldquo;assume it does
+the right thing&rdquo; technique still applies!</p>
+
+<p>With one <em>tiny</em> caveat. We haven&rsquo;t proved that the program <em>terminates</em>. If this
+technique proved termination, then we could just write</p>
+
+<p>```scheme
+(define (do-the-right-thing x)
+  (let does-the-right-thing ((x x))</p>
+
+<pre><code>(does-the-right-thing x)))
+</code></pre>
+
+<p>```</p>
+
+<p>and it would be totally correct, no matter what thing we want it to do.</p>
+
+<p>Technically, everywhere I&rsquo;ve said &ldquo;correct&rdquo;, what I mean is <strong>partially
+correct</strong>: <em>if</em> it terminates, <em>then</em> the output is correct. (Equivalently, it
+definitely <em>won&rsquo;t</em> return something incorrect.) <code>do-the-right-thing</code> is, in
+fact, partially correct: it never returns at all, so it won&rsquo;t give you any
+incorrect outputs!</p>
+
+<p>Termination proofs of recursive functions can usually be handled by <a href="http://en.wikipedia.org/wiki/Structural_induction">structural
+induction</a> on possible
+inputs: you establish that it terminates for minimal elements (e.g. the empty
+list) and that termination for any non-minimal element is dependent only on
+termination for some set of smaller elements (e.g. the tail of the list). The
+structure that you need in order to think about termination this way is also
+much clearer with recursion than with iteration constructs.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>If you doubt my ability to productively use assembly for more complicated toy problems, I direct you to my <a href="http://localhost:4000/blog/2014/02/25/overkilling-the-8-queens-problem/">previous blog post</a>.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>If we left it out, the final result would always be <code>0</code>. Proving this invariant is left as an exercise for the reader.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<li id="fn:3">
+<p><a href="http://en.wikipedia.org/wiki/Guido_van_Rossum">Guido van Rossum</a> is the author of Python, and the &ldquo;Benevolent Dictator for Life&rdquo; of its development process.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
+<li id="fn:4">
+<p>Unlike most language implementations, <code>guile</code> natively supports <a href="http://www.gnu.org/software/guile/manual/html_node/Integers.html#Integers">arbitrarily large integers</a>.<a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
+<li id="fn:5">
+<p>Although at least it&rsquo;s not as inelegant as defining the helper function <em>outside</em> the body of the actual function, thereby polluting the global namespace. Take advantage of nested functions!<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
+<li id="fn:6">
+<p>You can even keep your <code>for-each</code> loops, which are no substitute for <a href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d1-Fold-and-Map.html#SRFI_002d1-Fold-and-Map"><code>map</code> and <code>filter</code></a>.<a href="#fnref:6" rev="footnote">&#8617;</a></p></li>
+<li id="fn:7">
+<p>If you&rsquo;re curious how this works, click <a href="https://gist.github.com/davidad/9288924">here</a>. But I haven&rsquo;t settled on an ASM REPL solution I&rsquo;m happy with &mdash; this is just a one-off hack. A more legitimate ASM REPL may be the subject of a future blog post.<a href="#fnref:7" rev="footnote">&#8617;</a></p></li>
+<li id="fn:8">
+<p>Except for <code>rep</code> prefixes, which can iterate certain single instructions. I think it&rsquo;s fair to say those don&rsquo;t really count.<a href="#fnref:8" rev="footnote">&#8617;</a></p></li>
+<li id="fn:9">
+<p>I find calling conventions distasteful in general. The calling convention is like a shadow API (in fact, it&rsquo;s often referred to as the ABI, for application binary interface) that nobody has any control over (except the people at AMD, Intel, and Microsoft who are in a position to decide on such things) and that applies to every function, every component on every computer everywhere. What if we let people define their ABI as part of their API? Would the world come crashing down? I doubt it. You can already cause quite a bit of trouble by misusing A<em>P</em>Is; really, both API and ABI usage ought to be formally verified, and as such ought to have much more room for flexibility than they do now. &lt;/soapbox><a href="#fnref:9" rev="footnote">&#8617;</a></p></li>
+<li id="fn:10">
+<p>&ldquo;The stack&rdquo; is not merely a region of memory managed by the OS (like &ldquo;the heap&rdquo;, its common counterpart). The stack is a hardware-accelerated mechanism deeply embedded in the CPU. There is a hardware register <code>rsp</code> (a.k.a. the stack pointer). A <code>push</code> instruction decrements <code>rsp</code> (usually by 8 at a time, in 64-bit mode, since pointers are expressed as numbers of 8-bit bytes, and 64/8=8) and then stores a value to <code>[rsp]</code>. A <code>pop</code> instruction retrieves a value from <code>[rsp]</code> and then increments <code>rsp</code>. A <code>call</code> instruction <code>push</code>es the current value of <code>rip</code> (a.k.a. the instruction pointer, or the program counter), and then executes an unconditional jump (<code>jmp</code>). Finally, a <code>ret</code> instruction <code>pop</code>s from the stack into <code>rip</code>, returning to wherever the matching <code>call</code> left off.<a href="#fnref:10" rev="footnote">&#8617;</a></p></li>
+<li id="fn:11">
+<p>You may point out here that C doesn&rsquo;t actually let you pass entire linked lists by value. Maybe that&rsquo;s because it&rsquo;s a <em>bad idea</em>.<a href="#fnref:11" rev="footnote">&#8617;</a></p></li>
+<li id="fn:12">
+<p>If your function cannot be fully specified by an abstract mapping from inputs to outputs, then it is <strong>nondeterministic</strong>, which is a fancy word for &ldquo;unpredictable&rdquo;: there must exist some circumstances under which you cannot predict the behavior of the function, even knowing every input. Intuitively, I&rsquo;m sure you can see how unpredictable software is a nightmare to debug. Controlling nondeterminism is an active field of computer science research, which is not the subject of this article. However, I hope you are at least convinced that nondeterminism is something you should avoid if possible, and that therefore you should try to design every function in your program as a proper mathematical function.<p>Note that I&rsquo;m not talking about &ldquo;purity&rdquo; here &mdash; it&rsquo;s fine for &ldquo;outputs&rdquo; to include side effects as of function exit, and for &ldquo;inputs&rdquo; to include states of the external world as of function entry. What&rsquo;s important is that the state at function exit of anything the function modifies be uniquely determined by the state at function entry of anything that can affect its execution.<a href="#fnref:12" rev="footnote">&#8617;</a></p></li>
+<li id="fn:13">
+<p>Unless we&rsquo;re dealing with hairy scope issues like hoisting, in which case you should get rid of those first.<a href="#fnref:13" rev="footnote">&#8617;</a></p></li>
+<li id="fn:14">
+<p>Pun intended. The sentence within which this footnote is referenced <em>isn&rsquo;t</em> circular reasoning; it&rsquo;s a tautology. Therefore, it&rsquo;s an example of something that sounds like circular reasoning but is valid anyway. Of course, you shouldn&rsquo;t take the existence of this cute example as evidence that the circular-sounding reasoning preceding it is not, in fact, circular. (That would be a fallacy of <a href="http://en.wikipedia.org/wiki/Inappropriate_generalization">inappropriate generalization</a>, which neither is nor sounds like circular reasoning.)<a href="#fnref:14" rev="footnote">&#8617;</a></p></li>
+<li id="fn:15">
+<p>Trying to explain it for the purposes of this blog post &mdash; while making sure that I&rsquo;m not missing something &mdash; took me over four hours.<a href="#fnref:15" rev="footnote">&#8617;</a></p></li>
+<li id="fn:16">
+<p>Technically, I mean &ldquo;partially correct&rdquo;. This will be addressed in due time. Be patient, pedantic reader. This argument is hard enough to understand already.<a href="#fnref:16" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

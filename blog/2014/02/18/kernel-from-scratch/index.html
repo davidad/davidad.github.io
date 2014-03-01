@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Kernel From Scratch - Technical Journal</title>
+  <title>Kernel from Scratch - Technical Journal</title>
   <meta name="author" content="davidad (David A. Dalrymple)">
 
   
@@ -67,7 +67,7 @@ kernel image from scratch, using only nasm and my text editor. Well, folks &hell
   
   <header>
     
-      <h1 class="entry-title">Kernel From Scratch</h1>
+      <h1 class="entry-title">Kernel from Scratch</h1>
     
     
       <p class="meta">
@@ -189,7 +189,7 @@ $ qemu-system-x86_64 bootable.bin
 </code></div><div class='line'><code><span class="nl">k_64_bits:</span>
 </code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdi</span><span class="p">,</span> <span class="mh">0xb8000</span> <span class="c1">; This is the beginning of &quot;video memory.&quot;</span>
 </code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdx</span><span class="p">,</span> <span class="nb">rdi</span>     <span class="c1">; We&#39;ll save that value for later, too.</span>
-</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rcx</span><span class="p">,</span> <span class="mi">80</span><span class="o">*</span><span class="mi">25</span>   <span class="c1">; This is how many characters are on the screen.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rcx</span><span class="p">,</span> <span class="mi">80</span><span class="o">&ast;</span><span class="mi">25</span>   <span class="c1">; This is how many characters are on the screen.</span>
 </code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span> <span class="mh">0x7400</span>   <span class="c1">; Video memory uses 2 bytes per character. The high byte</span>
 </code></div><div class='line'><code>                   <span class="c1">; determines foreground and background colors. See also</span>
 </code></div><div class='line'><code><span class="c1">; <a href="http://en.wikipedia.org/wiki/List_of_8-bit_computer_hardware_palettes#CGA">http://en.wikipedia.org/wiki/List_of_8-bit_computer_hardware_palettes#CGA</a></span>
@@ -288,19 +288,23 @@ $ qemu-system-x86_64 bootable.bin
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/02/25/overkilling-the-8-queens-problem/">Overkilling the 8-queens Problem</a>
+        <a href="/blog/2014/02/28/python-to-scheme-to-assembly-1/">Python to Scheme to Assembly,<br>Part 1: Named Let</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/02/19/relocatable-vs-position-independent-code-or/">Relocatable vs. Position-Independent Code (or, Virtual Memory Isn't Just for Swap)</a>
+        <a href="/blog/2014/02/25/overkilling-the-8-queens-problem/">Overkilling the 8-queens problem</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/02/18/kernel-from-scratch/">Kernel From Scratch</a>
+        <a href="/blog/2014/02/19/relocatable-vs-position-independent-code-or/">Relocatable vs. Position-Independent Code (or, Virtual Memory isn't Just For Swap)</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/02/11/octopress-workflow/">Octopress Workflow</a>
+        <a href="/blog/2014/02/18/kernel-from-scratch/">Kernel from Scratch</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/11/octopress-workflow/">Octopress workflow</a>
       </li>
     
   </ul>
