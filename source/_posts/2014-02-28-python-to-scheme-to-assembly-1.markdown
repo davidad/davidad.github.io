@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Python to Scheme to Assembly,<br>Part 1: Named Let"
+title: "Python to Scheme to Assembly, <br>Part 1: Recursion and Named Let"
 date: 2014-02-28 14:43:58 -0500
 comments: true
 categories: python-to-scheme-to-assembly
@@ -11,10 +11,11 @@ programming language was Scheme. In 2014, my favorite programming language is
 x64 assembly. For some reason, that progression tends to surprise people. Come
 on a journey with me._
 
-* * *
+## Python
 
 In this article, we're going to consider a very simple toy problem: recursively
-summing up a list of numbers[^1]. Let's look at this function in Python.
+summing up a list of numbers[^1].
+
 
 ```python
 def sum_list(list):
@@ -38,6 +39,7 @@ would be proud.
 Young programmers often learn from this type of experience that recursion
 _sucks_. (Or, as a modern young programmer might say, it _doesn't scale_.) If
 they Google around a bit, they might find the following "solution":
+<!-- more -->
 
 >      >>> import sys
 >      >>> sys.setrecursionlimit(1500)
@@ -45,7 +47,7 @@ they Google around a bit, they might find the following "solution":
 >      500500
 
 If they have a good computer science teacher, though, they'll learn that the
-real solution is to use something called **tail recursion**. <!-- more --> This
+real solution is to use something called **tail recursion**.  This
 is a somewhat mysterious, seemingly arbitrary concept. If the result of your
 recursive call gets returned _immediately_, without any intervening expessions,
 then somehow it "doesn't count" toward the equally arbitrary recursion depth
