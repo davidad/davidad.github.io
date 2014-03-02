@@ -252,7 +252,7 @@ sum_list:
 This is _almost_ identical to the assembly that I wrote, except that it clobbers
 one of its inputs (which is perfectly allowed by the C calling convention[^16]),
 it uses `xor` instead of `mov` to load `0` (a solid optimization[^17]), it uses
-`rep ret` (less compact and no benefit on Intel chips) and it shuffles the
+`rep ret` (less compact and no benefit on Intel chips), and it shuffles the
 instructions around such that two `test`s are needed (almost certainly not
 helpful with modern branch prediction and loop detection). I haven't run
 benchmarks on this, but my guess is that it would come out about even. (Both
