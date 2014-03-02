@@ -49,10 +49,13 @@ real solution is to use something called **tail recursion**. <!-- more --> This
 is a somewhat mysterious, seemingly arbitrary concept. If the result of your
 recursive call gets returned _immediately_, without any intervening expessions,
 then somehow it "doesn't count" toward the equally arbitrary recursion depth
-limit. In our example above, we have to add `list[0]` to `sum_list(list[1:])`
-before we can return the result[^2]. In order to make this tail-recursive, we
-have to add an **accumulator** variable, which represents the sum of those
-numbers we've looked at already.
+limit. Our example above isn't tail-recusrive because we  add `list[0]` to
+`sum_list(list[1:])` before returning the result. In order to make `sum_list`
+tail-recursive, we have to add an **accumulator** variable, which represents the
+sum of those numbers we've looked at already. We'll call this version
+`sum_sublist`, and wrap it in a new `sum_list` function which calls
+`sum_sublist` with the initial accumulator 0 (initially, we haven't looked at
+any numbers yet, so the sum of them is 0).
 
 ```python
 def sum_list(list):
@@ -458,7 +461,7 @@ much clearer with recursion than with iteration constructs.
 In the next installment of **Python to Scheme to Assembly**, we will look at
 `call-with-current-continuation`.
 
-[^1]: If you doubt my ability to productively use assembly for more complicated toy problems, I direct you to my [previous blog post](http://localhost:4000/blog/2014/02/25/overkilling-the-8-queens-problem/).
+[^1]: If you doubt my ability to productively use assembly for more complicated toy problems, I direct you to my [previous blog post](/blog/2014/02/25/overkilling-the-8-queens-problem/).
 [^2]: If we left it out, the final result would always be `0`. Proving this invariant is left as an exercise for the reader.
 [^3]: [Guido van Rossum](http://en.wikipedia.org/wiki/Guido_van_Rossum) is the author of Python, and the "Benevolent Dictator for Life" of its development process.
 [^4]: Unlike most language implementations, `guile` natively supports [arbitrarily large integers](http://www.gnu.org/software/guile/manual/html_node/Integers.html#Integers).
