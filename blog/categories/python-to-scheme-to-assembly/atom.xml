@@ -4,7 +4,7 @@
   <title><![CDATA[Category: python-to-scheme-to-assembly | Technical Journal]]></title>
   <link href="http://davidad.github.io/blog/categories/python-to-scheme-to-assembly/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-03-01T20:24:08-05:00</updated>
+  <updated>2014-03-01T21:59:40-05:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -227,7 +227,7 @@ the <a href="http://luajit.org">LuaJIT</a> REPL instead<sup id="fnref:6"><a href
 assembly coder, because assembly doesn&rsquo;t really have any other iteration
 constructs<sup id="fnref:7"><a href="#fn:7" rel="footnote">7</a></sup>. But I don&rsquo;t miss them.  What would they look like, anyway?</p>
 
-<h2>C</h2>
+<h2>Addendum: C</h2>
 
 <p>In this section, we&rsquo;re going to look at the assembly for iteration, non-tail
 recursion, and tail recursion, as emitted by <code>gcc</code>, and get to the bottom of
@@ -411,13 +411,13 @@ penalty-free &mdash; a better abstraction than either iteration</em> (while-loop
 imitation) <em>or stack-driven recursion</em>, the two options <code>gcc</code> appears to pick
 from when dealing with various ways to code a list traversal.</p>
 
-<p>Actually, the real point I&rsquo;m trying to make here is <strong>I can naturally do named
-let in assembly, and that&rsquo;s one of the many reasons working in assembly makes me
-happy</strong>.</p>
+<p>Actually, the real point I&rsquo;m trying to make here is that, <strong>unlike in C, I can
+naturally do named let directly in assembly, and that&rsquo;s one of the many reasons
+working in assembly makes me happy</strong>.</p>
 
 <p><a name="recursion"></a></p>
 
-<h2>Addendum: What&rsquo;s so great about recursion, anyway?</h2>
+<h2>Appendix: What&rsquo;s so great about recursion, anyway?</h2>
 
 <p>For me, the most important point in favor of a recursive representation is that
 I find it easier to reason about <strong>correctness</strong> that way.</p>
