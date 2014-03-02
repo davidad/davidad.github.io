@@ -259,7 +259,7 @@ Named let style translates amazingly naturally into assembly.</p>
 </code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">accum</span><span class="p">,</span> <span class="mi">0</span>               <span class="c1">; these are the let-bindings!</span>
 </code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">sublist</span><span class="p">,</span> <span class="nv">list</span>
 </code></div><div class='line'><code><span class="nl">.sum_sublist:</span>
-</code></div><div class='line'><code>  <span class="nf">cmp</span> <span class="nv">sublist</span><span class="p">,</span> <span class="mi">0</span>             <span class="c1">; is it NULL?</span>
+</code></div><div class='line'><code>  <span class="nf">test</span> <span class="nv">sublist</span><span class="p">,</span> <span class="nv">sublist</span>      <span class="c1">; is it NULL?</span>
 </code></div><div class='line'><code>  <span class="nf">jnz</span> <span class="nv">.else</span>                  <span class="c1">; if not, goto else</span>
 </code></div><div class='line'><code>  <span class="nf">ret</span><span class="c1">; accum                (because return value is rax by calling convention)</span>
 </code></div><div class='line'><code><span class="nl">.else:</span>
@@ -279,11 +279,17 @@ the <a href="http://luajit.org">LuaJIT</a> REPL instead<sup id="fnref:6"><a href
 
 <p>In fact, if I weren&rsquo;t so comfortable with named let, I doubt I&rsquo;d be an effective
 assembly coder, because assembly doesn&rsquo;t really have any other iteration
-constructs<sup id="fnref:7"><a href="#fn:7" rel="footnote">7</a></sup>. But I don&rsquo;t miss them.  What would they look like, anyway?</p>
+constructs<sup id="fnref:7"><a href="#fn:7" rel="footnote">7</a></sup>. But I don&rsquo;t miss them. <a href="#iteration">What would they look like,
+anyway?</a></p>
+
+<hr />
+
+<p>In the next installment of <strong>Python to Scheme to Assembly</strong>, we will look at
+<code>call-with-current-continuation</code>.</p>
 
 <h2>Addendum: C</h2>
 
-<p>In this section, we&rsquo;re going to look at the assembly for iteration, non-tail
+<p>In this addendum, we&rsquo;re going to look at the assembly for iteration, non-tail
 recursion, and tail recursion, as emitted by <code>gcc</code>, and get to the bottom of
 what the difference is anyway.</p>
 
@@ -295,6 +301,8 @@ what the difference is anyway.</p>
 </code></div><div class='line'><code>  <span class="k">struct</span> <span class="n">number_list</span> <span class="o">&ast;</span><span class="n">next</span><span class="p">;</span>
 </code></div><div class='line'><code><span class="p">};</span>
 </code></div></pre></td></tr></table></div></figure></p>
+
+<p><a name="iteration"></a></p>
 
 <h3>Iteration</h3>
 
@@ -317,27 +325,27 @@ would do it.</p>
 </code></div><div class='line'><code><span class="nl">sum_list:</span>
 </code></div><div class='line'><code>  <span class="nf">xor</span> <span class="nb">eax</span><span class="p">,</span> <span class="nb">eax</span>     <span class="c1">; equivalent to &quot;mov rax, 0&quot; but faster</span>
 </code></div><div class='line'><code>                   <span class="c1">; in C it&#39;s fine to clobber rdi instead of copying it first</span>
-</code></div><div class='line'><code>  <span class="nf">test</span> <span class="nb">rdi</span><span class="p">,</span> <span class="nb">rdi</span>    <span class="c1">; equivalent to &quot;cmp rdi, 0&quot;, but more compact in machine code</span>
-</code></div><div class='line'><code>  <span class="nf">jz</span> <span class="nv">done</span>          <span class="c1">; here the &quot;if NULL&quot; case is at the bottom, accumulation case is right here. </span>
+</code></div><div class='line'><code>  <span class="nf">test</span> <span class="nb">rdi</span><span class="p">,</span> <span class="nb">rdi</span>        <span class="c1">; &lt;&ndash; same as ours</span>
+</code></div><div class='line'><code>  <span class="nf">jz</span> <span class="nv">done</span>          <span class="c1">; here the &quot;if NULL&quot; case is at the bottom</span>
 </code></div><div class='line'><code><span class="nl">.else:</span>
-</code></div><div class='line'><code>  <span class="nf">add</span> <span class="nb">rax</span><span class="p">,</span> <span class="p">[</span><span class="nb">rdi</span><span class="p">]</span>
-</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdi</span><span class="p">,</span> <span class="p">[</span><span class="nb">rdi</span><span class="o">+</span><span class="mi">8</span><span class="p">]</span>
-</code></div><div class='line'><code>  <span class="nf">test</span> <span class="nb">rdi</span><span class="p">,</span> <span class="nb">rdi</span>    <span class="c1">; equivalent to &quot;cmp rdi, 0&quot;</span>
-</code></div><div class='line'><code>  <span class="nf">jnz</span> <span class="nv">.else</span>
+</code></div><div class='line'><code>  <span class="nf">add</span> <span class="nb">rax</span><span class="p">,</span> <span class="p">[</span><span class="nb">rdi</span><span class="p">]</span>       <span class="c1">; &lt;&ndash; same as ours</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdi</span><span class="p">,</span> <span class="p">[</span><span class="nb">rdi</span><span class="o">+</span><span class="mi">8</span><span class="p">]</span>     <span class="c1">; &lt;&ndash; same as ours</span>
+</code></div><div class='line'><code>  <span class="nf">test</span> <span class="nb">rdi</span><span class="p">,</span> <span class="nb">rdi</span>        <span class="c1">; &lt;&ndash; same as ours, but duplicated</span>
+</code></div><div class='line'><code>  <span class="nf">jnz</span> <span class="nv">.else</span>            <span class="c1">; &lt;&ndash; same as ours</span>
 </code></div><div class='line'><code><span class="nl">.done:</span>
 </code></div><div class='line'><code>  <span class="nf">rep</span> <span class="nv">ret</span>          <span class="c1">; equivalent to &quot;ret&quot;, but faster on old AMD chips for no good reason</span>
 </code></div></pre></td></tr></table></div></figure></p>
 
 <p>This is <em>almost</em> identical to the assembly that I wrote, except that it clobbers
 one of its inputs (which is perfectly allowed by the C calling convention<sup id="fnref:8"><a href="#fn:8" rel="footnote">8</a></sup>),
-it uses <code>xor</code> instead of <code>mov</code> to load <code>0</code> (a solid optimization), it uses
-<code>test</code> in place of <code>cmp</code> (reasonable optimization), it uses <code>rep ret</code> (less
-compact and no benefit on Intel chips) and it shuffles the instructions around
-such that two <code>test</code>s are needed (almost certainly not helpful with modern
-branch prediction and loop detection). I haven&rsquo;t run benchmarks on this, but my
-guess is that it would come out about even. I also think the shuffling makes
-this &ldquo;iterative&rdquo; version more opaque and difficult to reason about (not least
-because of the duplicated <code>test</code>) than my &ldquo;named let&rdquo;-style code.</p>
+it uses <code>xor</code> instead of <code>mov</code> to load <code>0</code> (a solid optimization<sup id="fnref:9"><a href="#fn:9" rel="footnote">9</a></sup>), it uses
+<code>rep ret</code> (less compact and no benefit on Intel chips) and it shuffles the
+instructions around such that two <code>test</code>s are needed (almost certainly not
+helpful with modern branch prediction and loop detection). I haven&rsquo;t run
+benchmarks on this, but my guess is that it would come out about even. (Both
+versions are eight instructions long.) I also think the shuffling makes this
+&ldquo;iterative&rdquo; version more opaque and difficult to reason about (not least because
+of the duplicated <code>test</code>) than my &ldquo;named let&rdquo;-style code.</p>
 
 <h3>Non-Tail Recursion</h3>
 
@@ -371,12 +379,12 @@ optimizations are too complex to be made automatically.</p>
 </code></div></pre></td></tr></table></div></figure></p>
 
 <p>We can see immediately that some new instructions (<code>push</code>, <code>pop</code>, and <code>call</code>)
-have been introduced. These are all <strong>stack manipulation instructions</strong><sup id="fnref:9"><a href="#fn:9" rel="footnote">9</a></sup>. If
+have been introduced. These are all <strong>stack manipulation instructions</strong><sup id="fnref:10"><a href="#fn:10" rel="footnote">10</a></sup>. If
 we carefully pretend to be the CPU running this program, we can see that it
 pushes the address of every number in the linked list, and then dereferences and
 adds them up as it pops them from the stack. This is not good; if we wanted our
 entire data structure to be replicated on the stack, we would have passed it by
-value<sup id="fnref:10"><a href="#fn:10" rel="footnote">10</a></sup>! It&rsquo;s generally the amount of memory set aside for the stack that
+value<sup id="fnref:11"><a href="#fn:11" rel="footnote">11</a></sup>! It&rsquo;s generally the amount of memory set aside for the stack that
 we&rsquo;ve actually run out of in the case of a <code>recursion depth exceeded</code> error.</p>
 
 <h3>Tail Recursion</h3>
@@ -448,17 +456,17 @@ working in assembly makes me happy</strong>.</p>
 
 <h2>Appendix: What&rsquo;s so great about recursion, anyway?</h2>
 
-<p>For me, the most important point in favor of a recursive representation is that
-I find it easier to reason about <strong>correctness</strong> that way.</p>
+<p>For me, the most important point in favor of a recursive representation of loops
+is that I find it easier to reason about <strong>correctness</strong> that way.</p>
 
 <p>Any function we define ought to implement some ideal mathematical function that
-maps inputs to outputs<sup id="fnref:11"><a href="#fn:11" rel="footnote">11</a></sup>. If our code truly does implement that ideal
+maps inputs to outputs<sup id="fnref:12"><a href="#fn:12" rel="footnote">12</a></sup>. If our code truly does implement that ideal
 function, we say that the code is <strong>correct</strong>. Generally, we can break down the
 body of a function as a
 <a href="http://en.wikipedia.org/wiki/Function_composition">composition</a> of smaller
 functions; even in imperative languages, we can think of every statement as
 pulling in a state of the world, making well-defined changes, and passing the
-new state of the world into the next statement<sup id="fnref:12"><a href="#fn:12" rel="footnote">12</a></sup>. At each step, we ask
+new state of the world into the next statement<sup id="fnref:13"><a href="#fn:13" rel="footnote">13</a></sup>. At each step, we ask
 ourselves, &ldquo;are the outputs of this function going to be what I want them to
 be?&rdquo; For loops, though, <a href="http://en.wikipedia.org/wiki/Loop_invariant#Informal_example">this gets
 tricky</a>.</p>
@@ -469,15 +477,15 @@ function verification.  Intuitively, you can simply assume that all invocations
 of a recursive function within its own body are going to Do The Right Thing,
 ensure that the function as a whole Does The Right Thing under that assumption,
 and then conclude that the function Does The Right Thing in general.  If this
-sounds like circular reasoning, it does<sup id="fnref:13"><a href="#fn:13" rel="footnote">13</a></sup>; but it turns out to be valid
+sounds like circular reasoning, it does<sup id="fnref:14"><a href="#fn:14" rel="footnote">14</a></sup>; but it turns out to be valid
 anyway.</p>
 
 <p>There are many ways to justify this procedure formally, all of which are truly
-mind-bending<sup id="fnref:14"><a href="#fn:14" rel="footnote">14</a></sup>. But once you&rsquo;ve justified this procedure once, you never have
+mind-bending<sup id="fnref:15"><a href="#fn:15" rel="footnote">15</a></sup>. But once you&rsquo;ve justified this procedure once, you never have
 to do it again (unlike ad-hoc reasoning about loops). I&rsquo;ve determined that the
 most elegant way to explain it is by expanding our <a href="#named-let-1">named let
 example</a> into a non-recursive function, which just happens to
-accept as a parameter a correct<sup id="fnref:15"><a href="#fn:15" rel="footnote">15</a></sup> version of itself.</p>
+accept as a parameter a correct<sup id="fnref:16"><a href="#fn:16" rel="footnote">16</a></sup> version of itself.</p>
 
 <p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div></pre></td><td class='main  scheme'><pre><div class='line'><code><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">sum_list</span> <span class="nv">list</span><span class="p">)</span>
 </code></div><div class='line'><code>  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">sum_sublist_nonrec</span> <span class="nv">f_correct</span> <span class="nv">accum</span> <span class="nv">sublist</span><span class="p">)</span>
@@ -537,11 +545,6 @@ list) and that termination for any non-minimal element is dependent only on
 termination for some set of smaller elements (e.g. the tail of the list). The
 structure that you need in order to think about termination this way is also
 much clearer with recursion than with iteration constructs.</p>
-
-<hr />
-
-<p>In the next installment of <strong>Python to Scheme to Assembly</strong>, we will look at
-<code>call-with-current-continuation</code>.</p>
 <div class="footnotes">
 <hr/>
 <ol>
@@ -562,19 +565,21 @@ much clearer with recursion than with iteration constructs.</p>
 <li id="fn:8">
 <p>I find calling conventions distasteful in general. The calling convention is like a shadow API (in fact, it&rsquo;s often referred to as the ABI, for application binary interface) that nobody has any control over (except the people at AMD, Intel, and Microsoft who are in a position to decide on such things) and that applies to every function, every component on every computer everywhere. What if we let people define their ABI as part of their API? Would the world come crashing down? I doubt it. You can already cause quite a bit of trouble by misusing A<em>P</em>Is; really, both API and ABI usage ought to be formally verified, and as such ought to have much more room for flexibility than they do now. &lt;/soapbox><a href="#fnref:8" rev="footnote">&#8617;</a></p></li>
 <li id="fn:9">
-<p>&ldquo;The stack&rdquo; is not merely a region of memory managed by the OS (like &ldquo;the heap&rdquo;, its common counterpart). The stack is a hardware-accelerated mechanism deeply embedded in the CPU. There is a hardware register <code>rsp</code> (a.k.a. the stack pointer). A <code>push</code> instruction decrements <code>rsp</code> (usually by 8 at a time, in 64-bit mode, since pointers are expressed as numbers of 8-bit bytes, and 64/8=8) and then stores a value to <code>[rsp]</code>. A <code>pop</code> instruction retrieves a value from <code>[rsp]</code> and then increments <code>rsp</code>. A <code>call</code> instruction <code>push</code>es the current value of <code>rip</code> (a.k.a. the instruction pointer, or the program counter), and then executes an unconditional jump (<code>jmp</code>). Finally, a <code>ret</code> instruction <code>pop</code>s from the stack into <code>rip</code>, returning to wherever the matching <code>call</code> left off.<a href="#fnref:9" rev="footnote">&#8617;</a></p></li>
+<p>I would have applied this <code>xor</code> optimization too if I weren&rsquo;t trying to literally translate Scheme code as an illustration.<a href="#fnref:9" rev="footnote">&#8617;</a></p></li>
 <li id="fn:10">
-<p>You may point out here that C doesn&rsquo;t actually let you pass entire linked lists by value. Maybe that&rsquo;s because it&rsquo;s a <em>bad idea</em>.<a href="#fnref:10" rev="footnote">&#8617;</a></p></li>
+<p>&ldquo;The stack&rdquo; is not merely a region of memory managed by the OS (like &ldquo;the heap&rdquo;, its common counterpart). The stack is a hardware-accelerated mechanism deeply embedded in the CPU. There is a hardware register <code>rsp</code> (a.k.a. the stack pointer). A <code>push</code> instruction decrements <code>rsp</code> (usually by 8 at a time, in 64-bit mode, since pointers are expressed as numbers of 8-bit bytes, and 64/8=8) and then stores a value to <code>[rsp]</code>. A <code>pop</code> instruction retrieves a value from <code>[rsp]</code> and then increments <code>rsp</code>. A <code>call</code> instruction <code>push</code>es the current value of <code>rip</code> (a.k.a. the instruction pointer, or the program counter), and then executes an unconditional jump (<code>jmp</code>). Finally, a <code>ret</code> instruction <code>pop</code>s from the stack into <code>rip</code>, returning to wherever the matching <code>call</code> left off.<a href="#fnref:10" rev="footnote">&#8617;</a></p></li>
 <li id="fn:11">
-<p>If your function cannot be fully specified by an abstract mapping from inputs to outputs, then it is <strong>nondeterministic</strong>, which is a fancy word for &ldquo;unpredictable&rdquo;: there must exist some circumstances under which you cannot predict the behavior of the function, even knowing every input. Intuitively, I&rsquo;m sure you can see how unpredictable software is a nightmare to debug. Controlling nondeterminism is an active field of computer science research, which is not the subject of this article. However, I hope you are at least convinced that nondeterminism is something you should avoid if possible, and that therefore you should try to design every function in your program as a proper mathematical function.<p>Note that I&rsquo;m not talking about &ldquo;purity&rdquo; here &mdash; it&rsquo;s fine for &ldquo;outputs&rdquo; to include side effects as of function exit, and for &ldquo;inputs&rdquo; to include states of the external world as of function entry. What&rsquo;s important is that the state at function exit of anything the function modifies be uniquely determined by the state at function entry of anything that can affect its execution.<a href="#fnref:11" rev="footnote">&#8617;</a></p></li>
+<p>You may point out here that C doesn&rsquo;t actually let you pass entire linked lists by value. Maybe that&rsquo;s because it&rsquo;s a <em>bad idea</em>.<a href="#fnref:11" rev="footnote">&#8617;</a></p></li>
 <li id="fn:12">
-<p>Unless we&rsquo;re dealing with hairy scope issues like hoisting, in which case you should get rid of those first.<a href="#fnref:12" rev="footnote">&#8617;</a></p></li>
+<p>If your function cannot be fully specified by an abstract mapping from inputs to outputs, then it is <strong>nondeterministic</strong>, which is a fancy word for &ldquo;unpredictable&rdquo;: there must exist some circumstances under which you cannot predict the behavior of the function, even knowing every input. Intuitively, I&rsquo;m sure you can see how unpredictable software is a nightmare to debug. Controlling nondeterminism is an active field of computer science research, which is not the subject of this article. However, I hope you are at least convinced that nondeterminism is something you should avoid if possible, and that therefore you should try to design every function in your program as a proper mathematical function.<p>Note that I&rsquo;m not talking about &ldquo;purity&rdquo; here &mdash; it&rsquo;s fine for &ldquo;outputs&rdquo; to include side effects as of function exit, and for &ldquo;inputs&rdquo; to include states of the external world as of function entry. What&rsquo;s important is that the state at function exit of anything the function modifies be uniquely determined by the state at function entry of anything that can affect its execution.<a href="#fnref:12" rev="footnote">&#8617;</a></p></li>
 <li id="fn:13">
-<p>Pun intended. The sentence within which this footnote is referenced <em>isn&rsquo;t</em> circular reasoning; it&rsquo;s a tautology. Therefore, it&rsquo;s an example of something that sounds like circular reasoning but is valid anyway. Of course, you shouldn&rsquo;t take the existence of this cute example as evidence that the circular-sounding reasoning preceding it is not, in fact, circular. (That would be a fallacy of <a href="http://en.wikipedia.org/wiki/Inappropriate_generalization">inappropriate generalization</a>, which neither is nor sounds like circular reasoning.)<a href="#fnref:13" rev="footnote">&#8617;</a></p></li>
+<p>Unless we&rsquo;re dealing with hairy scope issues like hoisting, in which case you should get rid of those first.<a href="#fnref:13" rev="footnote">&#8617;</a></p></li>
 <li id="fn:14">
-<p>Trying to explain it for the purposes of this blog post &mdash; while making sure that I&rsquo;m not missing something &mdash; took me over four hours.<a href="#fnref:14" rev="footnote">&#8617;</a></p></li>
+<p>Pun intended. The sentence within which this footnote is referenced <em>isn&rsquo;t</em> circular reasoning; it&rsquo;s a tautology. Therefore, it&rsquo;s an example of something that sounds like circular reasoning but is valid anyway. Of course, you shouldn&rsquo;t take the existence of this cute example as evidence that the circular-sounding reasoning preceding it is not, in fact, circular. (That would be a fallacy of <a href="http://en.wikipedia.org/wiki/Inappropriate_generalization">inappropriate generalization</a>, which neither is nor sounds like circular reasoning.)<a href="#fnref:14" rev="footnote">&#8617;</a></p></li>
 <li id="fn:15">
-<p>Technically, I mean &ldquo;partially correct&rdquo;. This will be addressed in due time. Be patient, pedantic reader. This argument is hard enough to understand already.<a href="#fnref:15" rev="footnote">&#8617;</a></p></li>
+<p>Trying to explain it for the purposes of this blog post &mdash; while making sure that I&rsquo;m not missing something &mdash; took me over four hours.<a href="#fnref:15" rev="footnote">&#8617;</a></p></li>
+<li id="fn:16">
+<p>Technically, I mean &ldquo;partially correct&rdquo;. This will be addressed in due time. Be patient, pedantic reader. This argument is hard enough to understand already.<a href="#fnref:16" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
