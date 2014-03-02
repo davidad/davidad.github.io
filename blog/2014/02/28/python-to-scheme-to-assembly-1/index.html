@@ -339,7 +339,7 @@ would do it.</p>
 <p>This is <em>almost</em> identical to the assembly that I wrote, except that it clobbers
 one of its inputs (which is perfectly allowed by the C calling convention<sup id="fnref:8"><a href="#fn:8" rel="footnote">8</a></sup>),
 it uses <code>xor</code> instead of <code>mov</code> to load <code>0</code> (a solid optimization<sup id="fnref:9"><a href="#fn:9" rel="footnote">9</a></sup>), it uses
-<code>rep ret</code> (less compact and no benefit on Intel chips) and it shuffles the
+<code>rep ret</code> (less compact and no benefit on Intel chips), and it shuffles the
 instructions around such that two <code>test</code>s are needed (almost certainly not
 helpful with modern branch prediction and loop detection). I haven&rsquo;t run
 benchmarks on this, but my guess is that it would come out about even. (Both
