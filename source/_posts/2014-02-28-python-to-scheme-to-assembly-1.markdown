@@ -171,7 +171,7 @@ sum_list:
   mov accum, 0               ; these are the let-bindings!
   mov sublist, list
 .sum_sublist:
-  cmp sublist, 0             ; is it NULL?
+  test sublist, sublist      ; is it NULL?
   jnz .else                  ; if not, goto else
   ret; accum                (because return value is rax by calling convention)
 .else:
@@ -190,11 +190,17 @@ sum_list:
 
 In fact, if I weren't so comfortable with named let, I doubt I'd be an effective
 assembly coder, because assembly doesn't really have any other iteration
-constructs[^13]. But I don't miss them.  What would they look like, anyway?
+constructs[^13]. But I don't miss them. [What would they look like,
+anyway?](#iteration)
+
+* * *
+
+In the next installment of **Python to Scheme to Assembly**, we will look at
+`call-with-current-continuation`.
 
 ## Addendum: C
 
-In this section, we're going to look at the assembly for iteration, non-tail
+In this addendum, we're going to look at the assembly for iteration, non-tail
 recursion, and tail recursion, as emitted by `gcc`, and get to the bottom of
 what the difference is anyway.
 
@@ -208,6 +214,7 @@ struct number_list {
 };
 ```
 
+<a name="iteration"></a>
 ### Iteration
 
 If I were solving this problem in the context of a C program, this is how I
@@ -231,27 +238,27 @@ global sum_list
 sum_list:
   xor eax, eax     ; equivalent to "mov rax, 0" but faster
                    ; in C it's fine to clobber rdi instead of copying it first
-  test rdi, rdi    ; equivalent to "cmp rdi, 0", but more compact in machine code
-  jz done          ; here the "if NULL" case is at the bottom, accumulation case is right here. 
+  test rdi, rdi        ; <- same as ours
+  jz done          ; here the "if NULL" case is at the bottom
 .else:
-  add rax, [rdi]
-  mov rdi, [rdi+8]
-  test rdi, rdi    ; equivalent to "cmp rdi, 0"
-  jnz .else
+  add rax, [rdi]       ; <- same as ours
+  mov rdi, [rdi+8]     ; <- same as ours
+  test rdi, rdi        ; <- same as ours, but duplicated
+  jnz .else            ; <- same as ours
 .done:
   rep ret          ; equivalent to "ret", but faster on old AMD chips for no good reason
 ```
 
 This is _almost_ identical to the assembly that I wrote, except that it clobbers
 one of its inputs (which is perfectly allowed by the C calling convention[^16]),
-it uses `xor` instead of `mov` to load `0` (a solid optimization), it uses
-`test` in place of `cmp` (reasonable optimization), it uses `rep ret` (less
-compact and no benefit on Intel chips) and it shuffles the instructions around
-such that two `test`s are needed (almost certainly not helpful with modern
-branch prediction and loop detection). I haven't run benchmarks on this, but my
-guess is that it would come out about even. I also think the shuffling makes
-this "iterative" version more opaque and difficult to reason about (not least
-because of the duplicated `test`) than my "named let"-style code.
+it uses `xor` instead of `mov` to load `0` (a solid optimization[^17]), it uses
+`rep ret` (less compact and no benefit on Intel chips) and it shuffles the
+instructions around such that two `test`s are needed (almost certainly not
+helpful with modern branch prediction and loop detection). I haven't run
+benchmarks on this, but my guess is that it would come out about even. (Both
+versions are eight instructions long.) I also think the shuffling makes this
+"iterative" version more opaque and difficult to reason about (not least because
+of the duplicated `test`) than my "named let"-style code. 
 
 ### Non-Tail Recursion
 
@@ -366,8 +373,8 @@ working in assembly makes me happy**.
 <a name="recursion"></a>
 ## Appendix: What's so great about recursion, anyway?
 
-For me, the most important point in favor of a recursive representation is that
-I find it easier to reason about **correctness** that way.
+For me, the most important point in favor of a recursive representation of loops
+is that I find it easier to reason about **correctness** that way.
 
 Any function we define ought to implement some ideal mathematical function that
 maps inputs to outputs[^7]. If our code truly does implement that ideal
@@ -458,11 +465,6 @@ termination for some set of smaller elements (e.g. the tail of the list). The
 structure that you need in order to think about termination this way is also
 much clearer with recursion than with iteration constructs.
 
-* * *
-
-In the next installment of **Python to Scheme to Assembly**, we will look at
-`call-with-current-continuation`.
-
 [^1]: If you doubt my ability to productively use assembly for more complicated toy problems, I direct you to my [previous blog post](/blog/2014/02/25/overkilling-the-8-queens-problem/).
 [^2]: If we left it out, the final result would always be `0`. Proving this invariant is left as an exercise for the reader.
 [^3]: [Guido van Rossum](http://en.wikipedia.org/wiki/Guido_van_Rossum) is the author of Python, and the "Benevolent Dictator for Life" of its development process.
@@ -479,3 +481,4 @@ In the next installment of **Python to Scheme to Assembly**, we will look at
 [^14]: You may point out here that C doesn't actually let you pass entire linked lists by value. Maybe that's because it's a _bad idea_.
 [^15]: "The stack" is not merely a region of memory managed by the OS (like "the heap", its common counterpart). The stack is a hardware-accelerated mechanism deeply embedded in the CPU. There is a hardware register `rsp` (a.k.a. the stack pointer). A `push` instruction decrements `rsp` (usually by 8 at a time, in 64-bit mode, since pointers are expressed as numbers of 8-bit bytes, and 64/8=8) and then stores a value to `[rsp]`. A `pop` instruction retrieves a value from `[rsp]` and then increments `rsp`. A `call` instruction `push`es the current value of `rip` (a.k.a. the instruction pointer, or the program counter), and then executes an unconditional jump (`jmp`). Finally, a `ret` instruction `pop`s from the stack into `rip`, returning to wherever the matching `call` left off.
 [^16]: I find calling conventions distasteful in general. The calling convention is like a shadow API (in fact, it's often referred to as the ABI, for application binary interface) that nobody has any control over (except the people at AMD, Intel, and Microsoft who are in a position to decide on such things) and that applies to every function, every component on every computer everywhere. What if we let people define their ABI as part of their API? Would the world come crashing down? I doubt it. You can already cause quite a bit of trouble by misusing A<em>P</em>Is; really, both API and ABI usage ought to be formally verified, and as such ought to have much more room for flexibility than they do now. &lt;/soapbox>
+[^17]: I would have applied this `xor` optimization too if I weren't trying to literally translate Scheme code as an illustration.
