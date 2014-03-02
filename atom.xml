@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-03-01T21:58:27-05:00</updated>
+  <updated>2014-03-01T22:06:52-05:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Python to Scheme to Assembly,<br>Part 1: Named Let]]></title>
+    <title type="html"><![CDATA[Python to Scheme to Assembly, <br>Part 1: Recursion and Named Let]]></title>
     <link href="http://davidad.github.io/blog/2014/02/28/python-to-scheme-to-assembly-1/"/>
     <updated>2014-02-28T14:43:58-05:00</updated>
     <id>http://davidad.github.io/blog/2014/02/28/python-to-scheme-to-assembly-1</id>
@@ -23,10 +23,10 @@ programming language was Scheme. In 2014, my favorite programming language is
 x64 assembly. For some reason, that progression tends to surprise people. Come
 on a journey with me.</em></p>
 
-<hr />
+<h2>Python</h2>
 
 <p>In this article, we&rsquo;re going to consider a very simple toy problem: recursively
-summing up a list of numbers<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. Let&rsquo;s look at this function in Python.</p>
+summing up a list of numbers<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>.</p>
 
 <p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div></pre></td><td class='main  python'><pre><div class='line'><code><span class="k">def</span> <span class="nf">sum_list</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
 </code></div><div class='line'><code>  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -52,6 +52,9 @@ would be proud.</p>
 <em>sucks</em>. (Or, as a modern young programmer might say, it <em>doesn&rsquo;t scale</em>.) If
 they Google around a bit, they might find the following &ldquo;solution&rdquo;:</p>
 
+<!-- more -->
+
+
 <blockquote><pre><code> &gt;&gt;&gt; import sys
  &gt;&gt;&gt; sys.setrecursionlimit(1500)
  &gt;&gt;&gt; sum_list(range(1001))
@@ -59,7 +62,7 @@ they Google around a bit, they might find the following &ldquo;solution&rdquo;:<
 </code></pre></blockquote>
 
 <p>If they have a good computer science teacher, though, they&rsquo;ll learn that the
-real solution is to use something called <strong>tail recursion</strong>. <!-- more --> This
+real solution is to use something called <strong>tail recursion</strong>.  This
 is a somewhat mysterious, seemingly arbitrary concept. If the result of your
 recursive call gets returned <em>immediately</em>, without any intervening expessions,
 then somehow it &ldquo;doesn&rsquo;t count&rdquo; toward the equally arbitrary recursion depth
