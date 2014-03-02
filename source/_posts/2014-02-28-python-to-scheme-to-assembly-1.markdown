@@ -190,7 +190,7 @@ In fact, if I weren't so comfortable with named let, I doubt I'd be an effective
 assembly coder, because assembly doesn't really have any other iteration
 constructs[^13]. But I don't miss them.  What would they look like, anyway?
 
-## C
+## Addendum: C
 
 In this section, we're going to look at the assembly for iteration, non-tail
 recursion, and tail recursion, as emitted by `gcc`, and get to the bottom of
@@ -357,12 +357,12 @@ penalty-free -- a better abstraction than either iteration_ (while-loop
 imitation) _or stack-driven recursion_, the two options `gcc` appears to pick
 from when dealing with various ways to code a list traversal.
 
-Actually, the real point I'm trying to make here is **I can naturally do named
-let in assembly, and that's one of the many reasons working in assembly makes me
-happy**.
+Actually, the real point I'm trying to make here is that, **unlike in C, I can
+naturally do named let directly in assembly, and that's one of the many reasons
+working in assembly makes me happy**.
 
 <a name="recursion"></a>
-## Addendum: What's so great about recursion, anyway?
+## Appendix: What's so great about recursion, anyway?
 
 For me, the most important point in favor of a recursive representation is that
 I find it easier to reason about **correctness** that way.
