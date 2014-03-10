@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-03-10T11:59:43-04:00</updated>
+  <updated>2014-03-10T18:54:45-04:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -18,7 +18,16 @@
     <link href="http://davidad.github.io/blog/2014/03/10/how-i-think-about-math-relations/"/>
     <updated>2014-03-10T11:05:40-04:00</updated>
     <id>http://davidad.github.io/blog/2014/03/10/how-i-think-about-math-relations</id>
-    <content type="html"><![CDATA[<p>Last week at <a href="http://www.hackerschool.com">Hacker School</a>, I floated the idea of
+    <content type="html"><![CDATA[<p><a href="http://davidad.github.io/assets/20140306.pdf">See the slides (PDF)</a>. (You may want to use your PDF
+viewer&rsquo;s presentation mode; there are a lot of pseudo-animations that could
+get annoying to scroll through.)</p>
+
+<p><strong>Update</strong>: Today, I drew up the <a href="http://davidad.github.io/assets/20140310.pdf">field axioms</a> in this
+notation. I&rsquo;m almost to the point where I can define linearity!</p>
+
+<hr />
+
+<p>Last week at <a href="http://www.hackerschool.com">Hacker School</a>, I floated the idea of
 giving a presentation about linear algebra. Over a decade after taking it in
 college, I finally feel like I understand linear algebra well enough to express
 clearly, to an audience of programmers, most of the concepts from linear algebra
@@ -26,12 +35,12 @@ that they might find useful.</p>
 
 <p>I figured the very first thing to present would be the concept of <em>linearity</em>
 itself. After all, a <strong>linear operator</strong> is just any operator that commutes with
-addition and scalar multiplication. But wait&mdash; what is &ldquo;commuting&rdquo;? Well, no
-problem, &ldquo;<em>A</em> and <em>B</em> commute&rdquo; just means that composing <em>A</em> with <em>B</em> yields the
-same operator as composing <em>B</em> with <em>A</em>. But wait&mdash; what is &ldquo;composing&rdquo;? I
-<em>could</em> start my presentation by defining a category, but that would be
-unnecessarily scary given category theory&rsquo;s fearsome reputation. Besides, John
-Baez <a href="http://johncarlosbaez.wordpress.com/2014/03/02/network-theory-i/">showed me last
+addition and scalar multiplication. But wait&mdash; what is &ldquo;commuting&rdquo;? <!-- more
+--> Well, no problem, &ldquo;<em>A</em> and <em>B</em> commute&rdquo; just means that composing <em>A</em> with
+<em>B</em> yields the same operator as composing <em>B</em> with <em>A</em>. But wait&mdash; what is
+&ldquo;composing&rdquo;?   I <em>could</em> start my presentation by defining a category, but that
+would be unnecessarily scary given category theory&rsquo;s fearsome reputation.
+Besides, John Baez <a href="http://johncarlosbaez.wordpress.com/2014/03/02/network-theory-i/">showed me last
 week</a> that
 categorical diagram notation has its boxes and arrows counterintuitively
 swapped. But wait&mdash; I could just use Baez&rsquo;s new notation, instead! Then my
@@ -40,10 +49,6 @@ entire discussion of linear algebra will be based on concrete, non-fearsome
 
 <p>So&hellip;I got about as far as defining &ldquo;commuting.&rdquo; (Linear algebra will have to
 wait.)</p>
-
-<p><a href="http://davidad.github.io/assets/20140306.pdf">See the slides (PDF)</a>. (You may want to use your PDF
-viewer&rsquo;s presentation mode; there are a lot of pseudo-animations that could
-get annoying to scroll through.)</p>
 
 <hr />
 
