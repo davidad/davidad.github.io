@@ -1,1 +1,1 @@
-source/_posts/2014-02-28-python-to-scheme-to-assembly-1.markdown
+source/_posts/2014-03-10-how-i-think-about-math-relations.markdown
