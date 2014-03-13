@@ -39,6 +39,7 @@ phrases were used almost 60 years ago. My position is:
   **invented by people**: mortal, fallible humans like you and me who were
   just trying to make something work. With a solid historical perspective we can
   dare to do better.
+<!-- more -->
 
 ## The Programming Language
 
