@@ -10,7 +10,7 @@ Skelcy](https://twitter.com/_JacobJacob) for requesting such a piece._
 
 Computers didn't always have operating systems. The earliest machines, like the
 [Harvard Mark I](http://en.wikipedia.org/wiki/Harvard_Mark_I) and the
-[EDVAC](http://en.wikipedia.org/wiki/EDVAC), perfomed one "computation" at a
+[EDVAC](http://en.wikipedia.org/wiki/EDVAC), performed one "computation" at a
 time. Whenever a computation finished, with its output printed by a
 teletypewriter or recorded on a magnetic tape, the machine would shut down. A
 person would then have to notice the machine stopped, unload the output, set up
@@ -72,7 +72,7 @@ It is bizarre that we're still expressing programs entirely with text 59 years
 later when the first interactive graphical display appeared _4_ years later[^5].
 
 ### Benefits
-The existence of progamming languages enabled the use of concise notation for
+The existence of programming languages enabled the use of concise notation for
 complex ideas, also known as **abstraction**. This not only saves time, but
 also makes programs easier to understand and maintain.
 
@@ -135,7 +135,7 @@ arguably the "original" OS.
 
 ### Concept
 
-**An operating system is a piece of software that faciliates the execution of
+**An operating system is a piece of software that facilitates the execution of
 multiple independent programs on one computer, using standard input and output
 routines.**
 
@@ -145,7 +145,7 @@ execution of independent modules or subroutines. In fact, GM/NAA OS was
 [literally](http://millosh.wordpress.com/2007/09/07/the-worlds-first-computer-operating-system-implemented-at-general-motors-research-labs-in-warren-michigan-in-1955/)
 a modification of the octal code of the FORTRAN compiler tape.
 
-The bizareness about operating systems is that we still accept unquestioningly
+The bizzareness about operating systems is that we still accept unquestioningly
 that it's a good idea to run multiple programs on a single computer with the
 conceit that they're totally independent. Well-specified interfaces are great
 _semantically_ for maintainability. But when it comes to what the machine is
@@ -190,7 +190,7 @@ transistorized computers, was installed at MIT in summer of 1958. The TX-0 had a
 monitor (a 512x512 CRT display), a keyboard, and a pointing device (a [light
 pen](http://en.wikipedia.org/wiki/Light_pen)), making it probably the first
 computer with [a physical interface that we might recognize
-today](http://youtu.be/ieuV0A01--c?t=2m41s). It also happpens to be the machine
+today](http://youtu.be/ieuV0A01--c?t=2m41s). It also happens to be the machine
 which spawned [hacker
 culture](http://en.wikipedia.org/wiki/Hackers:_Heroes_of_the_Computer_Revolution#Part_One:_True_Hackers).
 
@@ -209,7 +209,7 @@ computing had three main causes in this context:
   could be "wasted" on providing such interactivity
 
 Because of its transistorized circuitry, the TX-0 needed very little
-maintainance or oversight, and for years was left unattended at MIT for pretty
+maintenance or oversight, and for years was left unattended at MIT for pretty
 much anybody to use at any time, resulting in a great flourishing of interactive
 programs (many of whose names began with the word "Expensive," in an
 acknowledgment of the absurdity of a $3M machine being available for such
@@ -455,14 +455,14 @@ introduced implementations of:
 > rearranging text before their eyes, quickly and with a minimum of human
 > effort. Even so apparently minor an advance could yield total changes in an
 > individual's repertoire hierarchy that would represent a great increase in
-> over-all effectivenesa. Normally the necessary equipment would enter the
+> over-all effectiveness. Normally the necessary equipment would enter the
 > market slowly; changes from the expected would be small, people would change
 > their ways of doing things a little at a time, and only gradually would their
 > accumulated changes create markets for more radical versions of the equipment.
 > Such an evolutionary process has been typical of the way our repertoire
 > hierarchies have grown and formed.
 >
-> But an active research effort, aimed at exploring and evaluating poasible
+> But an active research effort, aimed at exploring and evaluating possible
 > integrated changes throughout the repertoire hierarchy, could greatly
 > accelerate this evolutionary process.
 
