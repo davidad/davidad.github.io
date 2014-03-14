@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Systems Past: the only 8 software innovations ever"
+title: "Systems Past: the only 8 software innovations we actually use"
 date: 2014-03-12 19:21:49 -0400
 comments: true
 categories: 
@@ -41,7 +41,8 @@ phrases were used almost 60 years ago. My position is:
   dare to do better.
 <!-- more -->
 
-## The Programming Language
+<a name="The-Programming-Language"></a>
+## 1. The Programming Language <a href="#The-Programming-Language">#</a>
 
 **Year**: 1955
 
@@ -91,7 +92,8 @@ also makes programs easier to understand and maintain.
 * The fact that inputs had to be loaded into computers as stacks of punched
   cards limited the possible means of expressing computations -- lines of text.
 
-## The Operating System
+<a name="The-Operating-System"></a>
+## 2. The Operating System <a href="#The-Operating-System">#</a>
 
 **Year**: 1955
 
@@ -175,7 +177,8 @@ environment?
   simplest/earliest cases, by running each job to completion or termination
   before loading the next).
 
-## Interactivity
+<a name="Interactivity"></a>
+## 3. Interactivity <a href="#Interactivity">#</a>
 
 **Year**: 1958
 
@@ -237,7 +240,8 @@ available.
   continues to crop up in graphics programming, network programming, and other
   areas. 
 
-## Transactions
+<a name="Transactions"></a>
+## 4. Transactions <a href="#Transactions">#</a>
 
 **Year**: 1959
 
@@ -292,7 +296,8 @@ the precise order in which it was applied.
 
 None.
 
-## Garbage Collection
+<a name="Garbage-Collection"></a>
+## 5. Garbage Collection <a href="#Garbage-Collection">#</a>
 
 **Year**: 1960
 
@@ -331,7 +336,8 @@ available whenever it is no longer being referred to.**
 * Memory usage becomes unpredictable due to variable GC effectiveness and
   potential reference leaks.
 
-## Virtualization
+<a name="Virtualization"></a>
+## 6. Virtualization <a href="#Virtualization">#</a>
 
 **Year**: 1961
 
@@ -403,7 +409,8 @@ to themselves.** Common forms include:
   exist in an isolated virtual memory space.
 
 
-## Hypermedia
+<a name="Hypermedia"></a>
+## 7. Hypermedia <a href="#Hypermedia">#</a>
 
 **Year**: 1968
 
@@ -491,7 +498,8 @@ like Ted Nelson and Doug Engelbart had probably hoped.
   [HyperCard](http://en.wikipedia.org/wiki/HyperCard), it will be quickly
   discontinued since it will threaten the rest of the company's product line.
 
-## Internetworking
+<a name="Internetworking"></a>
+## 8. Internetworking <a href="#Internetworking">#</a>
 
 **Year**: 1969
 
