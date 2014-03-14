@@ -577,12 +577,12 @@ been doing since then? Mostly making things faster, cheaper, more
 memory-consuming, smaller, cheaper, dramatically less efficient, more secure,
 and worryingly glitchy. And we've been rehashing the same ideas over and over
 again.  Interactivity is now "event-driven programming".  Transactions are now
-"concurrency" or "distributed computing". Also, we have tabbed browsing now,
-because overlapping windows were a bad skeuomorphism from the start, and desktop
-notifications, because whatever is all the way in the corner of your screen is
-probably not very important. "Flexible view control" is relegated to the few and
-the proud who run something like `xmonad` or `herbstluftwm` on their
-custom-compiled GNU/Linux.
+"concurrency". Internetworking is now "mesh networking". Also, we have tabbed
+browsing now, because overlapping windows were a bad skeuomorphism from the
+start, and desktop notifications, because whatever is all the way in the corner
+of your screen is probably not very important. "Flexible view control" is
+relegated to the few and the proud who run something like `xmonad` or
+`herbstluftwm` on their custom-compiled GNU/Linux.
 
 Many good programs have been written. Lots of really important algorithms and
 data structures have been invented (though usually not implemented in practice).
