@@ -282,7 +282,7 @@ the precise order in which it was applied.
 * Transactions are also the key idea behind **version control systems**, which are
   increasingly adopted in all corners of the software world. In that context,
   they are called "commits".
-* Most recently, the core of crypto-currencies[^6] is a crude but clever solution to
+* Most recently, the core of crypto-currencies is a crude but clever solution to
   a distributed transaction processing problem. (In this context, transactions
   are in fact called transactions.)
 
