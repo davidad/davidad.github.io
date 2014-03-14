@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-03-14T02:04:33-04:00</updated>
+  <updated>2014-03-14T02:06:28-04:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -673,9 +673,9 @@ with high barriers to competition and low barriers to various abuses of power.</
 </ul>
 
 
-<hr />
+<h2>Conclusion</h2>
 
-<p>So, in conclusion, I find that all the significant concepts in software systems
+<p>I find that all the significant concepts in software systems
 were invented/discovered in the 15 years between 1955 and 1970. What have we
 been doing since then? Mostly making things faster, cheaper, more
 memory-consuming, smaller, cheaper, dramatically less efficient, more secure<sup id="fnref:6"><a href="#fn:6" rel="footnote">6</a></sup>,
