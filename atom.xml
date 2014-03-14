@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-03-14T16:28:55-04:00</updated>
+  <updated>2014-03-14T16:39:27-04:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -197,7 +197,7 @@ from the work of programming.</li>
 </ul>
 
 
-<h3>Exemplars</h3>
+<h3>Exemplars<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup></h3>
 
 <ul>
 <li><a href="http://en.wikipedia.org/wiki/CP/M">CP/M</a></li>
@@ -399,7 +399,7 @@ in order to make a working program.</li>
 <h3>Drawbacks</h3>
 
 <ul>
-<li>Performance becomes unpredictable due to variable GC pause times<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup>.</li>
+<li>Performance becomes unpredictable due to variable GC pause times<sup id="fnref:6"><a href="#fn:6" rel="footnote">6</a></sup>.</li>
 <li>Memory usage becomes unpredictable due to variable GC effectiveness and
 potential reference leaks.</li>
 </ul>
@@ -417,7 +417,7 @@ potential reference leaks.</li>
 Supervisor</a>,
 developed at the University of Manchester in 1961, has been called &ldquo;the first
 recognizable modern operating system&rdquo; and &ldquo;the most significant breakthrough in
-the history of operating systems&rdquo;<sup id="fnref:6"><a href="#fn:6" rel="footnote">6</a></sup>.</p>
+the history of operating systems&rdquo;<sup id="fnref:7"><a href="#fn:7" rel="footnote">7</a></sup>.</p>
 
 <h3>Motivation</h3>
 
@@ -679,7 +679,7 @@ with high barriers to competition and low barriers to various abuses of power.</
 <p>I find that all the significant concepts in software systems
 were invented/discovered in the 15 years between 1955 and 1970. What have we
 been doing since then? Mostly making things faster, cheaper, more
-memory-consuming, smaller, cheaper, dramatically less efficient, more secure<sup id="fnref:7"><a href="#fn:7" rel="footnote">7</a></sup>,
+memory-consuming, smaller, cheaper, dramatically less efficient, more secure<sup id="fnref:8"><a href="#fn:8" rel="footnote">8</a></sup>,
 and worryingly glitchy. And we&rsquo;ve been rehashing the same ideas over and over
 again.  Interactivity is now &ldquo;event-driven programming&rdquo;.  Transactions are now
 &ldquo;concurrency&rdquo;. Internetworking is now &ldquo;mesh networking&rdquo;. Also, we have tabbed
@@ -736,11 +736,13 @@ something new in software systems for the first time since 1969.</p>
 <li id="fn:4">
 <p>Yes, I&rsquo;m aware of <a href="http://en.wikipedia.org/wiki/Graphical_programming">all this $#!*</a>. If you want to point out that graphical programming languages exist, and they aren&rsquo;t based on FORTRAN, well, they fall outside my definition of &ldquo;programming language&rdquo;, so there. Riddle me this: why does nobody who knows how to program in text ever want to use them? Why do they break down for anything that isn&rsquo;t basically a signal processing task? Why don&rsquo;t they have lambdas, zooming, or style? You know, style. Like Edward Tufte has. Style. Nobody wants to use an ugly visual programming language.<a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
 <li id="fn:5">
-<p>This disadvantage can be mitigated significantly (or, with great effort, completely eliminated) by the careful use of <a href="http://en.wikipedia.org/wiki/Garbage_collection_(computer_science)#Stop-the-world_vs._incremental_vs._concurrent">incremental or concurrent</a> garbage collectors.<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
+<p>These are examples of <strong>non-multitasking</strong> OSes. Multitasking (as practiced today) requires a separate idea, which I cover in the section marked <a href="#Virtualization">Virtualization</a>.<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
 <li id="fn:6">
-<p>(<a href="http://books.google.com/books?id=-PDPBvIPYBkC&amp;lpg=PA1&amp;ots=LgbTZ3Z1IO&amp;dq=Classic%20Operating%20Systems%3A%20From%20Batch%20Processing%20to%20Distributed%20Systems&amp;pg=PA7#v=onepage&amp;q=atlas&amp;f=false">source</a>)<a href="#fnref:6" rev="footnote">&#8617;</a></p></li>
+<p>This disadvantage can be mitigated significantly (or, with great effort, completely eliminated) by the careful use of <a href="http://en.wikipedia.org/wiki/Garbage_collection_(computer_science)#Stop-the-world_vs._incremental_vs._concurrent">incremental or concurrent</a> garbage collectors.<a href="#fnref:6" rev="footnote">&#8617;</a></p></li>
 <li id="fn:7">
-<p>I considered including cryptography as another major bullet point, but if I selected a particular algorithm (e.g.  <a href="http://en.wikipedia.org/wiki/Diffie-Hellman_key_exchange">Diffie-Hellman-Merkle key exchange</a> or the <a href="http://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction">Merkle–Damgård hash function construction</a>), then I&rsquo;d have to include other important algorithms (I&rsquo;ve left algorithms out of my list here; they&rsquo;re not &ldquo;software innovations&rdquo; in the sense I mean), and if I selected &ldquo;encrypted communications&rdquo;, well, that surely predates computers. The fact that people started writing programs which encrypt communications is great, but it doesn&rsquo;t change the software environment on the level I&rsquo;m talking about.  That said, I do consider the invention of the practical cryptographic hash a contender for most important innovation in <em>computer science</em> in the last 25 years; asymmetric cryptography is about equally important.  Ralph Merkle really deserves more credit for having essentially conceived of both pillars of modern cryptography.<a href="#fnref:7" rev="footnote">&#8617;</a></p></li>
+<p>(<a href="http://books.google.com/books?id=-PDPBvIPYBkC&amp;lpg=PA1&amp;ots=LgbTZ3Z1IO&amp;dq=Classic%20Operating%20Systems%3A%20From%20Batch%20Processing%20to%20Distributed%20Systems&amp;pg=PA7#v=onepage&amp;q=atlas&amp;f=false">source</a>)<a href="#fnref:7" rev="footnote">&#8617;</a></p></li>
+<li id="fn:8">
+<p>I considered including cryptography as another major bullet point, but if I selected a particular algorithm (e.g.  <a href="http://en.wikipedia.org/wiki/Diffie-Hellman_key_exchange">Diffie-Hellman-Merkle key exchange</a> or the <a href="http://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction">Merkle–Damgård hash function construction</a>), then I&rsquo;d have to include other important algorithms (I&rsquo;ve left algorithms out of my list here; they&rsquo;re not &ldquo;software innovations&rdquo; in the sense I mean), and if I selected &ldquo;encrypted communications&rdquo;, well, that surely predates computers. The fact that people started writing programs which encrypt communications is great, but it doesn&rsquo;t change the software environment on the level I&rsquo;m talking about.  That said, I do consider the invention of the practical cryptographic hash a contender for most important innovation in <em>computer science</em> in the last 25 years; asymmetric cryptography is about equally important.  Ralph Merkle really deserves more credit for having essentially conceived of both pillars of modern cryptography.<a href="#fnref:8" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
