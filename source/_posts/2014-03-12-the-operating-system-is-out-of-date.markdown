@@ -393,10 +393,11 @@ to themselves.** Common forms include:
 
 ### Exemplars
 
-* [Multics](http://en.wikipedia.org/wiki/Multics)
+* [Multics](http://en.wikipedia.org/wiki/Multics) ([virtual memory](http://users.soe.ucsc.edu/~sbrandt/221/Papers/History/daley-cacm68.pdf))
 * [Plan 9](http://www.slideshare.net/jserv/plan-9-not-only-a-better-unix)
   (unparalleled uniformity between volatile, nonvolatile, and network storage)
 * [Xen](http://en.wikipedia.org/wiki/Xen) (full virtualization)
+* [LuaJIT](http://luajit.org/luajit.html) ([VM](http://nominolo.blogspot.co.uk/2012/07/implementing-fast-interpreters.html))
 
 ### Drawbacks
 
