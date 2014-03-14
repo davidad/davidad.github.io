@@ -83,3 +83,13 @@ blockquote blockquote {
 blockquote p {
   margin-bottom: 0.25em;
 }
+
+.footnotes li:hover a[rev="footnote"] {
+  color: $solar-orange;
+  text-shadow: 0 0 1px $solar-orange;
+}
+
+.footnotes li:hover a[rev="footnote"]:hover {
+  color: $solar-blue;
+  text-shadow: 0 0 1px $solar-blue;
+}
