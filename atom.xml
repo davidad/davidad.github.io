@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-03-14T16:39:27-04:00</updated>
+  <updated>2014-03-14T17:05:45-04:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -353,7 +353,11 @@ are in fact called transactions.)</li>
 
 <h3>Drawbacks</h3>
 
-<p>None.</p>
+<ul>
+<li>Trades performance for correctness. In some contexts, an occasional incorrect
+result is not as much of a problem as overall throughput.</li>
+</ul>
+
 
 <p><a name="Garbage-Collection"></a></p>
 
