@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-03-14T02:45:17-04:00</updated>
+  <updated>2014-03-14T02:52:04-04:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -469,10 +469,11 @@ to confirm that running arbitrary code within the VM is safe.</li>
 <h3>Exemplars</h3>
 
 <ul>
-<li><a href="http://en.wikipedia.org/wiki/Multics">Multics</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Multics">Multics</a> (<a href="http://users.soe.ucsc.edu/~sbrandt/221/Papers/History/daley-cacm68.pdf">virtual memory</a>)</li>
 <li><a href="http://www.slideshare.net/jserv/plan-9-not-only-a-better-unix">Plan 9</a>
 (unparalleled uniformity between volatile, nonvolatile, and network storage)</li>
 <li><a href="http://en.wikipedia.org/wiki/Xen">Xen</a> (full virtualization)</li>
+<li><a href="http://luajit.org/luajit.html">LuaJIT</a> (<a href="http://nominolo.blogspot.co.uk/2012/07/implementing-fast-interpreters.html">VM</a>)</li>
 </ul>
 
 
