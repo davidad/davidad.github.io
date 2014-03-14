@@ -19,7 +19,8 @@ finally, press the **start button** to get the machine cranking again. On the
 Harvard Mark I, for instance, restarting would involve separately turning on
 multiple electric motors and then pressing a button marked MAIN SEQUENCE.
 
-[![The control panel of the Harvard Mark I.](http://upload.wikimedia.org/wikipedia/commons/0/07/Harvard_Mark_I_Computer_-_Input-Output_Details.jpg)](http://upload.wikimedia.org/wikipedia/commons/0/07/Harvard_Mark_I_Computer_-_Input-Output_Details.jpg) 
+[![The control panel of the Harvard Mark
+I.](http://upload.wikimedia.org/wikipedia/commons/0/07/Harvard_Mark_I_Computer_-_Input-Output_Details.jpg)](http://commons.wikimedia.org/wiki/File:Harvard_Mark_I_Computer_-_Input-Output_Details.jpg) 
 
 
 **This is the context in which the programming language (PL) and the operating
