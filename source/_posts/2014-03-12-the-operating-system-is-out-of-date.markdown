@@ -570,9 +570,10 @@ reach their destination within less than a hundred "hops").
   _this_, most communications systems around the world are controlled by unjust oligopolies,
   with high barriers to competition and low barriers to various abuses of power.
 
-***
 
-So, in conclusion, I find that all the significant concepts in software systems
+## Conclusion
+
+I find that all the significant concepts in software systems
 were invented/discovered in the 15 years between 1955 and 1970. What have we
 been doing since then? Mostly making things faster, cheaper, more
 memory-consuming, smaller, cheaper, dramatically less efficient, more secure[^6],
