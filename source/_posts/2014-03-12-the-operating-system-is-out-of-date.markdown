@@ -165,7 +165,7 @@ environment?
 * Bare-hands reconfiguration of hardware (e.g. plugboards) finally disappeared
   from the work of programming.
 
-### Exemplars
+### Exemplars[^8]
 
 * [CP/M](http://en.wikipedia.org/wiki/CP/M)
 * [ProDOS](http://en.wikipedia.org/wiki/ProDOS)
@@ -630,3 +630,4 @@ _To be continued..._
 [^5]: Yes, I'm aware of [all this $#!*](http://en.wikipedia.org/wiki/Graphical_programming). If you want to point out that graphical programming languages exist, and they aren't based on FORTRAN, well, they fall outside my definition of "programming language", so there. Riddle me this: why does nobody who knows how to program in text ever want to use them? Why do they break down for anything that isn't basically a signal processing task? Why don't they have lambdas, zooming, or style? You know, style. Like Edward Tufte has. Style. Nobody wants to use an ugly visual programming language.
 [^6]: I considered including cryptography as another major bullet point, but if I selected a particular algorithm (e.g.  [Diffie-Hellman-Merkle key exchange](http://en.wikipedia.org/wiki/Diffie-Hellman_key_exchange) or the [Merkle–Damgård hash function construction](http://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction)), then I'd have to include other important algorithms (I've left algorithms out of my list here; they're not "software innovations" in the sense I mean), and if I selected "encrypted communications", well, that surely predates computers. The fact that people started writing programs which encrypt communications is great, but it doesn't change the software environment on the level I'm talking about.  That said, I do consider the invention of the practical cryptographic hash a contender for most important innovation in _computer science_ in the last 25 years; asymmetric cryptography is about equally important.  Ralph Merkle really deserves more credit for having essentially conceived of both pillars of modern cryptography.
 [^7]: This disadvantage can be mitigated significantly (or, with great effort, completely eliminated) by the careful use of [incremental or concurrent](http://en.wikipedia.org/wiki/Garbage_collection_(computer_science\)#Stop-the-world_vs._incremental_vs._concurrent) garbage collectors.
+[^8]: These are examples of **non-multitasking** OSes. Multitasking (as practiced today) requires a separate idea, which I cover in the section marked [Virtualization](#Virtualization).
