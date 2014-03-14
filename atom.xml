@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-03-13T15:12:27-04:00</updated>
+  <updated>2014-03-14T01:28:51-04:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Systems Past: the only 8 software innovations ever]]></title>
+    <title type="html"><![CDATA[Systems Past: the only 8 software innovations we actually use]]></title>
     <link href="http://davidad.github.io/blog/2014/03/12/the-operating-system-is-out-of-date/"/>
     <updated>2014-03-12T19:21:49-04:00</updated>
     <id>http://davidad.github.io/blog/2014/03/12/the-operating-system-is-out-of-date</id>
@@ -58,7 +58,9 @@ dare to do better.</li>
 <!-- more -->
 
 
-<h2>The Programming Language</h2>
+<p><a name="The-Programming-Language"></a></p>
+
+<h2>1. The Programming Language <a href="#The-Programming-Language">#</a></h2>
 
 <p><strong>Year</strong>: 1955</p>
 
@@ -118,7 +120,9 @@ cards limited the possible means of expressing computations &mdash; lines of tex
 </ul>
 
 
-<h2>The Operating System</h2>
+<p><a name="The-Operating-System"></a></p>
+
+<h2>2. The Operating System <a href="#The-Operating-System">#</a></h2>
 
 <p><strong>Year</strong>: 1955</p>
 
@@ -211,7 +215,9 @@ before loading the next).</li>
 </ul>
 
 
-<h2>Interactivity</h2>
+<p><a name="Interactivity"></a></p>
+
+<h2>3. Interactivity <a href="#Interactivity">#</a></h2>
 
 <p><strong>Year</strong>: 1958</p>
 
@@ -285,7 +291,9 @@ areas.</li>
 </ul>
 
 
-<h2>Transactions</h2>
+<p><a name="Transactions"></a></p>
+
+<h2>4. Transactions <a href="#Transactions">#</a></h2>
 
 <p><strong>Year</strong>: 1959</p>
 
@@ -346,7 +354,9 @@ are in fact called transactions.)</li>
 
 <p>None.</p>
 
-<h2>Garbage Collection</h2>
+<p><a name="Garbage-Collection"></a></p>
+
+<h2>5. Garbage Collection <a href="#Garbage-Collection">#</a></h2>
 
 <p><strong>Year</strong>: 1960</p>
 
@@ -394,7 +404,9 @@ potential reference leaks.</li>
 </ul>
 
 
-<h2>Virtualization</h2>
+<p><a name="Virtualization"></a></p>
+
+<h2>6. Virtualization <a href="#Virtualization">#</a></h2>
 
 <p><strong>Year</strong>: 1961</p>
 
@@ -477,7 +489,9 @@ exist in an isolated virtual memory space.</li>
 </ul>
 
 
-<h2>Hypermedia</h2>
+<p><a name="Hypermedia"></a></p>
+
+<h2>7. Hypermedia <a href="#Hypermedia">#</a></h2>
 
 <p><strong>Year</strong>: 1968</p>
 
@@ -577,7 +591,9 @@ discontinued since it will threaten the rest of the company&rsquo;s product line
 </ul>
 
 
-<h2>Internetworking</h2>
+<p><a name="Internetworking"></a></p>
+
+<h2>8. Internetworking <a href="#Internetworking">#</a></h2>
 
 <p><strong>Year</strong>: 1969</p>
 
