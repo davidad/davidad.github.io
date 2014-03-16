@@ -75,10 +75,10 @@ which supports both creation and deletion technically supports modification
 system which provides authenticity and non-repudiation also provides integrity.
 
 One place where InfoSec and product design overlap is **availability**. The
-product design version of availability is that a user wishes to access to system
-through some communications channel, and it must be able to respond. The InfoSec
-version is that an attacker wishes to cause the system to stop responding to
-legitimate users (usually, though not always, via [denial of
+product design version of availability is that a user wishes to access our
+system through some communications channel, and it must be able to respond. The
+InfoSec version is that an attacker wishes to cause our system to stop
+responding to legitimate users (usually, though not always, via [denial of
 service](http://en.wikipedia.org/wiki/Denial-of-service_attack) techniques), and
 the attacker must be unable to do this.
 
