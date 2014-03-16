@@ -127,11 +127,13 @@ arguably the "original" OS.
 > things go so smoothly. If a programmer was fumble-fingered, cards jammed,
 > magnetic tapes would not read due to defective splices, printer boards or
 > switches were incorrectly set up, and it took 10 minutes to get going; or
-> worse -- you lost your opportunity and the next guy took the machine when your
+> worse -- you lost your opportunity and the next person took the machine when your
 > time ran out. Usually the machine spent more time idle than computing. We
 > programmers weren't paid very much and although the machine was fairly costly,
 > its capacity was even a more precious commodity since there were only 17 in
 > the whole world.
+
+([source](http://www.rand.org/content/dam/rand/pubs/papers/2008/P7316.pdf))
 
 ### Concept
 
@@ -295,7 +297,8 @@ the precise order in which it was applied.
 
 ### Drawbacks
 
-None.
+* Trades performance for correctness. In some contexts, an occasional incorrect
+  result is not as much of a problem as overall throughput.
 
 <a name="Garbage-Collection"></a>
 ## 5. Garbage Collection <a href="#Garbage-Collection">#</a>
