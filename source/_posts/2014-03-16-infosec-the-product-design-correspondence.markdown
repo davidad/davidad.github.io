@@ -97,6 +97,7 @@ else](http://www.cloudflare.com/) handle that.
 You may also come across the words **authorization** and **authentication**
 connected with some of the above. These are issues without clear product design
 correspondences (except insofar as products are designed to provide them in
-their InfoSec senses). Like **trust** and **risk**, they tend to be intricately
-tied up in human affairs. These terms, along with the basic categories of
-cryptographic primitives, will be treated in future InfoSec articles.
+their InfoSec senses). Like **trust** and **risk**, they also tend to be
+intricately tied up in human affairs. These terms, along with the basic
+categories of cryptographic primitives, will be treated in future InfoSec
+articles.
