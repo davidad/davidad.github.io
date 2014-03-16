@@ -4,7 +4,7 @@
   <title><![CDATA[Category: infosec | Technical Journal]]></title>
   <link href="http://davidad.github.io/blog/categories/infosec/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-03-16T11:31:28-04:00</updated>
+  <updated>2014-03-16T11:32:40-04:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -117,9 +117,10 @@ else</a> handle that.</p>
 <p>You may also come across the words <strong>authorization</strong> and <strong>authentication</strong>
 connected with some of the above. These are issues without clear product design
 correspondences (except insofar as products are designed to provide them in
-their InfoSec senses). Like <strong>trust</strong> and <strong>risk</strong>, they tend to be intricately
-tied up in human affairs. These terms, along with the basic categories of
-cryptographic primitives, will be treated in future InfoSec articles.</p>
+their InfoSec senses). Like <strong>trust</strong> and <strong>risk</strong>, they also tend to be
+intricately tied up in human affairs. These terms, along with the basic
+categories of cryptographic primitives, will be treated in future InfoSec
+articles.</p>
 ]]></content>
   </entry>
   
