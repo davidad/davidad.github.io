@@ -604,8 +604,9 @@ computer to do things in a programming language and run the resulting program on
 an operating system. A righteous operating system should be a programming
 language. And for goodness' sake, let's not use the entire network stack just to
 talk to another process on the same machine which is responsible for managing a
-database using the filesystem stack. At least let's use shared memory (that's
-what it's _for_!). But if we believe in the future -- if we believe in ourselves
+database using the filesystem stack. At least let's use shared memory (with
+transactional semantics, naturally -- which Intel's latest CPUs support in
+hardware). But if we believe in the future -- if we believe in ourselves
 -- let's dare to ask why, anyway, does the operating system give you this
 "filesystem" thing that's no good as a database and expect you to just accept
 that "stuff on computers goes in folders, lah"? Any decent software environment
