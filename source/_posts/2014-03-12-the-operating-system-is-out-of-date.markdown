@@ -577,18 +577,18 @@ reach their destination within less than a hundred "hops").
 
 ## Conclusion
 
-I find that all the significant concepts in software systems
-were invented/discovered in the 15 years between 1955 and 1970. What have we
-been doing since then? Mostly making things faster, cheaper, more
-memory-consuming, smaller, cheaper, dramatically less efficient, more secure[^6],
-and worryingly glitchy. And we've been rehashing the same ideas over and over
-again.  Interactivity is now "event-driven programming".  Transactions are now
-"concurrency". Internetworking is now "mesh networking". Also, we have tabbed
-browsing now, because overlapping windows were a bad skeuomorphism from the
-start, and desktop notifications, because whatever is all the way in the corner
-of your screen is probably not very important. "Flexible view control" is
-relegated to the few and the proud who run something like `xmonad` or
-`herbstluftwm` on their custom-compiled GNU/Linux.
+I find that all the significant concepts in software systems were
+invented/discovered in the 15 years between 1955 and 1970. What have we been
+doing since then? Mostly making things faster, cheaper, more memory-consuming,
+smaller, cheaper, dramatically less efficient, more secure[^6], and worryingly
+glitchy. And we've been rehashing the same ideas over and over again.
+Interactivity is now "event-driven programming".  Transactions are now
+"concurrency primitives". Internetworking is now "mesh networking". Also, we
+have tabbed browsing now, because overlapping windows were a bad skeuomorphism
+from the start, and desktop notifications, because whatever is all the way in
+the corner of your screen is probably not very important. "Flexible view
+control" is relegated to the few and the proud who run something like `xmonad`
+or `herbstluftwm` on their custom-compiled GNU/Linux.
 
 Many good programs have been written. Lots of really important algorithms and
 data structures have been invented (though usually not implemented in practice).
