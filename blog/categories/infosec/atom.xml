@@ -4,7 +4,7 @@
   <title><![CDATA[Category: infosec | Technical Journal]]></title>
   <link href="http://davidad.github.io/blog/categories/infosec/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-03-24T11:48:57-04:00</updated>
+  <updated>2014-03-24T11:58:42-04:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -18,7 +18,7 @@
     <link href="http://davidad.github.io/blog/2014/03/16/infosec-the-product-design-correspondence/"/>
     <updated>2014-03-16T09:55:30-04:00</updated>
     <id>http://davidad.github.io/blog/2014/03/16/infosec-the-product-design-correspondence</id>
-    <content type="html"><![CDATA[<p><strong>General disclaimer for InfoSec articles:</strong> _Reading this article does not qualify you to design secure systems. Writing this article does not qualify <em>me</em> to design secure systems. In fact, <em>nobody is qualified to design secure systems</em>. A system should not be considered secure unless it has been reviewed by multiple security experts <em>and</em> resisted multiple serious attempts to violate its security claims in practice. The information contained in this article is offered “as is” and without warranties of any kind (express, implied, and statutory), all of which the author expressly disclaims to the fullest extent permitted by law._</p>
+    <content type="html"><![CDATA[<p><strong>General disclaimer for InfoSec articles:</strong> <em>Reading this article does not qualify you to design secure systems. Writing this article does not qualify </em>me <em>to design secure systems. In fact, </em>nobody is qualified to design secure systems<em>. A system should not be considered secure unless it has been reviewed by multiple security experts </em>and <em>resisted multiple serious attempts to violate its security claims in practice. The information contained in this article is offered “as is” and without warranties of any kind (express, implied, and statutory), all of which the author expressly disclaims to the fullest extent permitted by law.</em></p>
 <hr />
 <blockquote>
 <p>If programming is the art of adding functionality to computers, security is the art of removing it.</p>
