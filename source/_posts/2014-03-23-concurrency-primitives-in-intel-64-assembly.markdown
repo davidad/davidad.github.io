@@ -67,9 +67,9 @@ each, one byte at a time, giving each byte 4 characters field-width and printing
 it as an unsigned integer (in decimal), with a newline at the end of the line,
 starting from offset 8 (as the first 8 bytes of the file are used by the
 concurrency mechanism for bookkeeping purposes[^2]). The `*` on the second line
-means "every line after this matches it," so the file must repeat itself every
-235 bytes until the end. We can suppress the `*` with `-v` and examine the last
-4 lines, just to be sure we understand it correctly:
+of `hexdump`'s output means "every line after this matches it," so the file must
+repeat itself every 235 bytes until the end. We can suppress the `*` with `-v`
+and examine the last 4 lines, just to be sure we understand it correctly:
 
     bash-3.2$ hexdump -e '235/1 "%4u" "\n"' -s8 -v foo | tail -n4
        1  37 158 194  35 206  32 128  54 120 146 102 233   9 125  36 122 118 184 210 121 232  33  14  50 161  72  98 164 160  11 157  38  49 180 136 162 228 154  15  76  12  88 124  10  46  47  48  84 205   6  82  18  79 175 101 167 193 149  45  56 172  83 169 165 231  22 168  44  80  61  97 208 119 145 211 207  58 204  85  96 227 183 209  40 201  62 123  59 135 171  57  93  94  95 131  17  53 129  65 126 222 148 214   5 196  92 103 219 130 216 212  43  69 215  91 127 108 144  20 166 192  23  19 105  16 132 143  39 230  21  87  13 109 170 106 182 218 104 140 141 142 178  64 100 176 112 173  34 195  26  52   8 139 150  31 177  28  24  90 116  27 138 174 155 191  67 213   4  70  66 152  63 179 190  86  42  68 134  60 156 217 153 229  30 151 187 188 189 225 111 147 223 159 220  81   7  73  99  55 186 197  78 224  75  71 137 163  74 185 221 202   3 114  25  51 117 113 199 110 226   2 133  89 115 181 107 203  29 200  41  77 198 234   0
