@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-03-24T16:20:56-04:00</updated>
+  <updated>2014-03-24T16:24:40-04:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -223,7 +223,7 @@ concurrency.asm<a href='https://github.com/davidad/asm_concurrency/blob/TJ-1/con
 <h3 id="lock-cmpxchg-compare-and-swap"><code>lock cmpxchg</code> (compare-and-swap) <a href="#lock-cmpxchg">#</a></h3>
 <p>This is a slightly complex but beautiful operation. It takes three parameters:</p>
 <ul>
-<li>a <em>memory location</em> (<code>[rbp+rdi]</code> in this case), which has operand size <code>qword</code> (i.e. it’s an 8-byte machine word)<sup><a href="#fn6" class="footnoteRef" id="fnref6">6</a></sup>,</li>
+<li>a <em>memory location</em> (<code>[rbp+rdi]</code> in this case), which has operand size dependent on the operand size of the next parameter (in this case, it’s an 8-byte machine word, because the next parameter is an 8-byte register)<sup><a href="#fn6" class="footnoteRef" id="fnref6">6</a></sup>,</li>
 <li>an <em>update value</em> to store (<code>rcx</code> in this case, holding the value <code>0xff</code>), and</li>
 <li>an <em>expected value</em> to compare against (always <code>rax</code>, an implicit parameter, and in this case zeroed out by <code>xor rax, rax</code>).</li>
 </ul>
