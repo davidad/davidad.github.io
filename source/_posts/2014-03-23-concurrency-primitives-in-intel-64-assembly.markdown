@@ -344,7 +344,8 @@ RESERVED sign at the same location. That's where **`lock cmpxchg`** comes in.
 
 This is a slightly complex but beautiful operation. It takes three parameters:
 
-* a _memory location_ (`[rbp+rdi]` in this case),
+* a _memory location_ (`[rbp+rdi]` in this case), which has operand size `qword`
+  (i.e. it's an 8-byte machine word)[^6],
 * an _update value_ to store (`rcx` in this case, holding the value `0xff`), and
 * an _expected value_ to compare against (always `rax`, an implicit parameter, and in this case zeroed out by `xor rax, rax`).
 
@@ -504,3 +505,4 @@ Concurrency Primitives?" on your personal programming-environment scorecard.
 [^3]: The code displayed here violates this rule pretty badly, which is probably why the speedup from running in parallel is noticeably worse than ideal, but I think to do better would overcomplicate the presentation.
 [^4]: I could (should?) have used command-line arguments for these values, but let's face it, parsing command-line arguments is annoying in _any_ language, let alone assembly.
 [^5]: This may be counterintuitive if you think of assembly as a conspicuously old-school way to program. I won't deny that it is, but `nasm`, DynASM, `r2`, and the other tools I use for assembly hacking are relentlessly kept in sync with Intel's assembly-language specification, which is updated in advance of every new CPU release. Other tools take much longer to adapt because, well, Intel doesn't _specify_ exactly how they should make use of new features.  So, in fact, the latest hardware is supported in assembly before it's supported anywhere else.
+[^6]: There are some applicatons for which you might wish to compare-and-swap _two_ machine words (often, two pointers) in a single atomic operation. This can be done using the `lock cmpxchg16b` instruction (note: the 16 bytes still have to be contiguous in memory, and in fact must be 16-byte-aligned).
