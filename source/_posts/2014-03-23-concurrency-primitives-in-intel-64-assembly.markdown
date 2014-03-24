@@ -344,8 +344,9 @@ RESERVED sign at the same location. That's where **`lock cmpxchg`** comes in.
 
 This is a slightly complex but beautiful operation. It takes three parameters:
 
-* a _memory location_ (`[rbp+rdi]` in this case), which has operand size `qword`
-  (i.e. it's an 8-byte machine word)[^6],
+* a _memory location_ (`[rbp+rdi]` in this case), which has operand size
+  dependent on the operand size of the next parameter (in this case, it's an
+  8-byte machine word, because the next parameter is an 8-byte register)[^6],
 * an _update value_ to store (`rcx` in this case, holding the value `0xff`), and
 * an _expected value_ to compare against (always `rax`, an implicit parameter, and in this case zeroed out by `xor rax, rax`).
 
