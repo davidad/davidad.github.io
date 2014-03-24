@@ -296,7 +296,7 @@ concurrency.asm<a href='https://github.com/davidad/asm_concurrency/blob/TJ-1/con
 <h3 id="lock-cmpxchg-compare-and-swap"><code>lock cmpxchg</code> (compare-and-swap) <a href="#lock-cmpxchg">#</a></h3>
 <p>This is a slightly complex but beautiful operation. It takes three parameters:</p>
 <ul>
-<li>a <em>memory location</em> (<code>[rbp+rdi]</code> in this case),</li>
+<li>a <em>memory location</em> (<code>[rbp+rdi]</code> in this case), which has operand size <code>qword</code> (i.e. it’s an 8-byte machine word)<sup><a href="#fn6" class="footnoteRef" id="fnref6">6</a></sup>,</li>
 <li>an <em>update value</em> to store (<code>rcx</code> in this case, holding the value <code>0xff</code>), and</li>
 <li>an <em>expected value</em> to compare against (always <code>rax</code>, an implicit parameter, and in this case zeroed out by <code>xor rax, rax</code>).</li>
 </ul>
@@ -392,6 +392,7 @@ concurrency.asm<a href='https://github.com/davidad/asm_concurrency/blob/TJ-1/con
 <li id="fn3"><p>Pun not intended.<a href="#fnref3">↩</a></p></li>
 <li id="fn4"><p>The code displayed here violates this rule pretty badly, which is probably why the speedup from running in parallel is noticeably worse than ideal, but I think to do better would overcomplicate the presentation.<a href="#fnref4">↩</a></p></li>
 <li id="fn5"><p>I could (should?) have used command-line arguments for these values, but let’s face it, parsing command-line arguments is annoying in <em>any</em> language, let alone assembly.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>There are some applicatons for which you might wish to compare-and-swap <em>two</em> machine words (often, two pointers) in a single atomic operation. This can be done using the <code>lock cmpxchg16b</code> instruction (note: the 16 bytes still have to be contiguous in memory, and in fact must be 16-byte-aligned).<a href="#fnref6">↩</a></p></li>
 </ol>
 </section></div>
 
