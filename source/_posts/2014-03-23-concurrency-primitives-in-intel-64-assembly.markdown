@@ -340,22 +340,30 @@ their own plot of land. The key here is to prevent two workers from putting up a
 RESERVED sign at the same location. That's where **`lock cmpxchg`** comes in. 
 
 <a name="lock-cmpxchg"></a>
-### `lock cmpxchg` [#](#lock-cmpxchg)
+### `lock cmpxchg` (compare-and-swap) [#](#lock-cmpxchg)
 
-This is a slightly complex but beautiful operation. It takes three parameters: a
-memory location (`[rbp+rdi]` in this case), a value to store (`rcx` in this
-case, holding the value `0xff`), and a value to compare against (always `rax`,
-an implicit parameter, and in this case zeroed out by `xor rax, rax`). It locks
-the memory location and compares it against `rax`. The intuition here is that
-`rax` contains the value we _expect_ to be in that memory location currently. If
-the comparison fails, that means the value has changed since we last looked.
-Then, rax is loaded with the _new_ value (in case we want to use it to
-re-calculate our intended update). But, if the value in memory _does_ match what
-we expected (`rax`), then our updated value (in this case, `rcx`) goes back into
-that memory location before any other CPU/core has a chance to access it. The
-upshot is that it's impossible for more than one worker to reserve the same
-region. The zero-flag `ZF` tells us whether the operation was a success (i.e.
-whether the value did match our expectation and the update was stored).
+This is a slightly complex but beautiful operation. It takes three parameters:
+
+* a _memory location_ (`[rbp+rdi]` in this case),
+* an _update value_ to store (`rcx` in this case, holding the value `0xff`),
+* and an _expected value_ to compare against (always `rax`, an implicit parameter, and in this case zeroed out by `xor rax, rax`).
+
+The first thing `lock cmpxchg` will do is lock the memory location and compare
+it to the expected value. Then, depending on the result, it will do one of two
+things:
+
+* If the comparison fails, that means the state of memory isn't what we
+  expected---it must have changed since we last looked. This is bad news; the
+  update is aborted. To inform us exactly what went wrong, `cmpxchg` will
+  overwrite `rax` with whatever is actually in memory _now_ (instead of what we
+  expected). The zero-flag `ZF` will be cleared to signal non-equality.
+* If the value in memory _does_ match what we expected, then our update
+  value replaces it in that memory location before any other CPU/core has a
+  chance to either read or write there. That's a "successful" compare-and-swap,
+  and the zero-flag `ZF` will be set.
+
+The upshot is that it's impossible for more than one worker to reserve the same
+region.
 
 <a name="tatas"></a>
 ### "test-and-test-and-set" [#](#tatas)
