@@ -346,7 +346,7 @@ This is a slightly complex but beautiful operation. It takes three parameters: a
 memory location (`[rbp+rdi]` in this case), a value to store (`rcx` in this
 case, holding the value `0xff`), and a value to compare against (always `rax`,
 an implicit parameter, and in this case zeroed out by `xor rax, rax`). It locks
-that memory location and compares it against `rax`. The intuition here is that
+the memory location and compares it against `rax`. The intuition here is that
 `rax` contains the value we _expect_ to be in that memory location currently. If
 the comparison fails, that means the value has changed since we last looked.
 Then, rax is loaded with the _new_ value (in case we want to use it to
@@ -442,7 +442,34 @@ number-of-active-workers variable at the same time (e.g. the last two workers
 reading the value `2`, decrementing it, and both writing back `1` and exiting,
 with nobody left to decrease it to `0`).
 
-## Conclusion
+<a name="badness"></a>
+## What should have been done differently<br/>(if this weren't just an example) [#](#badness)
+
+It's worth pointing out that for this particular problem, I did a lot of things
+here that don't actually make so much sense.
+
+* There's no particular reason to allow multiple simultaneous invocations of the
+  whole program on the same file. If that requirement is relaxed, then it makes
+  a lot more sense to divide up the work by starting each worker at a different
+  offset and having them all skip $n$ tasks ahead when they finish (e.g. with
+  seven workers, the fifth worker would take the $(7k+4)$th task for every
+  integer $k$).
+* Even with the requirement in question, there would be more efficient ways to
+  divide up tasks---for instance, instead of trying to claim every task in
+  order, workers could maintain a second bookkeeping word which would track the
+  address of the current next-unclaimed-task.
+* The modular exponentiation could have been implemented more efficiently.
+* In fact, since the result is just a single 235-byte pattern that repeats over
+  and over, I could have just computed it once and repeatedly written it into
+  the file.  (Since this would be a primarily storage-bound operation, there
+  wouldn't even be much sense in parallelizing it.)
+
+But hey, now we know how to write concurrent x64 programs using
+memory-mapped files.
+
+
+<a name="conclusion"></a>
+## Conclusion [#](#conclusion)
 
 In whichever abstraction we're working, if we're doing concurrent processing on
 an Intel platform, it may be worth considering how the abstraction resolves down
