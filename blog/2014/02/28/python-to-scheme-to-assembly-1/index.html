@@ -9,8 +9,7 @@
   <meta name="author" content="davidad (David A. Dalrymple)">
 
   
-  <meta name="description" content="In 2001, my favorite programming language was Python. In 2008, my favorite
-programming language was Scheme. In 2014, my favorite programming language &hellip;">
+  <meta name="description" content="In 2001, my favorite programming language was Python. In 2008, my favorite programming language was Scheme. In 2014, my favorite programming language &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -90,166 +89,105 @@ programming language was Scheme. In 2014, my favorite programming language &hell
   </header>
 
 
-<div class="entry-content"><p><em>In 2001, my favorite programming language was Python. In 2008, my favorite
-programming language was Scheme. In 2014, my favorite programming language is
-x64 assembly. For some reason, that progression tends to surprise people. Come
-on a journey with me.</em></p>
-
-<h2>Python</h2>
-
-<p>In this article, we&rsquo;re going to consider a very simple toy problem: recursively
-summing up a list of numbers<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>.</p>
-
-<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div></pre></td><td class='main  python'><pre><div class='line'><code><span class="k">def</span> <span class="nf">sum_list</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+<div class="entry-content"><p><em>In 2001, my favorite programming language was Python. In 2008, my favorite programming language was Scheme. In 2014, my favorite programming language is x64 assembly. For some reason, that progression tends to surprise people. Come on a journey with me.</em></p>
+<h2 id="python">Python</h2>
+<p>In this article, we’re going to consider a very simple toy problem: recursively summing up a list of numbers<sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup>.</p>
+<figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div></pre></td><td class='main  python'><pre><div class='line'><code><span class="k">def</span> <span class="nf">sum_list</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
 </code></div><div class='line'><code>  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
 </code></div><div class='line'><code>    <span class="k">return</span> <span class="mi">0</span>
 </code></div><div class='line'><code>  <span class="k">else</span><span class="p">:</span>
 </code></div><div class='line'><code>    <span class="k">return</span> <span class="nb">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">sum_list</span><span class="p">(</span><span class="nb">list</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
-</code></div></pre></td></tr></table></div></figure></p>
-
-<blockquote><pre><code> &gt;&gt;&gt; sum_list(range(101))
- 5050
-</code></pre></blockquote>
-
-<p><a href="http://en.wikipedia.org/wiki/Carl_Friedrich_Gauss#Anecdotes">Young Carl Gauss</a>
-would be proud.</p>
-
-<blockquote><pre><code> &gt;&gt;&gt; sum_list(range(1001))
- RuntimeError: maximum recursion depth exceeded
-</code></pre>
-
-<p>Oops.</p></blockquote>
-
-<p>Young programmers often learn from this type of experience that recursion
-<em>sucks</em>. (Or, as a modern young programmer might say, it <em>doesn&rsquo;t scale</em>.) If
-they Google around a bit, they might find the following &ldquo;solution&rdquo;:</p>
-
-<!-- more -->
+</code></div></pre></td></tr></table></div></figure>
 
 
-<blockquote><pre><code> &gt;&gt;&gt; import sys
+<blockquote>
+<pre><code> &gt;&gt;&gt; sum_list(range(101))
+ 5050</code></pre>
+</blockquote>
+<p><a href="http://en.wikipedia.org/wiki/Carl_Friedrich_Gauss#Anecdotes">Young Carl Gauss</a> would be proud.</p>
+<blockquote>
+<pre><code> &gt;&gt;&gt; sum_list(range(1001))
+ RuntimeError: maximum recursion depth exceeded</code></pre>
+<p>Oops.</p>
+</blockquote>
+<p>Young programmers often learn from this type of experience that recursion <em>sucks</em>. (Or, as a modern young programmer might say, it <em>doesn’t scale</em>.) If they Google around a bit, they might find the following “solution”: <!-- more --></p>
+<blockquote>
+<pre><code> &gt;&gt;&gt; import sys
  &gt;&gt;&gt; sys.setrecursionlimit(1500)
  &gt;&gt;&gt; sum_list(range(1001))
- 500500
-</code></pre></blockquote>
-
-<p>If they have a good computer science teacher, though, they&rsquo;ll learn that the
-real solution is to use something called <strong>tail recursion</strong>.  This
-is a somewhat mysterious, seemingly arbitrary concept. If the result of your
-recursive call gets returned <em>immediately</em>, without any intervening expessions,
-then somehow it &ldquo;doesn&rsquo;t count&rdquo; toward the equally arbitrary recursion depth
-limit. Our example above isn&rsquo;t tail-recusrive because we  add <code>list[0]</code> to
-<code>sum_list(list[1:])</code> before returning the result. In order to make <code>sum_list</code>
-tail-recursive, we have to add an <strong>accumulator</strong> variable, which represents the
-sum of those numbers we&rsquo;ve looked at already. We&rsquo;ll call this version
-<code>sum_sublist</code>, and wrap it in a new <code>sum_list</code> function which calls
-<code>sum_sublist</code> with the initial accumulator 0 (initially, we haven&rsquo;t looked at
-any numbers yet, so the sum of them is 0).</p>
-
-<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div></pre></td><td class='main  python'><pre><div class='line'><code><span class="k">def</span> <span class="nf">sum_list</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+ 500500</code></pre>
+</blockquote>
+<p>If they have a good computer science teacher, though, they’ll learn that the real solution is to use something called <strong>tail recursion</strong>. This is a somewhat mysterious, seemingly arbitrary concept. If the result of your recursive call gets returned <em>immediately</em>, without any intervening expessions, then somehow it “doesn’t count” toward the equally arbitrary recursion depth limit. Our example above isn’t tail-recusrive because we add <code>list[0]</code> to <code>sum_list(list[1:])</code> before returning the result. In order to make <code>sum_list</code> tail-recursive, we have to add an <strong>accumulator</strong> variable, which represents the sum of those numbers we’ve looked at already. We’ll call this version <code>sum_sublist</code>, and wrap it in a new <code>sum_list</code> function which calls <code>sum_sublist</code> with the initial accumulator 0 (initially, we haven’t looked at any numbers yet, so the sum of them is 0).</p>
+<figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div></pre></td><td class='main  python'><pre><div class='line'><code><span class="k">def</span> <span class="nf">sum_list</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
 </code></div><div class='line'><code>  <span class="k">def</span> <span class="nf">sum_sublist</span><span class="p">(</span><span class="n">accum</span><span class="p">,</span><span class="n">sublist</span><span class="p">):</span>
 </code></div><div class='line'><code>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sublist</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
 </code></div><div class='line'><code>      <span class="k">return</span> <span class="n">accum</span>
 </code></div><div class='line'><code>    <span class="k">else</span><span class="p">:</span>
 </code></div><div class='line'><code>      <span class="k">return</span> <span class="n">sum_sublist</span><span class="p">(</span><span class="n">accum</span><span class="o">+</span><span class="n">sublist</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">sublist</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
 </code></div><div class='line'><code>  <span class="k">return</span> <span class="n">sum_sublist</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">list</span><span class="p">)</span>
-</code></div></pre></td></tr></table></div></figure></p>
+</code></div></pre></td></tr></table></div></figure>
 
-<blockquote><pre><code> &gt;&gt;&gt; sum_list(range(101))
- 5050
-</code></pre></blockquote>
 
+<blockquote>
+<pre><code> &gt;&gt;&gt; sum_list(range(101))
+ 5050</code></pre>
+</blockquote>
 <p>So far, so good.</p>
-
-<blockquote><pre><code> &gt;&gt;&gt; sum_list(range(1001))
- RuntimeError: maximum recursion depth exceeded
-</code></pre></blockquote>
-
+<blockquote>
+<pre><code> &gt;&gt;&gt; sum_list(range(1001))
+ RuntimeError: maximum recursion depth exceeded</code></pre>
+</blockquote>
 <p>Wait, what?</p>
-
-<blockquote><p>On Wednesday, April 22, 2009, Guido van Rossum
-<a href="http://neopythonic.blogspot.co.uk/2009/04/tail-recursion-elimination.html">wrote</a>:</p>
-
-<blockquote><p>A side remark about not supporting tail recursion elimination (TRE)
-immediately sparked several comments about what a pity it is that Python
-doesn&rsquo;t do this, including links to recent blog entries by others trying to
-&ldquo;prove&rdquo; that TRE can be added to Python easily. So let me defend my position
-(which is that I don&rsquo;t want TRE in the language). If you want a short
-answer, it&rsquo;s simply unpythonic. Here&rsquo;s the long answer:</p></blockquote>
-
+<blockquote>
+<p>On Wednesday, April 22, 2009, Guido van Rossum <a href="http://neopythonic.blogspot.co.uk/2009/04/tail-recursion-elimination.html">wrote</a>: &gt; A side remark about not supporting tail recursion elimination (TRE) &gt; immediately sparked several comments about what a pity it is that Python &gt; doesn’t do this, including links to recent blog entries by others trying to &gt; “prove” that TRE can be added to Python easily. So let me defend my position &gt; (which is that I don’t want TRE in the language). If you want a short &gt; answer, it’s simply unpythonic. Here’s the long answer:</p>
 <p><em>[snipped]</em></p>
-
-<blockquote><p>Third, I don&rsquo;t believe in recursion as the basis of all programming. This
-is a fundamental belief of certain computer scientists, especially those who
-love Scheme&hellip;</p></blockquote>
-
+<blockquote>
+<p>Third, I don’t believe in recursion as the basis of all programming. This is a fundamental belief of certain computer scientists, especially those who love Scheme…</p>
+</blockquote>
 <p><em>[snipped]</em></p>
-
-<blockquote><p>Still, if someone was determined to add TRE to CPython, they could modify
-the compiler roughly as follows&hellip;</p></blockquote></blockquote>
-
-<p>In other words, the <em>only</em> reason this doesn&rsquo;t work is that Guido van Rossum<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>
-<em>prefers it that way</em>. Guido, I respect your right to your opinion, but the
-reader and I are switching to Scheme.</p>
-
-<h2>Scheme</h2>
-
-<p>Here&rsquo;s a line-by-line translation:</p>
-
-<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div></pre></td><td class='main  scheme'><pre><div class='line'><code><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">sum_list</span> <span class="nv">list</span><span class="p">)</span>
+<blockquote>
+<p>Still, if someone was determined to add TRE to CPython, they could modify the compiler roughly as follows…</p>
+</blockquote>
+</blockquote>
+<p>In other words, the <em>only</em> reason this doesn’t work is that Guido van Rossum<sup><a href="#fn2" class="footnoteRef" id="fnref2">2</a></sup> <em>prefers it that way</em>. Guido, I respect your right to your opinion, but the reader and I are switching to Scheme.</p>
+<h2 id="scheme">Scheme</h2>
+<p>Here’s a line-by-line translation:</p>
+<figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div></pre></td><td class='main  scheme'><pre><div class='line'><code><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">sum_list</span> <span class="nv">list</span><span class="p">)</span>
 </code></div><div class='line'><code>  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">sum_sublist</span> <span class="nv">accum</span> <span class="nv">sublist</span><span class="p">)</span>
 </code></div><div class='line'><code>    <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">null? </span><span class="nv">sublist</span><span class="p">)</span>                 <span class="c1">; tests if sublist has length 0</span>
 </code></div><div class='line'><code>           <span class="nv">accum</span> <span class="p">)</span>                         <span class="c1">; don&#39;t need return statement in Scheme</span>
 </code></div><div class='line'><code>          <span class="p">(</span><span class="nf">else</span>
 </code></div><div class='line'><code>           <span class="p">(</span><span class="nf">sum_sublist</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">accum</span> <span class="p">(</span><span class="nb">car </span><span class="nv">sublist</span><span class="p">))</span> <span class="p">(</span><span class="nb">cdr </span><span class="nv">sublist</span><span class="p">))</span> <span class="p">)))</span>
 </code></div><div class='line'><code>  <span class="p">(</span><span class="nf">sum_sublist</span> <span class="mi">0</span> <span class="nv">list</span><span class="p">)</span> <span class="p">)</span>
-</code></div></pre></td></tr></table></div></figure></p>
+</code></div></pre></td></tr></table></div></figure>
 
-<blockquote><pre><code> guile&gt; (sum_list (iota 1001))
- 500500
-</code></pre></blockquote>
 
-<p>Phew! Let&rsquo;s make sure that we aren&rsquo;t just getting lucky with a bigger
-recursion limit:</p>
-
-<blockquote><pre><code> guile&gt; (sum_list (iota 10000001))
- 50000005000000
-</code></pre></blockquote>
-
-<p>Well, isn&rsquo;t that neat? If we go much bigger, it&rsquo;ll take a long time, but as long
-as the output fits into memory, we&rsquo;ll get the right answer<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>.</p>
-
-<h3>Named Let</h3>
-
-<p>In our last two versions of <code>sum_list</code>, we defined a helper function
-(<code>sum_sublist</code>), and the rest of the body of <code>sum_list</code> was just a single
-invocation of that helper function. This is an inelegant pattern<sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup>, which
-Scheme has a construct to address.</p>
-
-<p><a name="named-let-1"></a>
+<blockquote>
+<pre><code> guile&gt; (sum_list (iota 1001))
+ 500500</code></pre>
+</blockquote>
+<p>Phew! Let’s make sure that we aren’t just getting lucky with a bigger recursion limit:</p>
+<blockquote>
+<pre><code> guile&gt; (sum_list (iota 10000001))
+ 50000005000000</code></pre>
+</blockquote>
+<p>Well, isn’t that neat? If we go much bigger, it’ll take a long time, but as long as the output fits into memory, we’ll get the right answer<sup><a href="#fn3" class="footnoteRef" id="fnref3">3</a></sup>.</p>
+<h3 id="named-let">Named Let</h3>
+<p>In our last two versions of <code>sum_list</code>, we defined a helper function (<code>sum_sublist</code>), and the rest of the body of <code>sum_list</code> was just a single invocation of that helper function. This is an inelegant pattern<sup><a href="#fn4" class="footnoteRef" id="fnref4">4</a></sup>, which Scheme has a construct to address.</p>
+<a name="named-let-1"></a>
 <figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div></pre></td><td class='main  scheme'><pre><div class='line'><code><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">sum_list</span> <span class="nv">list</span><span class="p">)</span>
 </code></div><div class='line'><code>  <span class="p">(</span><span class="k">let </span><span class="nv">sum_sublist</span> <span class="p">((</span><span class="nf">accum</span> <span class="mi">0</span><span class="p">)</span> <span class="p">(</span><span class="nf">sublist</span> <span class="nv">list</span><span class="p">))</span>  <span class="c1">; the named let!</span>
 </code></div><div class='line'><code>    <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">null? </span><span class="nv">sublist</span><span class="p">)</span>
 </code></div><div class='line'><code>           <span class="nv">accum</span> <span class="p">)</span>
 </code></div><div class='line'><code>          <span class="p">(</span><span class="nf">else</span>
 </code></div><div class='line'><code>           <span class="p">(</span><span class="nf">sum_sublist</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">accum</span> <span class="p">(</span><span class="nb">car </span><span class="nv">sublist</span><span class="p">))</span> <span class="p">(</span><span class="nb">cdr </span><span class="nv">sublist</span><span class="p">))</span> <span class="p">))))</span>
-</code></div></pre></td></tr></table></div></figure></p>
+</code></div></pre></td></tr></table></div></figure>
 
-<p><a href="http://people.csail.mit.edu/jaffer/r5rs_6.html#IDX130"><strong>Named let</strong></a> creates a
-function and invokes it (with the provided initial values) in one step.  It is
-decidedly my favorite control structure of all time. You can have your <code>while</code>
-loops and your <code>for</code> loops, and your <code>do</code>&hellip;<code>until</code> loops too<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup>. I&rsquo;ll take
-named let any day, because it provides the abstraction barrier of recursion
-without compromising the conciseness and efficiency of iteration. In case you&rsquo;re
-not sufficiently impressed, I discuss the delightful properties of using
-recursion instead of non-recursive loops <a href="#recursion">below</a>.</p>
 
-<h2>Assembly</h2>
-
-<p><a name="neatly-into-assembly"></a>
-Named let style translates amazingly naturally into assembly.</p>
-
-<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div><div data-line='14' class='line-number'></div><div data-line='15' class='line-number'></div><div data-line='16' class='line-number'></div><div data-line='17' class='line-number'></div><div data-line='18' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="k">bits</span> <span class="mi">64</span>
+<p><a href="http://people.csail.mit.edu/jaffer/r5rs_6.html#IDX130"><strong>Named let</strong></a> creates a function and invokes it (with the provided initial values) in one step. It is decidedly my favorite control structure of all time. You can have your <code>while</code> loops and your <code>for</code> loops, and your <code>do</code>…<code>until</code> loops too<sup><a href="#fn5" class="footnoteRef" id="fnref5">5</a></sup>. I’ll take named let any day, because it provides the abstraction barrier of recursion without compromising the conciseness and efficiency of iteration. In case you’re not sufficiently impressed, I discuss the delightful properties of using recursion instead of non-recursive loops <a href="#recursion">below</a>.</p>
+<h2 id="assembly">Assembly</h2>
+<p><a name="neatly-into-assembly"></a> Named let style translates amazingly naturally into assembly.</p>
+<figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div><div data-line='14' class='line-number'></div><div data-line='15' class='line-number'></div><div data-line='16' class='line-number'></div><div data-line='17' class='line-number'></div><div data-line='18' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="k">bits</span> <span class="mi">64</span>
 </code></div><div class='line'><code><span class="c1">; macros for readability</span>
 </code></div><div class='line'><code><span class="cp">%define list rdi             </span><span class="c1">; by calling convention, argument shows up here</span>
 </code></div><div class='line'><code><span class="cp">%define accum rax            </span><span class="c1">; accumulator (literally!)</span>
@@ -266,104 +204,75 @@ Named let style translates amazingly naturally into assembly.</p>
 </code></div><div class='line'><code>  <span class="nf">add</span> <span class="nv">accum</span><span class="p">,</span> <span class="p">[</span><span class="nv">sublist</span><span class="p">]</span>       <span class="c1">; ~ accum=accum+car(sublist);</span>
 </code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">sublist</span><span class="p">,</span> <span class="p">[</span><span class="nv">sublist</span><span class="o">+</span><span class="mi">8</span><span class="p">]</span>   <span class="c1">; ~ sublist=cdr(sublist);</span>
 </code></div><div class='line'><code>  <span class="nf">jmp</span> <span class="nv">.sum_sublist</span>           <span class="c1">; tail-recurse</span>
-</code></div></pre></td></tr></table></div></figure></p>
+</code></div></pre></td></tr></table></div></figure>
 
-<blockquote><pre><code>&gt; sum_list(from(1,100))
+
+<blockquote>
+<pre><code>&gt; sum_list(from(1,100))
 5050
 &gt; sum_list(from(1,10000000))
-50000005000000
-</code></pre>
-
-<p>(Sadly, my assembler doesn&rsquo;t come with its own REPL; we&rsquo;re borrowing
-the <a href="http://luajit.org">LuaJIT</a> REPL instead<sup id="fnref:6"><a href="#fn:6" rel="footnote">6</a></sup>.)</p></blockquote>
-
-<p>In fact, if I weren&rsquo;t so comfortable with named let, I doubt I&rsquo;d be an effective
-assembly coder, because assembly doesn&rsquo;t really have any other iteration
-constructs<sup id="fnref:7"><a href="#fn:7" rel="footnote">7</a></sup>. But I don&rsquo;t miss them. <a href="#iteration">What would they look like,
-anyway?</a></p>
-
+50000005000000</code></pre>
+<p>(Sadly, my assembler doesn’t come with its own REPL; we’re borrowing the <a href="http://luajit.org">LuaJIT</a> REPL instead<sup><a href="#fn6" class="footnoteRef" id="fnref6">6</a></sup>.)</p>
+</blockquote>
+<p>In fact, if I weren’t so comfortable with named let, I doubt I’d be an effective assembly coder, because assembly doesn’t really have any other iteration constructs<sup><a href="#fn7" class="footnoteRef" id="fnref7">7</a></sup>. But I don’t miss them. <a href="#iteration">What would they look like, anyway?</a></p>
 <hr />
-
-<p>In the next installment of <strong>Python to Scheme to Assembly</strong>, we will look at
-<code>call-with-current-continuation</code>.</p>
-
-<h2>Addendum: C</h2>
-
-<p>In this addendum, we&rsquo;re going to look at the assembly for iteration, non-tail
-recursion, and tail recursion, as emitted by <code>gcc</code>, and get to the bottom of
-what the difference is anyway.</p>
-
+<p>In the next installment of <strong>Python to Scheme to Assembly</strong>, we will look at <code>call-with-current-continuation</code>.</p>
+<h2 id="addendum-c">Addendum: C</h2>
+<p>In this addendum, we’re going to look at the assembly for iteration, non-tail recursion, and tail recursion, as emitted by <code>gcc</code>, and get to the bottom of what the difference is anyway.</p>
 <p>At the top of each C file here, we have the following:</p>
-
-<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div></pre></td><td class='main  c'><pre><div class='line'><code><span class="cp">#include &lt;stdint.h&gt;</span>
+<figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div></pre></td><td class='main  c'><pre><div class='line'><code><span class="cp">#include &lt;stdint.h&gt;</span>
 </code></div><div class='line'><code><span class="k">struct</span> <span class="n">number_list</span> <span class="p">{</span>
 </code></div><div class='line'><code>  <span class="kt">uint64_t</span> <span class="n">number</span><span class="p">;</span>
 </code></div><div class='line'><code>  <span class="k">struct</span> <span class="n">number_list</span> <span class="o">&ast;</span><span class="n">next</span><span class="p">;</span>
 </code></div><div class='line'><code><span class="p">};</span>
-</code></div></pre></td></tr></table></div></figure></p>
+</code></div></pre></td></tr></table></div></figure>
+
 
 <p><a name="iteration"></a></p>
-
-<h3>Iteration</h3>
-
-<p>If I were solving this problem in the context of a C program, this is how I
-would do it.</p>
-
-<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div></pre></td><td class='main  c'><pre><div class='line'><code><span class="kt">uint64_t</span> <span class="nf">sum_list</span><span class="p">(</span><span class="k">struct</span> <span class="n">number_list</span><span class="o">&ast;</span> <span class="n">list</span><span class="p">)</span> <span class="p">{</span>
+<h3 id="iteration">Iteration</h3>
+<p>If I were solving this problem in the context of a C program, this is how I would do it.</p>
+<figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div></pre></td><td class='main  c'><pre><div class='line'><code><span class="kt">uint64_t</span> <span class="nf">sum_list</span><span class="p">(</span><span class="k">struct</span> <span class="n">number_list</span><span class="o">&ast;</span> <span class="n">list</span><span class="p">)</span> <span class="p">{</span>
 </code></div><div class='line'><code>  <span class="kt">uint64_t</span> <span class="n">accum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </code></div><div class='line'><code>  <span class="k">while</span><span class="p">(</span><span class="n">list</span><span class="p">)</span> <span class="p">{</span>
-</code></div><div class='line'><code>    <span class="n">accum</span><span class="o">+=</span><span class="n">list</span><span class="o">&ndash;&gt;</span><span class="n">number</span><span class="p">;</span>
-</code></div><div class='line'><code>    <span class="n">list</span><span class="o">=</span><span class="n">list</span><span class="o">&ndash;&gt;</span><span class="n">next</span><span class="p">;</span>
+</code></div><div class='line'><code>    <span class="n">accum</span><span class="o">+=</span><span class="n">list</span><span class="o">-&gt;</span><span class="n">number</span><span class="p">;</span>
+</code></div><div class='line'><code>    <span class="n">list</span><span class="o">=</span><span class="n">list</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
 </code></div><div class='line'><code>  <span class="p">}</span>
 </code></div><div class='line'><code>  <span class="k">return</span> <span class="n">accum</span><span class="p">;</span>
 </code></div><div class='line'><code><span class="p">}</span>
-</code></div></pre></td></tr></table></div></figure></p>
+</code></div></pre></td></tr></table></div></figure>
 
-<p>Here&rsquo;s the generated assembly, translated to <code>nasm</code> syntax and commented.</p>
 
-<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="k">global</span> <span class="nv">sum_list</span>
+<p>Here’s the generated assembly, translated to <code>nasm</code> syntax and commented.</p>
+<figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="k">global</span> <span class="nv">sum_list</span>
 </code></div><div class='line'><code><span class="nl">sum_list:</span>
 </code></div><div class='line'><code>  <span class="nf">xor</span> <span class="nb">eax</span><span class="p">,</span> <span class="nb">eax</span>     <span class="c1">; equivalent to &quot;mov rax, 0&quot; but faster</span>
 </code></div><div class='line'><code>                   <span class="c1">; in C it&#39;s fine to clobber rdi instead of copying it first</span>
-</code></div><div class='line'><code>  <span class="nf">test</span> <span class="nb">rdi</span><span class="p">,</span> <span class="nb">rdi</span>        <span class="c1">; &lt;&ndash; same as ours</span>
+</code></div><div class='line'><code>  <span class="nf">test</span> <span class="nb">rdi</span><span class="p">,</span> <span class="nb">rdi</span>        <span class="c1">; &lt;- same as ours</span>
 </code></div><div class='line'><code>  <span class="nf">jz</span> <span class="nv">done</span>          <span class="c1">; here the &quot;if NULL&quot; case is at the bottom</span>
 </code></div><div class='line'><code><span class="nl">.else:</span>
-</code></div><div class='line'><code>  <span class="nf">add</span> <span class="nb">rax</span><span class="p">,</span> <span class="p">[</span><span class="nb">rdi</span><span class="p">]</span>       <span class="c1">; &lt;&ndash; same as ours</span>
-</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdi</span><span class="p">,</span> <span class="p">[</span><span class="nb">rdi</span><span class="o">+</span><span class="mi">8</span><span class="p">]</span>     <span class="c1">; &lt;&ndash; same as ours</span>
-</code></div><div class='line'><code>  <span class="nf">test</span> <span class="nb">rdi</span><span class="p">,</span> <span class="nb">rdi</span>        <span class="c1">; &lt;&ndash; same as ours, but duplicated</span>
-</code></div><div class='line'><code>  <span class="nf">jnz</span> <span class="nv">.else</span>            <span class="c1">; &lt;&ndash; same as ours</span>
+</code></div><div class='line'><code>  <span class="nf">add</span> <span class="nb">rax</span><span class="p">,</span> <span class="p">[</span><span class="nb">rdi</span><span class="p">]</span>       <span class="c1">; &lt;- same as ours</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdi</span><span class="p">,</span> <span class="p">[</span><span class="nb">rdi</span><span class="o">+</span><span class="mi">8</span><span class="p">]</span>     <span class="c1">; &lt;- same as ours</span>
+</code></div><div class='line'><code>  <span class="nf">test</span> <span class="nb">rdi</span><span class="p">,</span> <span class="nb">rdi</span>        <span class="c1">; &lt;- same as ours, but duplicated</span>
+</code></div><div class='line'><code>  <span class="nf">jnz</span> <span class="nv">.else</span>            <span class="c1">; &lt;- same as ours</span>
 </code></div><div class='line'><code><span class="nl">.done:</span>
 </code></div><div class='line'><code>  <span class="nf">rep</span> <span class="nv">ret</span>          <span class="c1">; equivalent to &quot;ret&quot;, but faster on old AMD chips for no good reason</span>
-</code></div></pre></td></tr></table></div></figure></p>
+</code></div></pre></td></tr></table></div></figure>
 
-<p>This is <em>almost</em> identical to the assembly that I wrote, except that it clobbers
-one of its inputs (which is perfectly allowed by the C calling convention<sup id="fnref:8"><a href="#fn:8" rel="footnote">8</a></sup>),
-it uses <code>xor</code> instead of <code>mov</code> to load <code>0</code> (a solid optimization<sup id="fnref:9"><a href="#fn:9" rel="footnote">9</a></sup>), it uses
-<code>rep ret</code> (less compact and no benefit on Intel chips), and it shuffles the
-instructions around such that two <code>test</code>s are needed (almost certainly not
-helpful with modern branch prediction and loop detection). I haven&rsquo;t run
-benchmarks on this, but my guess is that it would come out about even. (Both
-versions are eight instructions long.) I also think the shuffling makes this
-&ldquo;iterative&rdquo; version more opaque and difficult to reason about (not least because
-of the duplicated <code>test</code>) than my &ldquo;named let&rdquo;-style code.</p>
 
-<h3>Non-Tail Recursion</h3>
-
-<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div></pre></td><td class='main  c'><pre><div class='line'><code><span class="kt">uint64_t</span> <span class="nf">sum_list</span><span class="p">(</span><span class="k">struct</span> <span class="n">number_list</span><span class="o">&ast;</span> <span class="n">list</span><span class="p">)</span> <span class="p">{</span>
+<p>This is <em>almost</em> identical to the assembly that I wrote, except that it clobbers one of its inputs (which is perfectly allowed by the C calling convention<sup><a href="#fn8" class="footnoteRef" id="fnref8">8</a></sup>), it uses <code>xor</code> instead of <code>mov</code> to load <code>0</code> (a solid optimization<sup><a href="#fn9" class="footnoteRef" id="fnref9">9</a></sup>), it uses <code>rep ret</code> (less compact and no benefit on Intel chips), and it shuffles the instructions around such that two <code>test</code>s are needed (almost certainly not helpful with modern branch prediction and loop detection). I haven’t run benchmarks on this, but my guess is that it would come out about even. (Both versions are eight instructions long.) I also think the shuffling makes this “iterative” version more opaque and difficult to reason about (not least because of the duplicated <code>test</code>) than my “named let”-style code.</p>
+<h3 id="non-tail-recursion">Non-Tail Recursion</h3>
+<figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div></pre></td><td class='main  c'><pre><div class='line'><code><span class="kt">uint64_t</span> <span class="nf">sum_list</span><span class="p">(</span><span class="k">struct</span> <span class="n">number_list</span><span class="o">&ast;</span> <span class="n">list</span><span class="p">)</span> <span class="p">{</span>
 </code></div><div class='line'><code>  <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">list</span><span class="p">)</span> <span class="p">{</span>
 </code></div><div class='line'><code>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </code></div><div class='line'><code>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</code></div><div class='line'><code>    <span class="k">return</span> <span class="n">list</span><span class="o">&ndash;&gt;</span><span class="n">number</span><span class="o">+</span><span class="n">sum_list</span><span class="p">(</span><span class="n">list</span><span class="o">&ndash;&gt;</span><span class="n">next</span><span class="p">);</span>
+</code></div><div class='line'><code>    <span class="k">return</span> <span class="n">list</span><span class="o">-&gt;</span><span class="n">number</span><span class="o">+</span><span class="n">sum_list</span><span class="p">(</span><span class="n">list</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span>
 </code></div><div class='line'><code>  <span class="p">}</span>
 </code></div><div class='line'><code><span class="p">}</span>
-</code></div></pre></td></tr></table></div></figure></p>
+</code></div></pre></td></tr></table></div></figure>
 
-<p><code>gcc -O3</code> can <em>almost</em> completely convert this version to iteration, so let&rsquo;s
-look at the generated assembly from <code>gcc -O1</code> to get a better sense of what it
-might look like in a language implementation for which the necessary
-optimizations are too complex to be made automatically.</p>
 
-<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="k">global</span> <span class="nv">sum_list</span>
+<p><code>gcc -O3</code> can <em>almost</em> completely convert this version to iteration, so let’s look at the generated assembly from <code>gcc -O1</code> to get a better sense of what it might look like in a language implementation for which the necessary optimizations are too complex to be made automatically.</p>
+<figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="k">global</span> <span class="nv">sum_list</span>
 </code></div><div class='line'><code><span class="nl">sum_list:</span>
 </code></div><div class='line'><code>  <span class="nf">push</span> <span class="nb">rbx</span>          <span class="c1">; preserve the current value of rbx on the stack</span>
 </code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rbx</span><span class="p">,</span> <span class="nb">rdi</span>      <span class="c1">; replace rbx by the argument to the function, list</span>
@@ -371,43 +280,33 @@ optimizations are too complex to be made automatically.</p>
 </code></div><div class='line'><code>  <span class="nf">test</span> <span class="nb">rdi</span><span class="p">,</span> <span class="nb">rdi</span>     <span class="c1">; check if rdi is NULL</span>
 </code></div><div class='line'><code>  <span class="nf">jz</span> <span class="nv">.else</span>          <span class="c1">; if so go to else</span>
 </code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdi</span><span class="p">,</span> <span class="p">[</span><span class="nb">rdi</span><span class="o">+</span><span class="mi">8</span><span class="p">]</span>  <span class="c1">; ~ list=list-&gt;next;</span>
-</code></div><div class='line'><code>  <span class="nf">call</span> <span class="nv">sum_list</span>     <span class="c1">; sum_list(list) &ndash;&gt; result register (rax)</span>
+</code></div><div class='line'><code>  <span class="nf">call</span> <span class="nv">sum_list</span>     <span class="c1">; sum_list(list) -&gt; result register (rax)</span>
 </code></div><div class='line'><code>  <span class="nf">add</span> <span class="nb">rax</span><span class="p">,</span> <span class="p">[</span><span class="nb">rbx</span><span class="p">]</span>    <span class="c1">; add list-&gt;number (preserved across function call) to rax</span>
 </code></div><div class='line'><code><span class="nl">.else:</span>
 </code></div><div class='line'><code>  <span class="nf">pop</span> <span class="nb">rbx</span>           <span class="c1">; restore the state of rbx</span>
 </code></div><div class='line'><code>  <span class="nf">ret</span>               <span class="c1">; return rax</span>
-</code></div></pre></td></tr></table></div></figure></p>
+</code></div></pre></td></tr></table></div></figure>
 
-<p>We can see immediately that some new instructions (<code>push</code>, <code>pop</code>, and <code>call</code>)
-have been introduced. These are all <strong>stack manipulation instructions</strong><sup id="fnref:10"><a href="#fn:10" rel="footnote">10</a></sup>. If
-we carefully pretend to be the CPU running this program, we can see that it
-pushes the address of every number in the linked list, and then dereferences and
-adds them up as it pops them from the stack. This is not good; if we wanted our
-entire data structure to be replicated on the stack, we would have passed it by
-value<sup id="fnref:11"><a href="#fn:11" rel="footnote">11</a></sup>! It&rsquo;s generally the amount of memory set aside for the stack that
-we&rsquo;ve actually run out of in the case of a <code>recursion depth exceeded</code> error.</p>
 
-<h3>Tail Recursion</h3>
-
-<p>What about translating the tail-recursive version into C? Like Scheme and
-Python, <code>gcc</code> supports nested function definitions (as a GNU extension to C), so
-this is no problem:</p>
-
-<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div><div data-line='14' class='line-number'></div><div data-line='15' class='line-number'></div></pre></td><td class='main  c'><pre><div class='line'><code><span class="kt">uint64_t</span> <span class="nf">sum_list</span><span class="p">(</span><span class="k">struct</span> <span class="n">number_list</span><span class="o">&ast;</span> <span class="n">list</span><span class="p">)</span> <span class="p">{</span>
+<p>We can see immediately that some new instructions (<code>push</code>, <code>pop</code>, and <code>call</code>) have been introduced. These are all <strong>stack manipulation instructions</strong><sup><a href="#fn10" class="footnoteRef" id="fnref10">10</a></sup>. If we carefully pretend to be the CPU running this program, we can see that it pushes the address of every number in the linked list, and then dereferences and adds them up as it pops them from the stack. This is not good; if we wanted our entire data structure to be replicated on the stack, we would have passed it by value<sup><a href="#fn11" class="footnoteRef" id="fnref11">11</a></sup>! It’s generally the amount of memory set aside for the stack that we’ve actually run out of in the case of a <code>recursion depth exceeded</code> error.</p>
+<h3 id="tail-recursion">Tail Recursion</h3>
+<p>What about translating the tail-recursive version into C? Like Scheme and Python, <code>gcc</code> supports nested function definitions (as a GNU extension to C), so this is no problem:</p>
+<figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div><div data-line='14' class='line-number'></div><div data-line='15' class='line-number'></div></pre></td><td class='main  c'><pre><div class='line'><code><span class="kt">uint64_t</span> <span class="nf">sum_list</span><span class="p">(</span><span class="k">struct</span> <span class="n">number_list</span><span class="o">&ast;</span> <span class="n">list</span><span class="p">)</span> <span class="p">{</span>
 </code></div><div class='line'><code>  <span class="kt">uint64_t</span> <span class="n">sum_sublist</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">accum</span><span class="p">,</span> <span class="k">struct</span> <span class="n">number_list</span><span class="o">&ast;</span> <span class="n">sublist</span><span class="p">)</span> <span class="p">{</span>
 </code></div><div class='line'><code>    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">sublist</span><span class="p">)</span> <span class="p">{</span>
 </code></div><div class='line'><code>      <span class="k">return</span> <span class="n">accum</span><span class="p">;</span>
 </code></div><div class='line'><code>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</code></div><div class='line'><code>      <span class="k">return</span> <span class="n">sum_sublist</span><span class="p">(</span><span class="n">accum</span><span class="o">+</span><span class="n">sublist</span><span class="o">&ndash;&gt;</span><span class="n">number</span><span class="p">,</span><span class="n">sublist</span><span class="o">&ndash;&gt;</span><span class="n">next</span><span class="p">);</span>
+</code></div><div class='line'><code>      <span class="k">return</span> <span class="n">sum_sublist</span><span class="p">(</span><span class="n">accum</span><span class="o">+</span><span class="n">sublist</span><span class="o">-&gt;</span><span class="n">number</span><span class="p">,</span><span class="n">sublist</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span>
 </code></div><div class='line'><code>    <span class="p">}</span>
 </code></div><div class='line'><code>  <span class="p">}</span>
 </code></div><div class='line'><code>  <span class="k">return</span> <span class="n">sum_sublist</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">list</span><span class="p">);</span>
 </code></div><div class='line'><code><span class="p">}</span>
-</code></div></pre></td></tr></table></div></figure></p>
+</code></div></pre></td></tr></table></div></figure>
 
-<p>Here&rsquo;s what <code>gcc -O1</code> gives us (translated and commented as before):
+
+Here’s what <code>gcc -O1</code> gives us (translated and commented as before):
 <figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div><div data-line='14' class='line-number'></div><div data-line='15' class='line-number'></div><div data-line='16' class='line-number'></div><div data-line='17' class='line-number'></div><div data-line='18' class='line-number'></div><div data-line='19' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="nl">sum_sublist.1867:</span>       <span class="c1">; A random constant has been added to avoid polluting the namespace. Not the best solution, but okay.</span>
-</code></div><div class='line'><code>  <span class="nf">sub</span> <span class="nb">rsp</span><span class="p">,</span> <span class="mi">8</span>            <span class="c1">; Decrement the stack by one 8-byte machine word. Seems unnecessary&hellip;</span>
+</code></div><div class='line'><code>  <span class="nf">sub</span> <span class="nb">rsp</span><span class="p">,</span> <span class="mi">8</span>            <span class="c1">; Decrement the stack by one 8-byte machine word. Seems unnecessary...</span>
 </code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rax</span><span class="p">,</span> <span class="nb">rdi</span>          <span class="c1">; Copy first argument (rdi/&quot;accum&quot;) into result register (rax).</span>
 </code></div><div class='line'><code>  <span class="nf">test</span> <span class="nb">rsi</span><span class="p">,</span> <span class="nb">rsi</span>         <span class="c1">; Test second argument (rsi/&quot;sublist&quot;) for nullity.</span>
 </code></div><div class='line'><code>  <span class="nf">jz</span> <span class="nv">.else</span>              <span class="c1">; If null, goto else.</span>
@@ -424,166 +323,65 @@ this is no problem:</p>
 </code></div><div class='line'><code>  <span class="nf">call</span> <span class="nv">sum_sublist.1867</span> <span class="c1">; call sum_sublist!</span>
 </code></div><div class='line'><code>  <span class="nf">add</span> <span class="nb">rsp</span><span class="p">,</span> <span class="mi">8</span>
 </code></div><div class='line'><code>  <span class="nf">ret</span>
-</code></div></pre></td></tr></table></div></figure></p>
+</code></div></pre></td></tr></table></div></figure>
 
-<p>In this mode, the tail <code>call</code> is not being eliminated &mdash; although we&rsquo;re no
-longer <code>push</code>ing <code>rbx</code>, we&rsquo;re still pushing <code>rip</code> to stack with every <code>call</code>,
-and eventually we&rsquo;ll run out of stack that way. The only way to get around this
-is to replace each <code>call</code> with <code>jmp</code>: since we&rsquo;re just going to take the return
-value of the next recursive invocation and then immediately <code>ret</code> back to the
-previous caller on the stack, there&rsquo;s no point in even inserting our own address
-on the stack (as <code>call</code> does); we can just set up the next guy to pass the
-return value straight back to the previous guy, and quietly disappear.</p>
 
-<p><code>gcc -O3</code> does this. In fact, somewhat surprisingly, it generates <em>exactly</em> the
-same assembly, line for line, for this version as for the purely iterative
-version above.  That&rsquo;s &ldquo;<strong>tail call optimization</strong>&rdquo; (TCO) or &ldquo;<strong>tail recursion
-elimination</strong>&rdquo; (TRE) in its most agressive form: it literally just gets rid of
-all calls and recursions and replaces them with an equivalent iteration
-(complete with duplicate <code>test</code>).</p>
-
-<p>The upshot of all this is that <em>not only does Scheme&rsquo;s &ldquo;named let&rdquo; recursion
-form translate <a href="#neatly-into-assembly">neatly into assembly</a>, it provides &mdash;
-penalty-free &mdash; a better abstraction than either iteration</em> (while-loop
-imitation) <em>or stack-driven recursion</em>, the two options <code>gcc</code> appears to pick
-from when dealing with various ways to code a list traversal.</p>
-
-<p>Actually, the real point I&rsquo;m trying to make here is that, <strong>unlike in C, I can
-naturally do named let directly in assembly, and that&rsquo;s one of the many reasons
-working in assembly makes me happy</strong>.</p>
-
+<p>In this mode, the tail <code>call</code> is not being eliminated – although we’re no longer <code>push</code>ing <code>rbx</code>, we’re still pushing <code>rip</code> to stack with every <code>call</code>, and eventually we’ll run out of stack that way. The only way to get around this is to replace each <code>call</code> with <code>jmp</code>: since we’re just going to take the return value of the next recursive invocation and then immediately <code>ret</code> back to the previous caller on the stack, there’s no point in even inserting our own address on the stack (as <code>call</code> does); we can just set up the next guy to pass the return value straight back to the previous guy, and quietly disappear.</p>
+<p><code>gcc -O3</code> does this. In fact, somewhat surprisingly, it generates <em>exactly</em> the same assembly, line for line, for this version as for the purely iterative version above. That’s “<strong>tail call optimization</strong>” (TCO) or “<strong>tail recursion elimination</strong>” (TRE) in its most agressive form: it literally just gets rid of all calls and recursions and replaces them with an equivalent iteration (complete with duplicate <code>test</code>).</p>
+<p>The upshot of all this is that <em>not only does Scheme’s “named let” recursion form translate <a href="#neatly-into-assembly">neatly into assembly</a>, it provides – penalty-free – a better abstraction than either iteration</em> (while-loop imitation) <em>or stack-driven recursion</em>, the two options <code>gcc</code> appears to pick from when dealing with various ways to code a list traversal.</p>
+<p>Actually, the real point I’m trying to make here is that, <strong>unlike in C, I can naturally do named let directly in assembly, and that’s one of the many reasons working in assembly makes me happy</strong>.</p>
 <p><a name="recursion"></a></p>
-
-<h2>Appendix: What&rsquo;s so great about recursion, anyway?</h2>
-
-<p>For me, the most important point in favor of a recursive representation of loops
-is that I find it easier to reason about <strong>correctness</strong> that way.</p>
-
-<p>Any function we define ought to implement some ideal mathematical function that
-maps inputs to outputs<sup id="fnref:12"><a href="#fn:12" rel="footnote">12</a></sup>. If our code truly does implement that ideal
-function, we say that the code is <strong>correct</strong>. Generally, we can break down the
-body of a function as a
-<a href="http://en.wikipedia.org/wiki/Function_composition">composition</a> of smaller
-functions; even in imperative languages, we can think of every statement as
-pulling in a state of the world, making well-defined changes, and passing the
-new state of the world into the next statement<sup id="fnref:13"><a href="#fn:13" rel="footnote">13</a></sup>. At each step, we ask
-ourselves, &ldquo;are the outputs of this function going to be what I want them to
-be?&rdquo; For loops, though, <a href="http://en.wikipedia.org/wiki/Loop_invariant#Informal_example">this gets
-tricky</a>.</p>
-
-<p>What recursion does for us as aspiring writers of correct functions is automatic
-translation of the loop verification problem into the much nicer problem of
-function verification.  Intuitively, you can simply assume that all invocations
-of a recursive function within its own body are going to Do The Right Thing,
-ensure that the function as a whole Does The Right Thing under that assumption,
-and then conclude that the function Does The Right Thing in general.  If this
-sounds like circular reasoning, it does<sup id="fnref:14"><a href="#fn:14" rel="footnote">14</a></sup>; but it turns out to be valid
-anyway.</p>
-
-<p>There are many ways to justify this procedure formally, all of which are truly
-mind-bending<sup id="fnref:15"><a href="#fn:15" rel="footnote">15</a></sup>. But once you&rsquo;ve justified this procedure once, you never have
-to do it again (unlike ad-hoc reasoning about loops). I&rsquo;ve determined that the
-most elegant way to explain it is by expanding our <a href="#named-let-1">named let
-example</a> into a non-recursive function, which just happens to
-accept as a parameter a correct<sup id="fnref:16"><a href="#fn:16" rel="footnote">16</a></sup> version of itself.</p>
-
-<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div></pre></td><td class='main  scheme'><pre><div class='line'><code><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">sum_list</span> <span class="nv">list</span><span class="p">)</span>
+<h2 id="appendix-whats-so-great-about-recursion-anyway">Appendix: What’s so great about recursion, anyway?</h2>
+<p>For me, the most important point in favor of a recursive representation of loops is that I find it easier to reason about <strong>correctness</strong> that way.</p>
+<p>Any function we define ought to implement some ideal mathematical function that maps inputs to outputs<sup><a href="#fn12" class="footnoteRef" id="fnref12">12</a></sup>. If our code truly does implement that ideal function, we say that the code is <strong>correct</strong>. Generally, we can break down the body of a function as a <a href="http://en.wikipedia.org/wiki/Function_composition">composition</a> of smaller functions; even in imperative languages, we can think of every statement as pulling in a state of the world, making well-defined changes, and passing the new state of the world into the next statement<sup><a href="#fn13" class="footnoteRef" id="fnref13">13</a></sup>. At each step, we ask ourselves, “are the outputs of this function going to be what I want them to be?” For loops, though, <a href="http://en.wikipedia.org/wiki/Loop_invariant#Informal_example">this gets tricky</a>.</p>
+<p>What recursion does for us as aspiring writers of correct functions is automatic translation of the loop verification problem into the much nicer problem of function verification. Intuitively, you can simply assume that all invocations of a recursive function within its own body are going to Do The Right Thing, ensure that the function as a whole Does The Right Thing under that assumption, and then conclude that the function Does The Right Thing in general. If this sounds like circular reasoning, it does<sup><a href="#fn14" class="footnoteRef" id="fnref14">14</a></sup>; but it turns out to be valid anyway.</p>
+<p>There are many ways to justify this procedure formally, all of which are truly mind-bending<sup><a href="#fn15" class="footnoteRef" id="fnref15">15</a></sup>. But once you’ve justified this procedure once, you never have to do it again (unlike ad-hoc reasoning about loops). I’ve determined that the most elegant way to explain it is by expanding our <a href="#named-let-1">named let example</a> into a non-recursive function, which just happens to accept as a parameter a correct<sup><a href="#fn16" class="footnoteRef" id="fnref16">16</a></sup> version of itself.</p>
+<figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div></pre></td><td class='main  scheme'><pre><div class='line'><code><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">sum_list</span> <span class="nv">list</span><span class="p">)</span>
 </code></div><div class='line'><code>  <span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">sum_sublist_nonrec</span> <span class="nv">f_correct</span> <span class="nv">accum</span> <span class="nv">sublist</span><span class="p">)</span>
 </code></div><div class='line'><code>    <span class="p">(</span><span class="k">cond </span><span class="p">((</span><span class="nb">null? </span><span class="nv">sublist</span><span class="p">)</span>
 </code></div><div class='line'><code>           <span class="nv">accum</span> <span class="p">)</span>
 </code></div><div class='line'><code>          <span class="p">(</span><span class="nf">else</span>
 </code></div><div class='line'><code>           <span class="p">(</span><span class="nf">f_correct</span> <span class="nv">f_correct</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">accum</span> <span class="p">(</span><span class="nb">car </span><span class="nv">sublist</span><span class="p">))</span> <span class="p">(</span><span class="nb">cdr </span><span class="nv">sublist</span><span class="p">))</span> <span class="p">)))</span>
 </code></div><div class='line'><code>  <span class="p">(</span><span class="nf">sum_sublist_nonrec</span> <span class="nv">sum_sublist_nonrec</span> <span class="mi">0</span> <span class="nv">list</span><span class="p">)</span> <span class="p">)</span>
-</code></div></pre></td></tr></table></div></figure></p>
+</code></div></pre></td></tr></table></div></figure>
 
-<p>Now, <code>sum_sublist_nonrec</code> is an honest-to-goodness non-recursive function, and
-we can check that it is correct. Given a correct function <code>f_correct</code> (which
-takes as inputs a correct version of itself, a number, and a list, and correctly
-returns the sum of all the elements in the list plus the number), a number, and
-a list, does <code>sum_sublist_nonrec</code> correctly return the sum of all elements in
-the list plus the number? Why yes, it does. (Constructing a formal proof tree
-for this claim is left as an exercise for the self-punishing reader.) Note that
-since <code>f_correct</code> is assumed to already be correct, the correct version of it is
-still just <code>f_correct</code>, so we can safely pass it to itself without violating our
-assumptions or introducing new ones. So, <code>sum_sublist_nonrec</code> is correct.</p>
 
-<p>Now let&rsquo;s consider the correctness of <code>sum_list</code>. It&rsquo;s supposed to add up all
-the numbers in <code>list</code>. What it actually does is to apply the (correct) function
-<code>sum_sublist_nonrec</code>, passing in a correct version of itself (check! it&rsquo;s
-already correct), a number to add the sum of the list to (check! adding zero to
-the sum of the list won&rsquo;t change it), and the list (check! that&rsquo;s what we&rsquo;re
-supposed to sum up).</p>
-
-<p>We&rsquo;ve just proved our program correct! The magic of named let is that it
-generates this clumsy form with a bunch of <code>f_correct</code>s from a compact and
-elegant form. In so doing, it lets us get away with much less formal reasoning
-while still having the confidence that it can be converted into something like
-what we just slogged through. Rest assured that no matter what you do with named
-let, no matter how complicated the construct you create, this &ldquo;assume it does
-the right thing&rdquo; technique still applies!</p>
-
-<p>With one <em>tiny</em> caveat. We haven&rsquo;t proved that the program <em>terminates</em>. If this
-technique proved termination, then we could just write</p>
-
-<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div></pre></td><td class='main  scheme'><pre><div class='line'><code><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">do-the-right-thing</span> <span class="nv">x</span><span class="p">)</span>
+<p>Now, <code>sum_sublist_nonrec</code> is an honest-to-goodness non-recursive function, and we can check that it is correct. Given a correct function <code>f_correct</code> (which takes as inputs a correct version of itself, a number, and a list, and correctly returns the sum of all the elements in the list plus the number), a number, and a list, does <code>sum_sublist_nonrec</code> correctly return the sum of all elements in the list plus the number? Why yes, it does. (Constructing a formal proof tree for this claim is left as an exercise for the self-punishing reader.) Note that since <code>f_correct</code> is assumed to already be correct, the correct version of it is still just <code>f_correct</code>, so we can safely pass it to itself without violating our assumptions or introducing new ones. So, <code>sum_sublist_nonrec</code> is correct.</p>
+<p>Now let’s consider the correctness of <code>sum_list</code>. It’s supposed to add up all the numbers in <code>list</code>. What it actually does is to apply the (correct) function <code>sum_sublist_nonrec</code>, passing in a correct version of itself (check! it’s already correct), a number to add the sum of the list to (check! adding zero to the sum of the list won’t change it), and the list (check! that’s what we’re supposed to sum up).</p>
+<p>We’ve just proved our program correct! The magic of named let is that it generates this clumsy form with a bunch of <code>f_correct</code>s from a compact and elegant form. In so doing, it lets us get away with much less formal reasoning while still having the confidence that it can be converted into something like what we just slogged through. Rest assured that no matter what you do with named let, no matter how complicated the construct you create, this “assume it does the right thing” technique still applies!</p>
+<p>With one <em>tiny</em> caveat. We haven’t proved that the program <em>terminates</em>. If this technique proved termination, then we could just write</p>
+<figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div></pre></td><td class='main  scheme'><pre><div class='line'><code><span class="p">(</span><span class="k">define </span><span class="p">(</span><span class="nf">do-the-right-thing</span> <span class="nv">x</span><span class="p">)</span>
 </code></div><div class='line'><code>  <span class="p">(</span><span class="k">let </span><span class="nv">does-the-right-thing</span> <span class="p">((</span><span class="nf">x</span> <span class="nv">x</span><span class="p">))</span>
 </code></div><div class='line'><code>    <span class="p">(</span><span class="nf">does-the-right-thing</span> <span class="nv">x</span><span class="p">)))</span>
-</code></div></pre></td></tr></table></div></figure></p>
+</code></div></pre></td></tr></table></div></figure>
+
 
 <p>and it would be totally correct, no matter what thing we want it to do.</p>
-
-<p>Technically, everywhere I&rsquo;ve said &ldquo;correct&rdquo;, what I mean is <strong>partially
-correct</strong>: <em>if</em> it terminates, <em>then</em> the output is correct. (Equivalently, it
-definitely <em>won&rsquo;t</em> return something incorrect.) <code>do-the-right-thing</code> is, in
-fact, partially correct: it never returns at all, so it won&rsquo;t give you any
-incorrect outputs!</p>
-
-<p>Termination proofs of recursive functions can usually be handled by <a href="http://en.wikipedia.org/wiki/Structural_induction">structural
-induction</a> on possible
-inputs: you establish that it terminates for minimal elements (e.g. the empty
-list) and that termination for any non-minimal element is dependent only on
-termination for some set of smaller elements (e.g. the tail of the list). The
-structure that you need in order to think about termination this way is also
-much clearer with recursion than with iteration constructs.</p>
-<div class="footnotes">
-<hr/>
+<p>Technically, everywhere I’ve said “correct”, what I mean is <strong>partially correct</strong>: <em>if</em> it terminates, <em>then</em> the output is correct. (Equivalently, it definitely <em>won’t</em> return something incorrect.) <code>do-the-right-thing</code> is, in fact, partially correct: it never returns at all, so it won’t give you any incorrect outputs!</p>
+<p>Termination proofs of recursive functions can usually be handled by <a href="http://en.wikipedia.org/wiki/Structural_induction">structural induction</a> on possible inputs: you establish that it terminates for minimal elements (e.g. the empty list) and that termination for any non-minimal element is dependent only on termination for some set of smaller elements (e.g. the tail of the list). The structure that you need in order to think about termination this way is also much clearer with recursion than with iteration constructs.</p>
+<section class="footnotes">
+<hr />
 <ol>
-<li id="fn:1">
-<p>If you doubt my ability to productively use assembly for more complicated toy problems, I direct you to my <a href="/blog/2014/02/25/overkilling-the-8-queens-problem/">previous blog post</a>.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-<li id="fn:2">
-<p><a href="http://en.wikipedia.org/wiki/Guido_van_Rossum">Guido van Rossum</a> is the author of Python, and the &ldquo;Benevolent Dictator for Life&rdquo; of its development process.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
-<li id="fn:3">
-<p>Unlike most language implementations, <code>guile</code> natively supports <a href="http://www.gnu.org/software/guile/manual/html_node/Integers.html#Integers">arbitrarily large integers</a>.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
-<li id="fn:4">
-<p>Although at least it&rsquo;s not as inelegant as defining the helper function <em>outside</em> the body of the actual function, thereby polluting the global namespace. Take advantage of nested functions!<a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
-<li id="fn:5">
-<p>You can even keep your <code>for-each</code> loops, which are no substitute for <a href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d1-Fold-and-Map.html#SRFI_002d1-Fold-and-Map"><code>map</code> and <code>filter</code></a>.<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
-<li id="fn:6">
-<p>If you&rsquo;re curious how this works, click <a href="https://gist.github.com/davidad/9288924">here</a>. But I haven&rsquo;t settled on an ASM REPL solution I&rsquo;m happy with &mdash; this is just a one-off hack. A more legitimate ASM REPL may be the subject of a future blog post.<a href="#fnref:6" rev="footnote">&#8617;</a></p></li>
-<li id="fn:7">
-<p>Except for <code>rep</code> prefixes, which can iterate certain single instructions. I think it&rsquo;s fair to say those don&rsquo;t really count.<a href="#fnref:7" rev="footnote">&#8617;</a></p></li>
-<li id="fn:8">
-<p>I find calling conventions distasteful in general. The calling convention is like a shadow API (in fact, it&rsquo;s often referred to as the ABI, for application binary interface) that nobody has any control over (except the people at AMD, Intel, and Microsoft who are in a position to decide on such things) and that applies to every function, every component on every computer everywhere. What if we let people define their ABI as part of their API? Would the world come crashing down? I doubt it. You can already cause quite a bit of trouble by misusing A<em>P</em>Is; really, both API and ABI usage ought to be formally verified, and as such ought to have much more room for flexibility than they do now. &lt;/soapbox><a href="#fnref:8" rev="footnote">&#8617;</a></p></li>
-<li id="fn:9">
-<p>I would have applied this <code>xor</code> optimization too if I weren&rsquo;t trying to literally translate Scheme code as an illustration.<a href="#fnref:9" rev="footnote">&#8617;</a></p></li>
-<li id="fn:10">
-<p>&ldquo;The stack&rdquo; is not merely a region of memory managed by the OS (like &ldquo;the heap&rdquo;, its common counterpart). The stack is a hardware-accelerated mechanism deeply embedded in the CPU. There is a hardware register <code>rsp</code> (a.k.a. the stack pointer). A <code>push</code> instruction decrements <code>rsp</code> (usually by 8 at a time, in 64-bit mode, since pointers are expressed as numbers of 8-bit bytes, and 64/8=8) and then stores a value to <code>[rsp]</code>. A <code>pop</code> instruction retrieves a value from <code>[rsp]</code> and then increments <code>rsp</code>. A <code>call</code> instruction <code>push</code>es the current value of <code>rip</code> (a.k.a. the instruction pointer, or the program counter), and then executes an unconditional jump (<code>jmp</code>). Finally, a <code>ret</code> instruction <code>pop</code>s from the stack into <code>rip</code>, returning to wherever the matching <code>call</code> left off.<a href="#fnref:10" rev="footnote">&#8617;</a></p></li>
-<li id="fn:11">
-<p>You may point out here that C doesn&rsquo;t actually let you pass entire linked lists by value. Maybe that&rsquo;s because it&rsquo;s a <em>bad idea</em>.<a href="#fnref:11" rev="footnote">&#8617;</a></p></li>
-<li id="fn:12">
-<p>If your function cannot be fully specified by an abstract mapping from inputs to outputs, then it is <strong>nondeterministic</strong>, which is a fancy word for &ldquo;unpredictable&rdquo;: there must exist some circumstances under which you cannot predict the behavior of the function, even knowing every input. Intuitively, I&rsquo;m sure you can see how unpredictable software is a nightmare to debug. Controlling nondeterminism is an active field of computer science research, which is not the subject of this article. However, I hope you are at least convinced that nondeterminism is something you should avoid if possible, and that therefore you should try to design every function in your program as a proper mathematical function.<p>Note that I&rsquo;m not talking about &ldquo;purity&rdquo; here &mdash; it&rsquo;s fine for &ldquo;outputs&rdquo; to include side effects as of function exit, and for &ldquo;inputs&rdquo; to include states of the external world as of function entry. What&rsquo;s important is that the state at function exit of anything the function modifies be uniquely determined by the state at function entry of anything that can affect its execution.<a href="#fnref:12" rev="footnote">&#8617;</a></p></li>
-<li id="fn:13">
-<p>Unless we&rsquo;re dealing with hairy scope issues like hoisting, in which case you should get rid of those first.<a href="#fnref:13" rev="footnote">&#8617;</a></p></li>
-<li id="fn:14">
-<p>Pun intended. The sentence within which this footnote is referenced <em>isn&rsquo;t</em> circular reasoning; it&rsquo;s a tautology. Therefore, it&rsquo;s an example of something that sounds like circular reasoning but is valid anyway. Of course, you shouldn&rsquo;t take the existence of this cute example as evidence that the circular-sounding reasoning preceding it is not, in fact, circular. (That would be a fallacy of <a href="http://en.wikipedia.org/wiki/Inappropriate_generalization">inappropriate generalization</a>, which neither is nor sounds like circular reasoning.)<a href="#fnref:14" rev="footnote">&#8617;</a></p></li>
-<li id="fn:15">
-<p>Trying to explain it for the purposes of this blog post &mdash; while making sure that I&rsquo;m not missing something &mdash; took me over four hours.<a href="#fnref:15" rev="footnote">&#8617;</a></p></li>
-<li id="fn:16">
-<p>Technically, I mean &ldquo;partially correct&rdquo;. This will be addressed in due time. Be patient, pedantic reader. This argument is hard enough to understand already.<a href="#fnref:16" rev="footnote">&#8617;</a></p></li>
+<li id="fn1"><p>If you doubt my ability to productively use assembly for more complicated toy problems, I direct you to my <a href="/blog/2014/02/25/overkilling-the-8-queens-problem/">previous blog post</a>.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p><a href="http://en.wikipedia.org/wiki/Guido_van_Rossum">Guido van Rossum</a> is the author of Python, and the “Benevolent Dictator for Life” of its development process.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Unlike most language implementations, <code>guile</code> natively supports <a href="http://www.gnu.org/software/guile/manual/html_node/Integers.html#Integers">arbitrarily large integers</a>.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>Although at least it’s not as inelegant as defining the helper function <em>outside</em> the body of the actual function, thereby polluting the global namespace. Take advantage of nested functions!<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>You can even keep your <code>for-each</code> loops, which are no substitute for <a href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d1-Fold-and-Map.html#SRFI_002d1-Fold-and-Map"><code>map</code> and <code>filter</code></a>.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>If you’re curious how this works, click <a href="https://gist.github.com/davidad/9288924">here</a>. But I haven’t settled on an ASM REPL solution I’m happy with – this is just a one-off hack. A more legitimate ASM REPL may be the subject of a future blog post.<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>Except for <code>rep</code> prefixes, which can iterate certain single instructions. I think it’s fair to say those don’t really count.<a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>I find calling conventions distasteful in general. The calling convention is like a shadow API (in fact, it’s often referred to as the ABI, for application binary interface) that nobody has any control over (except the people at AMD, Intel, and Microsoft who are in a position to decide on such things) and that applies to every function, every component on every computer everywhere. What if we let people define their ABI as part of their API? Would the world come crashing down? I doubt it. You can already cause quite a bit of trouble by misusing A<em>P</em>Is; really, both API and ABI usage ought to be formally verified, and as such ought to have much more room for flexibility than they do now. &lt;/soapbox&gt;<a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p>I would have applied this <code>xor</code> optimization too if I weren’t trying to literally translate Scheme code as an illustration.<a href="#fnref9">↩</a></p></li>
+<li id="fn10"><p>“The stack” is not merely a region of memory managed by the OS (like “the heap”, its common counterpart). The stack is a hardware-accelerated mechanism deeply embedded in the CPU. There is a hardware register <code>rsp</code> (a.k.a. the stack pointer). A <code>push</code> instruction decrements <code>rsp</code> (usually by 8 at a time, in 64-bit mode, since pointers are expressed as numbers of 8-bit bytes, and 64/8=8) and then stores a value to <code>[rsp]</code>. A <code>pop</code> instruction retrieves a value from <code>[rsp]</code> and then increments <code>rsp</code>. A <code>call</code> instruction <code>push</code>es the current value of <code>rip</code> (a.k.a. the instruction pointer, or the program counter), and then executes an unconditional jump (<code>jmp</code>). Finally, a <code>ret</code> instruction <code>pop</code>s from the stack into <code>rip</code>, returning to wherever the matching <code>call</code> left off.<a href="#fnref10">↩</a></p></li>
+<li id="fn11"><p>You may point out here that C doesn’t actually let you pass entire linked lists by value. Maybe that’s because it’s a <em>bad idea</em>.<a href="#fnref11">↩</a></p></li>
+<li id="fn12">If your function cannot be fully specified by an abstract mapping from inputs to outputs, then it is <strong>nondeterministic</strong>, which is a fancy word for “unpredictable”: there must exist some circumstances under which you cannot predict the behavior of the function, even knowing every input. Intuitively, I’m sure you can see how unpredictable software is a nightmare to debug. Controlling nondeterminism is an active field of computer science research, which is not the subject of this article. However, I hope you are at least convinced that nondeterminism is something you should avoid if possible, and that therefore you should try to design every function in your program as a proper mathematical function.
+<p>
+<p>Note that I’m not talking about “purity” here – it’s fine for “outputs” to include side effects as of function exit, and for “inputs” to include states of the external world as of function entry. What’s important is that the state at function exit of anything the function modifies be uniquely determined by the state at function entry of anything that can affect its execution.<a href="#fnref12">↩</a></p></li>
+<li id="fn13"><p>Unless we’re dealing with hairy scope issues like hoisting, in which case you should get rid of those first.<a href="#fnref13">↩</a></p></li>
+<li id="fn14"><p>Pun intended. The sentence within which this footnote is referenced <em>isn’t</em> circular reasoning; it’s a tautology. Therefore, it’s an example of something that sounds like circular reasoning but is valid anyway. Of course, you shouldn’t take the existence of this cute example as evidence that the circular-sounding reasoning preceding it is not, in fact, circular. (That would be a fallacy of <a href="http://en.wikipedia.org/wiki/Inappropriate_generalization">inappropriate generalization</a>, which neither is nor sounds like circular reasoning.)<a href="#fnref14">↩</a></p></li>
+<li id="fn15"><p>Trying to explain it for the purposes of this blog post – while making sure that I’m not missing something – took me over four hours.<a href="#fnref15">↩</a></p></li>
+<li id="fn16"><p>Technically, I mean “partially correct”. This will be addressed in due time. Be patient, pedantic reader. This argument is hard enough to understand already.<a href="#fnref16">↩</a></p></li>
 </ol>
-</div>
-
-</div>
+</section></div>
 
 
   <footer>
@@ -640,6 +438,10 @@ much clearer with recursion than with iteration constructs.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/23/concurrency-primitives-in-intel-64-assembly/">Concurrency Primitives in Intel 64 Assembly</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/03/16/infosec-the-product-design-correspondence/">The Security/Product Design Correspondence</a>
       </li>
     
@@ -653,10 +455,6 @@ much clearer with recursion than with iteration constructs.</p>
     
       <li class="post">
         <a href="/blog/2014/02/28/python-to-scheme-to-assembly-1/">Python to Scheme to Assembly, <br>Part 1: Recursion and Named Let</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/02/25/overkilling-the-8-queens-problem/">Overkilling the 8-queens problem</a>
       </li>
     
   </ul>

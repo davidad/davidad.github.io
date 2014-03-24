@@ -9,8 +9,7 @@
   <meta name="author" content="davidad (David A. Dalrymple)">
 
   
-  <meta name="description" content="General disclaimer for InfoSec articles: Reading this article does not
-qualify you to design secure systems. Writing this article does not qualify me &hellip;">
+  <meta name="description" content="Now that nearly every computer has some form of multi-processing (that is, multiple CPUs sharing a single address space), some high-level languages &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -70,6 +69,74 @@ qualify you to design secure systems. Writing this article does not qualify me &
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/03/23/concurrency-primitives-in-intel-64-assembly/">Concurrency Primitives in Intel 64 Assembly</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-23T20:36:47-04:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Now that nearly every computer has some form of multi-processing (that is, multiple CPUs sharing a single address space), some high-level languages are starting to get attention for their concurrency features. Many languages refer to such features as “concurrency primitives.” But since these are high-level languages, we know that these “primitives” must ultimately be implemented with hardware operations. Older high-level languages, like C, don’t have baked-in support for such operations – not because such languages are lower-level, but simply because the operations in question <em>weren’t a thing</em> when C was invented. Assembly language, being up to date with the latest CPU capabilities by definition<sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup>, should provide the best window into the true nature of today’s concurrency operations.</p>
+<p>In this post I’m going to walk you through a (relatively) simple concurrent assembly program which runs on OSX or Linux. Here’s the demo (<a href="https://github.com/davidad/asm_concurrency">github</a>):</p>
+<pre><code>bash-3.2$ time ./concurrency-noprint-x1 foo    # single-worker version
+
+real  0m1.458s
+user  0m1.445s
+sys   0m0.010s
+bash-3.2$ # now run two at once
+bash-3.2$ time ./concurrency-noprint-x1 foo-2 &amp; ./concurrency-noprint-x1 foo-2
+[1] 71366
+
+real  0m0.785s
+user  0m0.780s
+sys   0m0.001s
+[1]+  Done                    time ./concurrency-noprint-x1 foo-2
+bash-3.2$ time ./concurrency-noprint-x4 foo-3  # four-worker version
+
+real  0m0.417s
+user  0m0.413s
+sys   0m0.003s
+bash-3.2$ time ./concurrency-noprint-x7 foo-4  # seven-worker version
+
+real  0m0.295s
+user  0m0.283s
+sys   0m0.001s
+bash-3.2$ diff -s --from-file=foo foo-*
+Files foo and foo-2 are identical
+Files foo and foo-3 are identical
+Files foo and foo-4 are identical</code></pre>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/03/23/concurrency-primitives-in-intel-64-assembly/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/03/16/infosec-the-product-design-correspondence/">The Security/Product Design Correspondence</a></h1>
     
     
@@ -93,36 +160,13 @@ qualify you to design secure systems. Writing this article does not qualify me &
   </header>
 
 
-  <div class="entry-content"><p><strong>General disclaimer for InfoSec articles:</strong> <em>Reading this article does not
-qualify you to design secure systems. Writing this article does not qualify </em>me<em>
-to design secure systems.  In fact, </em>nobody is qualified to design secure
-systems<em>.  A system should not be considered secure unless it has been reviewed
-by multiple security experts </em>and<em> resisted multiple serious attempts to violate
-its security claims in practice. The information contained in this article is
-offered &ldquo;as is&rdquo; and without warranties of any kind (express, implied, and
-statutory), all of which the author expressly disclaims to the fullest extent
-permitted by law.</em></p>
-
+  <div class="entry-content"><p><strong>General disclaimer for InfoSec articles:</strong> _Reading this article does not qualify you to design secure systems. Writing this article does not qualify <em>me</em> to design secure systems. In fact, <em>nobody is qualified to design secure systems</em>. A system should not be considered secure unless it has been reviewed by multiple security experts <em>and</em> resisted multiple serious attempts to violate its security claims in practice. The information contained in this article is offered “as is” and without warranties of any kind (express, implied, and statutory), all of which the author expressly disclaims to the fullest extent permitted by law._</p>
 <hr />
-
-<blockquote><p>If programming is the art of adding functionality to computers, security is
-the art of removing it.</p></blockquote>
-
-<p>This maxim is a bit unfair to deep and wonderful world of information security
-(InfoSec), but it has a point. A lot of essential concepts in InfoSec have
-natural opposites in software product design.</p>
-
-<p>Let&rsquo;s start at the top. Every professional software project begins with
-specifications. In product design, the specifications are called <strong>use cases</strong>:
-stories about an external agent who wants to perform some function, and how they
-would go about performing the function using your software. In InfoSec, the
-specifications are called <strong>threats</strong>. These are also stories about an external
-agent who wants to perform some function, and how would go about performing the
-function using your software. The difference is, in product design, you want to
-make the agent&rsquo;s job <em>as easy as possible</em>, while in InfoSec, you want
-to make it as <em>hard</em>  as possible. We also have these related correspondences:</p>
-
-</div>
+<blockquote>
+<p>If programming is the art of adding functionality to computers, security is the art of removing it.</p>
+</blockquote>
+<p>This maxim is a bit unfair to deep and wonderful world of information security (InfoSec), but it has a point. A lot of essential concepts in InfoSec have natural opposites in software product design.</p>
+<p>Let’s start at the top. Every professional software project begins with specifications. In product design, the specifications are called <strong>use cases</strong>: stories about an external agent who wants to perform some function, and how they would go about performing the function using your software. In InfoSec, the specifications are called <strong>threats</strong>. These are also stories about an external agent who wants to perform some function, and how would go about performing the function using your software. The difference is, in product design, you want to make the agent’s job <em>as easy as possible</em>, while in InfoSec, you want to make it as <em>hard</em> as possible. We also have these related correspondences: </div>
   
   
     <footer>
@@ -161,45 +205,13 @@ to make it as <em>hard</em>  as possible. We also have these related corresponde
   </header>
 
 
-  <div class="entry-content"><p><em>Note: This is a position piece, not a technical article. Hat tip to <a href="https://twitter.com/_JacobJacob">Jake
-Skelcy</a> for requesting such a piece.</em></p>
-
-<p>Computers didn&rsquo;t always have operating systems. The earliest machines, like the
-<a href="http://en.wikipedia.org/wiki/Harvard_Mark_I">Harvard Mark I</a> and the
-<a href="http://en.wikipedia.org/wiki/EDVAC">EDVAC</a>, performed one &ldquo;computation&rdquo; at a
-time. Whenever a computation finished, with its output printed by a
-teletypewriter or recorded on a magnetic tape, the machine would shut down. A
-person would then have to notice the machine stopped, unload the output, set up
-a new computation by manually loading the input and program instructions, and
-finally, press the <strong>start button</strong> to get the machine cranking again. On the
-Harvard Mark I, for instance, restarting would involve separately turning on
-multiple electric motors and then pressing a button marked MAIN SEQUENCE.</p>
-
-<p><a href="http://commons.wikimedia.org/wiki/File:Harvard_Mark_I_Computer_-_Input-Output_Details.jpg"><img src="http://upload.wikimedia.org/wikipedia/commons/0/07/Harvard_Mark_I_Computer_-_Input-Output_Details.jpg" alt="The control panel of the Harvard Mark
-I." /></a></p>
-
-<p><strong>This is the context in which the programming language (PL) and the operating
-system (OS) were invented. The year was 1955. Almost everything since then has
-been window dressing</strong> (so to speak). In this essay, I&rsquo;m going to tell you my
-perspective on the PL and the OS, and the six other things since then which I
-consider significant improvements, which have made it into software practice,
-and which are neither algorithms nor data structures (but rather system
-concepts). Despite those and other incremental changes, to this day<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>, we work
-exclusively<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup> within software environments which can definitely be considered
-programming languages and operating systems, in exactly the same sense as those
-phrases were used almost 60 years ago. My position is:</p>
-
+  <div class="entry-content"><p><em>Note: This is a position piece, not a technical article. Hat tip to <a href="https://twitter.com/_JacobJacob">Jake Skelcy</a> for requesting such a piece.</em></p>
+<p>Computers didn’t always have operating systems. The earliest machines, like the <a href="http://en.wikipedia.org/wiki/Harvard_Mark_I">Harvard Mark I</a> and the <a href="http://en.wikipedia.org/wiki/EDVAC">EDVAC</a>, performed one “computation” at a time. Whenever a computation finished, with its output printed by a teletypewriter or recorded on a magnetic tape, the machine would shut down. A person would then have to notice the machine stopped, unload the output, set up a new computation by manually loading the input and program instructions, and finally, press the <strong>start button</strong> to get the machine cranking again. On the Harvard Mark I, for instance, restarting would involve separately turning on multiple electric motors and then pressing a button marked MAIN SEQUENCE.</p>
+<p><a href="http://commons.wikimedia.org/wiki/File:Harvard_Mark_I_Computer_-_Input-Output_Details.jpg"><img src="http://upload.wikimedia.org/wikipedia/commons/0/07/Harvard_Mark_I_Computer_-_Input-Output_Details.jpg" alt="The control panel of the Harvard Mark I." /></a></p>
+<p><strong>This is the context in which the programming language (PL) and the operating system (OS) were invented. The year was 1955. Almost everything since then has been window dressing</strong> (so to speak). In this essay, I’m going to tell you my perspective on the PL and the OS, and the six other things since then which I consider significant improvements, which have made it into software practice, and which are neither algorithms nor data structures (but rather system concepts). Despite those and other incremental changes, to this day<sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup>, we work exclusively<sup><a href="#fn2" class="footnoteRef" id="fnref2">2</a></sup> within software environments which can definitely be considered programming languages and operating systems, in exactly the same sense as those phrases were used almost 60 years ago. My position is:</p>
 <ul>
 <li>Frankly, this is backward, and we ought to admit it.</li>
-<li>Most of this stuff was invented by people who had a lot less knowledge and
-experience with computing than we have accumulated today. <strong>All</strong> of it was
-<strong>invented by people</strong>: mortal, fallible humans like you and me who were
-just trying to make something work. With a solid historical perspective we can
-dare to do better.</li>
-</ul>
-
-
-</div>
+<li>Most of this stuff was invented by people who had a lot less knowledge and experience with computing than we have accumulated today. <strong>All</strong> of it was <strong>invented by people</strong>: mortal, fallible humans like you and me who were just trying to make something work. With a solid historical perspective we can dare to do better. </div>
   
   
     <footer>
@@ -238,24 +250,11 @@ dare to do better.</li>
   </header>
 
 
-  <div class="entry-content"><p><a href="/assets/20140306.pdf">See the slides (PDF)</a>. (You may want to use your PDF
-viewer&rsquo;s presentation mode; there are a lot of pseudo-animations that could
-get annoying to scroll through.)</p>
-
-<p><strong>Update</strong>: Today, I drew up the <a href="/assets/20140310.pdf">field axioms</a> in this
-notation. I&rsquo;m almost to the point where I can define linearity!</p>
-
+  <div class="entry-content"><p><a href="/assets/20140306.pdf">See the slides (PDF)</a>. (You may want to use your PDF viewer’s presentation mode; there are a lot of pseudo-animations that could get annoying to scroll through.)</p>
+<p><strong>Update</strong>: Today, I drew up the <a href="/assets/20140310.pdf">field axioms</a> in this notation. I’m almost to the point where I can define linearity!</p>
 <hr />
-
-<p>Last week at <a href="http://www.hackerschool.com">Hacker School</a>, I floated the idea of
-giving a presentation about linear algebra. Over a decade after taking it in
-college, I finally feel like I understand linear algebra well enough to express
-clearly, to an audience of programmers, most of the concepts from linear algebra
-that they might find useful.</p>
-
-<p>I figured the very first thing to present would be the concept of <em>linearity</em>
-itself. After all, a <strong>linear operator</strong> is just any operator that commutes with
-addition and scalar multiplication. But wait&mdash; what is &ldquo;commuting&rdquo;? </div>
+<p>Last week at <a href="http://www.hackerschool.com">Hacker School</a>, I floated the idea of giving a presentation about linear algebra. Over a decade after taking it in college, I finally feel like I understand linear algebra well enough to express clearly, to an audience of programmers, most of the concepts from linear algebra that they might find useful.</p>
+<p>I figured the very first thing to present would be the concept of <em>linearity</em> itself. After all, a <strong>linear operator</strong> is just any operator that commutes with addition and scalar multiplication. But wait– what is “commuting”? </div>
   
   
     <footer>
@@ -294,41 +293,28 @@ addition and scalar multiplication. But wait&mdash; what is &ldquo;commuting&rdq
   </header>
 
 
-  <div class="entry-content"><p><em>In 2001, my favorite programming language was Python. In 2008, my favorite
-programming language was Scheme. In 2014, my favorite programming language is
-x64 assembly. For some reason, that progression tends to surprise people. Come
-on a journey with me.</em></p>
-
-<h2>Python</h2>
-
-<p>In this article, we&rsquo;re going to consider a very simple toy problem: recursively
-summing up a list of numbers<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>.</p>
-
-<p><figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div></pre></td><td class='main  python'><pre><div class='line'><code><span class="k">def</span> <span class="nf">sum_list</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+  <div class="entry-content"><p><em>In 2001, my favorite programming language was Python. In 2008, my favorite programming language was Scheme. In 2014, my favorite programming language is x64 assembly. For some reason, that progression tends to surprise people. Come on a journey with me.</em></p>
+<h2 id="python">Python</h2>
+<p>In this article, we’re going to consider a very simple toy problem: recursively summing up a list of numbers<sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup>.</p>
+<figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div></pre></td><td class='main  python'><pre><div class='line'><code><span class="k">def</span> <span class="nf">sum_list</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
 </code></div><div class='line'><code>  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
 </code></div><div class='line'><code>    <span class="k">return</span> <span class="mi">0</span>
 </code></div><div class='line'><code>  <span class="k">else</span><span class="p">:</span>
 </code></div><div class='line'><code>    <span class="k">return</span> <span class="nb">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">sum_list</span><span class="p">(</span><span class="nb">list</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
-</code></div></pre></td></tr></table></div></figure></p>
+</code></div></pre></td></tr></table></div></figure>
 
-<blockquote><pre><code> &gt;&gt;&gt; sum_list(range(101))
- 5050
-</code></pre></blockquote>
 
-<p><a href="http://en.wikipedia.org/wiki/Carl_Friedrich_Gauss#Anecdotes">Young Carl Gauss</a>
-would be proud.</p>
-
-<blockquote><pre><code> &gt;&gt;&gt; sum_list(range(1001))
- RuntimeError: maximum recursion depth exceeded
-</code></pre>
-
-<p>Oops.</p></blockquote>
-
-<p>Young programmers often learn from this type of experience that recursion
-<em>sucks</em>. (Or, as a modern young programmer might say, it <em>doesn&rsquo;t scale</em>.) If
-they Google around a bit, they might find the following &ldquo;solution&rdquo;:</p>
-
-</div>
+<blockquote>
+<pre><code> &gt;&gt;&gt; sum_list(range(101))
+ 5050</code></pre>
+</blockquote>
+<p><a href="http://en.wikipedia.org/wiki/Carl_Friedrich_Gauss#Anecdotes">Young Carl Gauss</a> would be proud.</p>
+<blockquote>
+<pre><code> &gt;&gt;&gt; sum_list(range(1001))
+ RuntimeError: maximum recursion depth exceeded</code></pre>
+<p>Oops.</p>
+</blockquote>
+<p>Young programmers often learn from this type of experience that recursion <em>sucks</em>. (Or, as a modern young programmer might say, it <em>doesn’t scale</em>.) If they Google around a bit, they might find the following “solution”: </div>
   
   
     <footer>
@@ -367,25 +353,11 @@ they Google around a bit, they might find the following &ldquo;solution&rdquo;:<
   </header>
 
 
-  <div class="entry-content"><p>Last night, a fellow <a href="http://www.hackerschool.com">Hacker School</a>er challenged
-me to a running-time contest on the classic <a href="http://en.wikipedia.org/wiki/Eight_queens_puzzle">eight queens
-puzzle</a>. Naturally, I pulled
-up my trusty <a href="http://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-manual-325462.pdf">Intel® 64
-manual</a>
-and got to work. It turned out to be even faster than I expected, churning out
-pretty-printed output in 15ms, which is totally dominated by the time it takes
-the terminal to display it (it takes only 2ms if redirected to a file).</p>
-
-<p><strong>Update</strong>: Very slightly more scientific
-<a href="https://github.com/davidad/8queens/tree/%2Bc_comparison">testing</a>, spurred by
-curious <a href="https://news.ycombinator.com/item?id=7301913">Hacker News commenters</a>,
-indicates that, without pretty-printing and other overhead, the solving time is
-actually closer to 11.2&#181;s &mdash; about a factor of 7 speedup over commenter
-<a href="https://news.ycombinator.com/item?id=7302005">bluecalm</a>&rsquo;s <a href="https://github.com/davidad/8queens/blob/%2Bc_comparison/8q_C_bluecalm.c">C
-implementation</a>.</p>
-
-<p><img src="http://i.imgur.com/5dOH49e.png" alt="pretty-printed output" /></p>
-
+  <div class="entry-content"><p>Last night, a fellow <a href="http://www.hackerschool.com">Hacker School</a>er challenged me to a running-time contest on the classic <a href="http://en.wikipedia.org/wiki/Eight_queens_puzzle">eight queens puzzle</a>. Naturally, I pulled up my trusty <a href="http://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-manual-325462.pdf">Intel® 64 manual</a> and got to work. It turned out to be even faster than I expected, churning out pretty-printed output in 15ms, which is totally dominated by the time it takes the terminal to display it (it takes only 2ms if redirected to a file).</p>
+<p><strong>Update</strong>: Very slightly more scientific <a href="https://github.com/davidad/8queens/tree/%2Bc_comparison">testing</a>, spurred by curious <a href="https://news.ycombinator.com/item?id=7301913">Hacker News commenters</a>, indicates that, without pretty-printing and other overhead, the solving time is actually closer to 11.2µs – about a factor of 7 speedup over commenter <a href="https://news.ycombinator.com/item?id=7302005">bluecalm</a>’s <a href="https://github.com/davidad/8queens/blob/%2Bc_comparison/8q_C_bluecalm.c">C implementation</a>.</p>
+<figure>
+<img src="http://i.imgur.com/5dOH49e.png" alt="pretty-printed output" /><figcaption>pretty-printed output</figcaption>
+</figure>
 </div>
   
   
@@ -425,30 +397,14 @@ implementation</a>.</p>
   </header>
 
 
-  <div class="entry-content"><blockquote><p><strong>Myth</strong>: &ldquo;Virtual memory&rdquo; is the mechanism that a kernel uses to make more
-memory available than is actually physically installed, by setting aside a
-disk partition for the overflow and copying pages between memory and disk as
-needed.</p></blockquote>
-
-<p>I acquired this belief very early in my programming career, but it turns out
-that swapping pages to disk is merely one of the many things that &ldquo;virtual
-memory&rdquo; makes possible.</p>
-
-<blockquote><p><strong>Fact</strong>: &ldquo;Virtual memory&rdquo; is a <em>hardware</em> (CPU) mechanism, which, every
-single time memory is accessed, references a kernel-specified data structure
-called a &ldquo;page table&rdquo; to arbitrarily
-<a href="http://www.catb.org/jargon/html/F/frobnicate.html">frobnicate</a> the high bits
-of the address, which is called &ldquo;translating&rdquo; from a &ldquo;linear address&rdquo; to a
-&ldquo;physical address&rdquo;. (The page table gets cached by a <a href="http://en.wikipedia.org/wiki/Translation_lookaside_buffer">translation lookaside
-buffer</a>, so the
-lookup is usually quite efficient!)</p></blockquote>
-
-<p>This fact became very real to me this week as I made a <a href="/blog/2014/02/18/kernel-from-scratch/">kernel from
-scratch</a>: I was moderately surprised
-that I <em>needed</em> to set up a page table, when I had always thought of virtual
-memory as a somewhat advanced kernel feature. Today, I learned how &ldquo;relocatable&rdquo;
-and &ldquo;PIC&rdquo; &mdash; terms I&rsquo;d encountered in the past and never really understood &mdash;
-suddenly make sense in this context.  </div>
+  <div class="entry-content"><blockquote>
+<p><strong>Myth</strong>: “Virtual memory” is the mechanism that a kernel uses to make more memory available than is actually physically installed, by setting aside a disk partition for the overflow and copying pages between memory and disk as needed.</p>
+</blockquote>
+<p>I acquired this belief very early in my programming career, but it turns out that swapping pages to disk is merely one of the many things that “virtual memory” makes possible.</p>
+<blockquote>
+<p><strong>Fact</strong>: “Virtual memory” is a <em>hardware</em> (CPU) mechanism, which, every single time memory is accessed, references a kernel-specified data structure called a “page table” to arbitrarily <a href="http://www.catb.org/jargon/html/F/frobnicate.html">frobnicate</a> the high bits of the address, which is called “translating” from a “linear address” to a “physical address”. (The page table gets cached by a <a href="http://en.wikipedia.org/wiki/Translation_lookaside_buffer">translation lookaside buffer</a>, so the lookup is usually quite efficient!)</p>
+</blockquote>
+<p>This fact became very real to me this week as I made a <a href="/blog/2014/02/18/kernel-from-scratch/">kernel from scratch</a>: I was moderately surprised that I <em>needed</em> to set up a page table, when I had always thought of virtual memory as a somewhat advanced kernel feature. Today, I learned how “relocatable” and “PIC” – terms I’d encountered in the past and never really understood – suddenly make sense in this context. </div>
   
   
     <footer>
@@ -487,13 +443,8 @@ suddenly make sense in this context.  </div>
   </header>
 
 
-  <div class="entry-content"><p>One of my 3 major goals for Hacker School was to create a bootable, 64-bit
-kernel image from scratch, using only <code>nasm</code> and my text editor. Well, folks,
-one down, two to go.</p>
-
-<p><img src="http://i.imgur.com/vnYFaFZ.png" alt="Hello, kernel!" /></p>
-
-</div>
+  <div class="entry-content"><p>One of my 3 major goals for Hacker School was to create a bootable, 64-bit kernel image from scratch, using only <code>nasm</code> and my text editor. Well, folks, one down, two to go.</p>
+<p><img src="http://i.imgur.com/vnYFaFZ.png" alt="Hello, kernel!" /> </div>
   
   
     <footer>
@@ -532,26 +483,10 @@ one down, two to go.</p>
   </header>
 
 
-  <div class="entry-content"><p>Today is my second day at <a href="http://hackerschool.com">Hacker School</a>, and I
-decided to set up a little bit of tooling for blogging about what I do here.
-The first tool I set up (following the recommendations of many Hacker Schoolers
-and alums) was <a href="http://octopress.org">Octopress</a>, a static site generator
-designed for <a href="pages.github.com">GitHub Pages</a> and implemented atop
-<a href="http://jekyllrb.com">Jekyll</a>. (The page you&rsquo;re reading right now is
-Octopress-generated.) I followed the admirably thorough Octopress documentation
-for <a href="http://octopress.org/docs/setup/">installation</a>, <a href="http://octopress.org/docs/configuring/">initial
-configuration</a>, <a href="http://octopress.org/docs/deploying/github/">deployment with Github
-Pages</a>, and <a href="http://octopress.org/docs/theme/">theme
-customization</a><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. But I wanted even more
-convenience. So, I&rsquo;m here to introduce you to the <code>blog</code> command (the same one
-I used to write this very post).</p>
-
+  <div class="entry-content"><p>Today is my second day at <a href="http://hackerschool.com">Hacker School</a>, and I decided to set up a little bit of tooling for blogging about what I do here. The first tool I set up (following the recommendations of many Hacker Schoolers and alums) was <a href="http://octopress.org">Octopress</a>, a static site generator designed for <a href="pages.github.com">GitHub Pages</a> and implemented atop <a href="http://jekyllrb.com">Jekyll</a>. (The page you’re reading right now is Octopress-generated.) I followed the admirably thorough Octopress documentation for <a href="http://octopress.org/docs/setup/">installation</a>, <a href="http://octopress.org/docs/configuring/">initial configuration</a>, <a href="http://octopress.org/docs/deploying/github/">deployment with Github Pages</a>, and <a href="http://octopress.org/docs/theme/">theme customization</a><sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup>. But I wanted even more convenience. So, I’m here to introduce you to the <code>blog</code> command (the same one I used to write this very post).</p>
 <pre><code>davidad@zayin ~/octopress&gt; blog
-Enter a title for your post:
-</code></pre>
-
-<p><code>blog</code> is a <code>bash</code> script, pretty specific to my own setup (vim, chrome, OSX),
-but it could be adapted to other environments. </div>
+Enter a title for your post:</code></pre>
+<p><code>blog</code> is a <code>bash</code> script, pretty specific to my own setup (vim, chrome, OSX), but it could be adapted to other environments. </div>
   
   
     <footer>
@@ -575,6 +510,10 @@ but it could be adapted to other environments. </div>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/23/concurrency-primitives-in-intel-64-assembly/">Concurrency Primitives in Intel 64 Assembly</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/03/16/infosec-the-product-design-correspondence/">The Security/Product Design Correspondence</a>
       </li>
     
@@ -588,10 +527,6 @@ but it could be adapted to other environments. </div>
     
       <li class="post">
         <a href="/blog/2014/02/28/python-to-scheme-to-assembly-1/">Python to Scheme to Assembly, <br>Part 1: Recursion and Named Let</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/02/25/overkilling-the-8-queens-problem/">Overkilling the 8-queens problem</a>
       </li>
     
   </ul>

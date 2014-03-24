@@ -9,8 +9,7 @@
   <meta name="author" content="davidad (David A. Dalrymple)">
 
   
-  <meta name="description" content="Myth: &ldquo;Virtual memory&rdquo; is the mechanism that a kernel uses to make more
-memory available than is actually physically installed, by &hellip;">
+  <meta name="description" content="Myth: “Virtual memory” is the mechanism that a kernel uses to make more memory available than is actually physically installed, by setting aside a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -90,113 +89,37 @@ memory available than is actually physically installed, by &hellip;">
   </header>
 
 
-<div class="entry-content"><blockquote><p><strong>Myth</strong>: &ldquo;Virtual memory&rdquo; is the mechanism that a kernel uses to make more
-memory available than is actually physically installed, by setting aside a
-disk partition for the overflow and copying pages between memory and disk as
-needed.</p></blockquote>
-
-<p>I acquired this belief very early in my programming career, but it turns out
-that swapping pages to disk is merely one of the many things that &ldquo;virtual
-memory&rdquo; makes possible.</p>
-
-<blockquote><p><strong>Fact</strong>: &ldquo;Virtual memory&rdquo; is a <em>hardware</em> (CPU) mechanism, which, every
-single time memory is accessed, references a kernel-specified data structure
-called a &ldquo;page table&rdquo; to arbitrarily
-<a href="http://www.catb.org/jargon/html/F/frobnicate.html">frobnicate</a> the high bits
-of the address, which is called &ldquo;translating&rdquo; from a &ldquo;linear address&rdquo; to a
-&ldquo;physical address&rdquo;. (The page table gets cached by a <a href="http://en.wikipedia.org/wiki/Translation_lookaside_buffer">translation lookaside
-buffer</a>, so the
-lookup is usually quite efficient!)</p></blockquote>
-
-<p>This fact became very real to me this week as I made a <a href="/blog/2014/02/18/kernel-from-scratch/">kernel from
-scratch</a>: I was moderately surprised
-that I <em>needed</em> to set up a page table, when I had always thought of virtual
-memory as a somewhat advanced kernel feature. Today, I learned how &ldquo;relocatable&rdquo;
-and &ldquo;PIC&rdquo; &mdash; terms I&rsquo;d encountered in the past and never really understood &mdash;
-suddenly make sense in this context.  <!-- more --></p>
-
-<p>Here&rsquo;s another fact that surprised me: in conventional operating systems,
-<strong>every process has its own page table</strong>. The pointer <code>0x7fff8000</code> does not
-necessarily translate to the same physical address in one process as it does in
-another<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>.</p>
-
-<p>Now, let&rsquo;s talk about libraries. Libraries are code, but they don&rsquo;t run as
-processes of their own. They&rsquo;re going to wind up under someone else&rsquo;s page
-table. There&rsquo;s two ways that can happen: static linking and dynamic linking<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>.</p>
-
+<div class="entry-content"><blockquote>
+<p><strong>Myth</strong>: “Virtual memory” is the mechanism that a kernel uses to make more memory available than is actually physically installed, by setting aside a disk partition for the overflow and copying pages between memory and disk as needed.</p>
+</blockquote>
+<p>I acquired this belief very early in my programming career, but it turns out that swapping pages to disk is merely one of the many things that “virtual memory” makes possible.</p>
+<blockquote>
+<p><strong>Fact</strong>: “Virtual memory” is a <em>hardware</em> (CPU) mechanism, which, every single time memory is accessed, references a kernel-specified data structure called a “page table” to arbitrarily <a href="http://www.catb.org/jargon/html/F/frobnicate.html">frobnicate</a> the high bits of the address, which is called “translating” from a “linear address” to a “physical address”. (The page table gets cached by a <a href="http://en.wikipedia.org/wiki/Translation_lookaside_buffer">translation lookaside buffer</a>, so the lookup is usually quite efficient!)</p>
+</blockquote>
+<p>This fact became very real to me this week as I made a <a href="/blog/2014/02/18/kernel-from-scratch/">kernel from scratch</a>: I was moderately surprised that I <em>needed</em> to set up a page table, when I had always thought of virtual memory as a somewhat advanced kernel feature. Today, I learned how “relocatable” and “PIC” – terms I’d encountered in the past and never really understood – suddenly make sense in this context. <!-- more --></p>
+<p>Here’s another fact that surprised me: in conventional operating systems, <strong>every process has its own page table</strong>. The pointer <code>0x7fff8000</code> does not necessarily translate to the same physical address in one process as it does in another<sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup>.</p>
+<p>Now, let’s talk about libraries. Libraries are code, but they don’t run as processes of their own. They’re going to wind up under someone else’s page table. There’s two ways that can happen: static linking and dynamic linking<sup><a href="#fn2" class="footnoteRef" id="fnref2">2</a></sup>.</p>
 <ul>
-<li>If a library is statically linked, the linker finds some place in a code
-segment of the executable to situate the library. The loader will then place
-this segment in virtual memory (wherever it&rsquo;s explicitly specified to go) when
-the executable is run.</li>
-<li>If a library is dynamically
-linked, then when the loader sets up the executable, it will invoke the dynamic
-linker to make sure that the
-required library shows up some place in the process&rsquo;s virtual memory<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>.</li>
+<li>If a library is statically linked, the linker finds some place in a code segment of the executable to situate the library. The loader will then place this segment in virtual memory (wherever it’s explicitly specified to go) when the executable is run.</li>
+<li>If a library is dynamically linked, then when the loader sets up the executable, it will invoke the dynamic linker to make sure that the required library shows up some place in the process’s virtual memory<sup><a href="#fn3" class="footnoteRef" id="fnref3">3</a></sup>.</li>
 </ul>
-
-
-<p>Whether static or dynamic, a linked library is going to be situated in virtual
-memory somewhere that the library can&rsquo;t predict<sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup>, which is problematic for
-accessing its own memory.  Fortunately, the linker (whether static or dynamic)
-can help us out by <strong>relocating</strong> the library&rsquo;s code, so that it knows where it
-is.  Unfortunately, library writers have to help the linker out by specifying,
-in the object file, the set of instructions or initialized data that need to be
-modified to properly relocate it. As long as all that &ldquo;relocation information&rdquo;
-is present, the object file is said to be <strong>relocatable</strong>.</p>
-
-<p>On the other hand, <strong>position-independent code</strong> (<strong>PIC</strong>), as the name
-suggests, doesn&rsquo;t even need to be relocated. None of its instructions or
-initialized data encode any assumptions about the region of virtual memory the
-program will be loaded into; it figures out where it is (usually by referencing
-the instruction pointer) and makes all memory accesses based on what it finds
-out.</p>
-
+<p>Whether static or dynamic, a linked library is going to be situated in virtual memory somewhere that the library can’t predict<sup><a href="#fn4" class="footnoteRef" id="fnref4">4</a></sup>, which is problematic for accessing its own memory. Fortunately, the linker (whether static or dynamic) can help us out by <strong>relocating</strong> the library’s code, so that it knows where it is. Unfortunately, library writers have to help the linker out by specifying, in the object file, the set of instructions or initialized data that need to be modified to properly relocate it. As long as all that “relocation information” is present, the object file is said to be <strong>relocatable</strong>.</p>
+<p>On the other hand, <strong>position-independent code</strong> (<strong>PIC</strong>), as the name suggests, doesn’t even need to be relocated. None of its instructions or initialized data encode any assumptions about the region of virtual memory the program will be loaded into; it figures out where it is (usually by referencing the instruction pointer) and makes all memory accesses based on what it finds out.</p>
 <p>So why do all that work when the linker can relocate for us?</p>
-
-<p>Here&rsquo;s the kicker. The whole motivation for dynamic linking was <strong>shared
-libraries</strong>. <strong>Shared</strong> doesn&rsquo;t just mean that multiple programs reference the
-same library file on disk. It means those processes share that library <strong>in
-physical memory</strong><sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup>.  Since every process has its own page table, the exact
-same library code winds up executing as if it were loaded into multiple,
-inconsistent virtual memory locations.  If we relocated it for one process, it
-wouldn&rsquo;t necessarily be valid for another. <strong>This is why weird things sometimes
-happen where the solution is &ldquo;recompile <code>blah</code> with <code>-fPIC</code>&rdquo;</strong>.</p>
-
+<p>Here’s the kicker. The whole motivation for dynamic linking was <strong>shared libraries</strong>. <strong>Shared</strong> doesn’t just mean that multiple programs reference the same library file on disk. It means those processes share that library <strong>in physical memory</strong><sup><a href="#fn5" class="footnoteRef" id="fnref5">5</a></sup>. Since every process has its own page table, the exact same library code winds up executing as if it were loaded into multiple, inconsistent virtual memory locations. If we relocated it for one process, it wouldn’t necessarily be valid for another. <strong>This is why weird things sometimes happen where the solution is “recompile <code>blah</code> with <code>-fPIC</code>”</strong>.</p>
 <hr />
-
-<p>Perhaps the most interesting thing about all this is that in today&rsquo;s 64-bit age,
-position-independent code may not even be necessary. The available virtual
-memory address space with 64 bits is so large that an OS may be able to afford
-blocking off a region of <em>every</em> process&rsquo;s virtual memory space to host <em>every</em>
-shared library on the system, so that their linear locations are guaranteed to
-be consistent from process to process. That means shared libraries would still
-have to be relocatable, but they wouldn&rsquo;t have to be PIC.</p>
-
-<p>On the other hand, x86_64 makes it <a href="http://eli.thegreenplace.net/2011/11/11/position-independent-code-pic-in-shared-libraries-on-x64/">significantly
-easier</a>
-to write position-independent code, by referring addresses to the current
-program counter (so no matter what virtual memory offset the code is at, it&rsquo;s
-internally consistent). If we adopt a policy that <em>all</em> libraries (static and
-dynamic) are PIC, then libraries don&rsquo;t ever have to worry about being relocated
-and the linker gets a lot simpler.</p>
-<div class="footnotes">
-<hr/>
+<p>Perhaps the most interesting thing about all this is that in today’s 64-bit age, position-independent code may not even be necessary. The available virtual memory address space with 64 bits is so large that an OS may be able to afford blocking off a region of <em>every</em> process’s virtual memory space to host <em>every</em> shared library on the system, so that their linear locations are guaranteed to be consistent from process to process. That means shared libraries would still have to be relocatable, but they wouldn’t have to be PIC.</p>
+<p>On the other hand, x86_64 makes it <a href="http://eli.thegreenplace.net/2011/11/11/position-independent-code-pic-in-shared-libraries-on-x64/">significantly easier</a> to write position-independent code, by referring addresses to the current program counter (so no matter what virtual memory offset the code is at, it’s internally consistent). If we adopt a policy that <em>all</em> libraries (static and dynamic) are PIC, then libraries don’t ever have to worry about being relocated and the linker gets a lot simpler.</p>
+<section class="footnotes">
+<hr />
 <ol>
-<li id="fn:1">
-<p>This is one of the things that differentiates a &ldquo;process&rdquo; from a &ldquo;thread&rdquo;: <strong>threads</strong> don&rsquo;t have their own page tables.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-<li id="fn:2">
-<p>Just as with static typechecking and dynamic typechecking, &ldquo;static&rdquo; means that it happens before the program is invoked, and &ldquo;dynamic&rdquo; means that happens after the program is invoked.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
-<li id="fn:3">
-<p>The loader also needs to populate a series of &ldquo;slots&rdquo; at fixed addresses with instructions that jump into where the library is (since the executable won&rsquo;t know in advance where the library will show up, unlike with static linking). But that part of dynamic linking is a distraction for the discussion of relocatable vs. PIC.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
-<li id="fn:4">
-<p>unlike a stand-alone executable, which can request (almost) any virtual memory address that it wants (since it has the whole page table to itself)<a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
-<li id="fn:5">
-<p>In fact, in most operating systems, if multiple processes map the same file into their virtual memory, and none of them write to it, those processes' page tables will translate each of their process-specific addresses for that file to the <strong>same pages</strong> of physical memory.<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
+<li id="fn1"><p>This is one of the things that differentiates a “process” from a “thread”: <strong>threads</strong> don’t have their own page tables.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Just as with static typechecking and dynamic typechecking, “static” means that it happens before the program is invoked, and “dynamic” means that happens after the program is invoked.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>The loader also needs to populate a series of “slots” at fixed addresses with instructions that jump into where the library is (since the executable won’t know in advance where the library will show up, unlike with static linking). But that part of dynamic linking is a distraction for the discussion of relocatable vs. PIC.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>unlike a stand-alone executable, which can request (almost) any virtual memory address that it wants (since it has the whole page table to itself)<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>In fact, in most operating systems, if multiple processes map the same file into their virtual memory, and none of them write to it, those processes’ page tables will translate each of their process-specific addresses for that file to the <strong>same pages</strong> of physical memory.<a href="#fnref5">↩</a></p></li>
 </ol>
-</div>
-
-</div>
+</section></div>
 
 
   <footer>
@@ -247,6 +170,10 @@ and the linker gets a lot simpler.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/23/concurrency-primitives-in-intel-64-assembly/">Concurrency Primitives in Intel 64 Assembly</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/03/16/infosec-the-product-design-correspondence/">The Security/Product Design Correspondence</a>
       </li>
     
@@ -260,10 +187,6 @@ and the linker gets a lot simpler.</p>
     
       <li class="post">
         <a href="/blog/2014/02/28/python-to-scheme-to-assembly-1/">Python to Scheme to Assembly, <br>Part 1: Recursion and Named Let</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/02/25/overkilling-the-8-queens-problem/">Overkilling the 8-queens problem</a>
       </li>
     
   </ul>

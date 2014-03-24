@@ -1,0 +1,489 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Concurrency Primitives in Intel 64 Assembly - Technical Journal</title>
+  <meta name="author" content="davidad (David A. Dalrymple)">
+
+  
+  <meta name="description" content="Now that nearly every computer has some form of multi-processing (that is, multiple CPUs sharing a single address space), some high-level languages &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://davidad.github.io/blog/2014/03/23/concurrency-primitives-in-intel-64-assembly">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Technical Journal" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Technical Journal</a></h1>
+  <h2>Stuff I <a href="http://hackerschool.com/">hack</a></h2>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:davidad.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Concurrency Primitives in Intel 64 Assembly</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-23T20:36:47-04:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Now that nearly every computer has some form of multi-processing (that is, multiple CPUs sharing a single address space), some high-level languages are starting to get attention for their concurrency features. Many languages refer to such features as “concurrency primitives.” But since these are high-level languages, we know that these “primitives” must ultimately be implemented with hardware operations. Older high-level languages, like C, don’t have baked-in support for such operations – not because such languages are lower-level, but simply because the operations in question <em>weren’t a thing</em> when C was invented. Assembly language, being up to date with the latest CPU capabilities by definition<sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup>, should provide the best window into the true nature of today’s concurrency operations.</p>
+<p>In this post I’m going to walk you through a (relatively) simple concurrent assembly program which runs on OSX or Linux. Here’s the demo (<a href="https://github.com/davidad/asm_concurrency">github</a>):</p>
+<pre><code>bash-3.2$ time ./concurrency-noprint-x1 foo    # single-worker version
+
+real  0m1.458s
+user  0m1.445s
+sys   0m0.010s
+bash-3.2$ # now run two at once
+bash-3.2$ time ./concurrency-noprint-x1 foo-2 &amp; ./concurrency-noprint-x1 foo-2
+[1] 71366
+
+real  0m0.785s
+user  0m0.780s
+sys   0m0.001s
+[1]+  Done                    time ./concurrency-noprint-x1 foo-2
+bash-3.2$ time ./concurrency-noprint-x4 foo-3  # four-worker version
+
+real  0m0.417s
+user  0m0.413s
+sys   0m0.003s
+bash-3.2$ time ./concurrency-noprint-x7 foo-4  # seven-worker version
+
+real  0m0.295s
+user  0m0.283s
+sys   0m0.001s
+bash-3.2$ diff -s --from-file=foo foo-*
+Files foo and foo-2 are identical
+Files foo and foo-3 are identical
+Files foo and foo-4 are identical</code></pre>
+<!-- more -->
+
+<p>What the program actually does is a pretty useless but computationally nontrivial and easily parallelizable task: taking the offset of each byte from the start of the buffer to the 65537th power mod 235, and storing that value back to each byte. Since it’s mod-235, the output should repeat itself every 235 bytes:</p>
+<pre><code>bash-3.2$ hexdump -e &#39;235/1 &quot;%4u&quot; &quot;\n&quot;&#39; -s8 foo
+   1  37 158 194  35 206  32 128  54 120 146 102 233   9 125  36 122 118 184 210 121 232  33  14  50 161  72  98 164 160  11 157  38  49 180 136 162 228 154  15  76  12  88 124  10  46  47  48  84 205   6  82  18  79 175 101 167 193 149  45  56 172  83 169 165 231  22 168  44  80  61  97 208 119 145 211 207  58 204  85  96 227 183 209  40 201  62 123  59 135 171  57  93  94  95 131  17  53 129  65 126 222 148 214   5 196  92 103 219 130 216 212  43  69 215  91 127 108 144  20 166 192  23  19 105  16 132 143  39 230  21  87  13 109 170 106 182 218 104 140 141 142 178  64 100 176 112 173  34 195  26  52   8 139 150  31 177  28  24  90 116  27 138 174 155 191  67 213   4  70  66 152  63 179 190  86  42  68 134  60 156 217 153 229  30 151 187 188 189 225 111 147 223 159 220  81   7  73  99  55 186 197  78 224  75  71 137 163  74 185 221 202   3 114  25  51 117 113 199 110 226   2 133  89 115 181 107 203  29 200  41  77 198 234   0
+*</code></pre>
+<p>Here, I’m asking <code>hexdump</code> to display this binary file in lines of 235 bytes each, one byte at a time, giving each byte 4 characters field-width and printing it as an unsigned integer (in decimal), with a newline at the end of the line, starting from offset 8 (as the first 8 bytes of the file are used by the concurrency mechanism for bookkeeping purposes<sup><a href="#fn2" class="footnoteRef" id="fnref2">2</a></sup>). The <code>*</code> on the second line means “every line after this matches it,” so the file must repeat itself every 235 bytes until the end. We can suppress the <code>*</code> with <code>-v</code> and examine the last 4 lines, just to be sure we understand it correctly:</p>
+<pre><code>bash-3.2$ hexdump -e &#39;235/1 &quot;%4u&quot; &quot;\n&quot;&#39; -s8 -v foo | tail -n4
+   1  37 158 194  35 206  32 128  54 120 146 102 233   9 125  36 122 118 184 210 121 232  33  14  50 161  72  98 164 160  11 157  38  49 180 136 162 228 154  15  76  12  88 124  10  46  47  48  84 205   6  82  18  79 175 101 167 193 149  45  56 172  83 169 165 231  22 168  44  80  61  97 208 119 145 211 207  58 204  85  96 227 183 209  40 201  62 123  59 135 171  57  93  94  95 131  17  53 129  65 126 222 148 214   5 196  92 103 219 130 216 212  43  69 215  91 127 108 144  20 166 192  23  19 105  16 132 143  39 230  21  87  13 109 170 106 182 218 104 140 141 142 178  64 100 176 112 173  34 195  26  52   8 139 150  31 177  28  24  90 116  27 138 174 155 191  67 213   4  70  66 152  63 179 190  86  42  68 134  60 156 217 153 229  30 151 187 188 189 225 111 147 223 159 220  81   7  73  99  55 186 197  78 224  75  71 137 163  74 185 221 202   3 114  25  51 117 113 199 110 226   2 133  89 115 181 107 203  29 200  41  77 198 234   0
+   1  37 158 194  35 206  32 128  54 120 146 102 233   9 125  36 122 118 184 210 121 232  33  14  50 161  72  98 164 160  11 157  38  49 180 136 162 228 154  15  76  12  88 124  10  46  47  48  84 205   6  82  18  79 175 101 167 193 149  45  56 172  83 169 165 231  22 168  44  80  61  97 208 119 145 211 207  58 204  85  96 227 183 209  40 201  62 123  59 135 171  57  93  94  95 131  17  53 129  65 126 222 148 214   5 196  92 103 219 130 216 212  43  69 215  91 127 108 144  20 166 192  23  19 105  16 132 143  39 230  21  87  13 109 170 106 182 218 104 140 141 142 178  64 100 176 112 173  34 195  26  52   8 139 150  31 177  28  24  90 116  27 138 174 155 191  67 213   4  70  66 152  63 179 190  86  42  68 134  60 156 217 153 229  30 151 187 188 189 225 111 147 223 159 220  81   7  73  99  55 186 197  78 224  75  71 137 163  74 185 221 202   3 114  25  51 117 113 199 110 226   2 133  89 115 181 107 203  29 200  41  77 198 234   0
+   1  37 158 194  35 206  32 128  54 120 146 102 233   9 125  36 122 118 184 210 121 232  33  14  50 161  72  98 164 160  11 157  38  49 180 136 162 228 154  15  76  12  88 124  10  46  47  48  84 205   6  82  18  79 175 101 167 193 149  45  56 172  83 169 165 231  22 168  44  80  61  97 208 119 145 211 207  58 204  85  96 227 183 209  40 201  62 123  59 135 171  57  93  94  95 131  17  53 129  65 126 222 148 214   5 196  92 103 219 130 216 212  43  69 215  91 127 108 144  20 166 192  23  19 105  16 132 143  39 230  21  87  13 109 170 106 182 218 104 140 141 142 178  64 100 176 112 173  34 195  26  52   8 139 150  31 177  28  24  90 116  27 138 174 155 191  67 213   4  70  66 152  63 179 190  86  42  68 134  60 156 217 153 229  30 151 187 188 189 225 111 147 223 159 220  81   7  73  99  55 186 197  78 224  75  71 137 163  74 185 221 202   3 114  25  51 117 113 199 110 226   2 133  89 115 181 107 203  29 200  41  77 198 234   0
+   1  37 158 194  35 206  32 128  54 120 146 102 233   9 125  36 122 118 184 210 121 232  33  14  50 161  72  98 164 160  11 157  38  49 180 136 162 228 154  15  76  12  88 124  10  46  47  48  84 205   6  82  18  79 175 101 167 193 149  45  56 172  83 169 165 231  22 168  44  80  61  97 208 119 145 211 207  58 204  85  96 227 183 209  40 201  62 123  59 135 171  57  93  94  95 131  17  53 129  65 126 222 148 214   5 196  92 103 219 130 216 212  43  69 215  91 127 108 144  20 166 192  23  19 105  16 132 143  39 230</code></pre>
+<p>Notice that it doesn’t have an even multiple of 235 bytes – if you scroll all the way over, you’ll see that the very last line ends in the middle. That’s because this file isn’t generated by printing a particular 235-byte sequence in a loop. Rather, every <a name="task-size"></a>8-byte machine word is computed separately; the 235-byte repeating structure is built into the nature of the problem the program solves (which I chose, in part, so that it’s easy to check whether the results are sensible).</p>
+<p><a name="critical-sections"></a></p>
+<h2 id="critical-sections">Critical Sections <a href="#critical-sections">#</a></h2>
+<p>Let’s begin with a conceptual overview of the problem concurrency primitives are supposed to address<sup><a href="#fn3" class="footnoteRef" id="fnref3">3</a></sup>. When we have a single process operating in an address space (that it, a non-concurrent process), we can reason about the state of the entire address space at a particular point during the execution of the process. We can make statements like “this variable must be positive because we checked that it was positive four lines of code ago and we haven’t changed it since then.” In a concurrent process, a lot of this reasoning goes out the window, because our process’s sibling might have set the variable to <code>-1</code> between here and there. We just have no way of knowing – the possible state transitions are too various to justify strong claims about. Claims like “the program produces correct output” tend to be very strong indeed in this context, and we often want to make such claims (at least to ourselves).</p>
+<p>So, much like <a href="/blog/2014/03/16/infosec-the-product-design-correspondence/">security is, in a sense, all about limiting features</a>, concurrency primitives are means to restrict the possible state transitions of memory shared by multiple processors. The most common bugaboo is that a shared-memory state could have been changed by a sibling between the time that we measure it and the time that we take action based upon that measurement. So, as a general rule, the most basic concurrency operations <strong>measure a shared state</strong> and then use the data to <strong>change that shared state</strong>, while <strong>excluding siblings</strong> from accessing it throughout the whole operation. A region of code like this – where siblings are not allowed, during its execution, to access a particular memory location – is called a <strong>critical section</strong>.</p>
+<p>On all Intel CPUs prior to Haswell (which started shipping last year; I don’t have one yet), “actual” critical sections are limited to <strong>single machine instructions</strong> with <strong>a <code>lock</code> prefix</strong>; larger critical sections can be emulated based on these single-instruction primitives. We’ll be doing a variation of this today.</p>
+<p><a name="tasks-and-workers"></a></p>
+<h2 id="tasks-and-workers">Tasks and Workers <a href="#tasks-and-workers">#</a></h2>
+<p>I don’t know of any particular argument to justify the tasks-and-workers perspective on parallel computing, but in practice, it’s the one I’ve found most useful for organizing my code, and it seems to be fairly common. The idea is this: we divide our program’s workload into <strong>tasks</strong> of some granularity, and each task is picked up and operated on by exactly one of some number of interchangeable <strong>workers</strong>, which each run concurrently. The tasks should not be too small, so that the amount of work involved in choosing a task is not too great<sup><a href="#fn4" class="footnoteRef" id="fnref4">4</a></sup>, but they should also not be too large, so that if any worker finishes a task earlier than the others, there will likely be another task ready for it to do.</p>
+<p>In this context, <strong>a task is a type of critical section</strong>, because once a task has been picked up by any single worker, the other workers are supposed to leave it alone. But critical sections carry the connotation of being very small, so they can execute and get out of the way quickly. I suppose I’ve been fortunate enough to work in domains where I’ve had the luxury to split things up into independent tasks most of the time. (These domains are sometimes referred to as <a href="http://en.wikipedia.org/wiki/Embarrassingly_parallel"><em>embarrassingly parallel</em></a>.) But in the code below, we’ll also see one example of a state variable which is operated on by short critical sections instead of tasks.</p>
+<p><a name="show-me-the-code"></a></p>
+<h1 id="show-me-the-code-already">Show me the code already! <a href="#show-me-the-code">#</a></h1>
+<figure class='code'><figcaption>
+concurrency.asm<a href='https://github.com/davidad/asm_concurrency/blob/TJ-1/concurrency.asm#L1-8'>context</a>
+</figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="cp">%include &quot;os_dependent_stuff.asm&quot;</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code>  <span class="c1">; Initialize constants.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r12</span><span class="p">,</span> <span class="mi">65537</span>                 <span class="c1">; Exponent to modular-exponentiate with</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rbx</span><span class="p">,</span> <span class="mi">235</span>                   <span class="c1">; Modulus to modular-exponentiate with</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r15</span><span class="p">,</span> <span class="nv">NPROCS</span>                <span class="c1">; Number of worker processes to fork.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r14</span><span class="p">,</span> <span class="p">(</span><span class="nb">SI</span><span class="nv">ZE</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">&ast;</span><span class="mi">8</span>            <span class="c1">; Size of shared memory; reserving first</span>
+</code></div><div class='line'><code>                                 <span class="c1">; 64 bits for bookkeeping</span>
+</code></div></pre></td></tr></table></div></figure>
+
+
+<p>The first two constants are pretty straightforward – just the parameters of the task to compute. <code>NPROCS</code> and <code>SIZE</code> need a bit of explanation. These are constants which are actually defined in the <code>Makefile</code> and passed in to <code>nasm</code> using the <code>-D</code> option (as in <code>-DNPROCS=7</code>)<sup><a href="#fn5" class="footnoteRef" id="fnref5">5</a></sup>. <code>SIZE</code> is actually measured in 8-byte machine words; it’s the number of <strong>tasks</strong> we want to perform. (As I briefly mentioned <a href="#task-size">earlier</a>, each task in this program is an 8-byte machine word of the output file to be computed.)</p>
+<figure class='code'><figcaption>
+concurrency.asm<a href='https://github.com/davidad/asm_concurrency/blob/TJ-1/concurrency.asm#L10-12'>context</a>
+</figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code>  <span class="c1">; Check for command-line argument.</span>
+</code></div><div class='line'><code>  <span class="nf">cmp</span> <span class="kt">qword</span> <span class="p">[</span><span class="nb">rsp</span><span class="p">],</span> <span class="mi">1</span>
+</code></div><div class='line'><code>  <span class="nf">je</span> <span class="nv">map_anon</span>
+</code></div></pre></td></tr></table></div></figure>
+
+
+<p>When our program is entered by the OS, the command-line is on the stack; <code>[rsp]</code> is the number of command-line tokens (including the name of the program itself), <code>[rsp+8]</code> will be a pointer to the name of the program, <code>[rsp+2*8]</code> a pointer to the first command-line argument (if there is one), and so on. If we don’t have any command-line arguments, then the number of tokens will be 1 (just the name of the program). In this case, we’re going to a request an anonymous region of memory; otherwise, we’re going to open the file specified on the command line and map that. <em>Note:</em> if you haven’t seen <code>mmap</code> before, check out <a href="http://man7.org/linux/man-pages/man2/mmap.2.html">its man page</a>. In my opinion, it’s the “right” way to do either memory allocation (“anonymous” mappings) or file I/O.</p>
+<p><a name="open-ftruncate=mmap"></a></p>
+<h2 id="open-ftruncate-and-mmap"><code>open()</code>, <code>ftruncate()</code>, and <code>mmap()</code> <a href="#open-ftruncate-mmap">#</a></h2>
+<figure class='code'><figcaption>
+concurrency.asm<a href='https://github.com/davidad/asm_concurrency/blob/TJ-1/concurrency.asm#L14-43'>context</a>
+</figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='14' class='line-number'></div><div data-line='15' class='line-number'></div><div data-line='16' class='line-number'></div><div data-line='17' class='line-number'></div><div data-line='18' class='line-number'></div><div data-line='19' class='line-number'></div><div data-line='20' class='line-number'></div><div data-line='21' class='line-number'></div><div data-line='22' class='line-number'></div><div data-line='23' class='line-number'></div><div data-line='24' class='line-number'></div><div data-line='25' class='line-number'></div><div data-line='26' class='line-number'></div><div data-line='27' class='line-number'></div><div data-line='28' class='line-number'></div><div data-line='29' class='line-number'></div><div data-line='30' class='line-number'></div><div data-line='31' class='line-number'></div><div data-line='32' class='line-number'></div><div data-line='33' class='line-number'></div><div data-line='34' class='line-number'></div><div data-line='35' class='line-number'></div><div data-line='36' class='line-number'></div><div data-line='37' class='line-number'></div><div data-line='38' class='line-number'></div><div data-line='39' class='line-number'></div><div data-line='40' class='line-number'></div><div data-line='41' class='line-number'></div><div data-line='42' class='line-number'></div><div data-line='43' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="nl">open_file:</span>
+</code></div><div class='line'><code>  <span class="c1">; We have a file specified on the command line, so open() it.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rax</span><span class="p">,</span> <span class="nv">SYSCALL_OPEN</span>          <span class="c1">; set up open()</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdi</span><span class="p">,</span> <span class="p">[</span><span class="nb">rsp</span><span class="o">+</span><span class="mi">2</span><span class="o">&ast;</span><span class="mi">8</span><span class="p">]</span>               <span class="c1">; filename from command line</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rsi</span><span class="p">,</span> <span class="nv">O_RDWR</span><span class="o">|</span><span class="nv">O_CREAT</span>          <span class="c1">; read/write mode; create if necessary</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdx</span><span class="p">,</span> <span class="mi">660</span><span class="nv">o</span>                    <span class="c1">; &#x60;chmod&#x60;-mode of file to create (octal)</span>
+</code></div><div class='line'><code>  <span class="nf">syscall</span>                        <span class="c1">; do open() system call</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r13</span><span class="p">,</span> <span class="nb">rax</span>                   <span class="c1">; preserve file descriptor in r13</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rax</span><span class="p">,</span> <span class="nv">SYSCALL_FTRUNCATE</span>     <span class="c1">; set up ftruncate() to adjust file size</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdi</span><span class="p">,</span> <span class="nv">r13</span>                     <span class="c1">; file descriptor</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rsi</span><span class="p">,</span> <span class="nv">r14</span>                     <span class="c1">; desired file size</span>
+</code></div><div class='line'><code>  <span class="nf">syscall</span>                        <span class="c1">; do ftruncate() system call</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r8</span><span class="p">,</span>  <span class="nv">r13</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r10</span><span class="p">,</span> <span class="nv">MAP_SHARED</span>
+</code></div><div class='line'><code>  <span class="nf">jmp</span> <span class="nv">mmap</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code>  <span class="c1">; Ask the kernel for a shared memory mapping.</span>
+</code></div><div class='line'><code><span class="nl">map_anon:</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r10</span><span class="p">,</span> <span class="nv">MAP_SHARED</span><span class="o">|</span><span class="nv">MAP_ANON</span>     <span class="c1">; MAP_ANON means not backed by a file</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r8</span><span class="p">,</span>  <span class="o">-</span><span class="mi">1</span>                      <span class="c1">; thus our file descriptor is -1</span>
+</code></div><div class='line'><code><span class="nl">mmap:</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r9</span><span class="p">,</span>   <span class="mi">0</span>                      <span class="c1">; and there&#39;s no file offset in either case.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rax</span><span class="p">,</span> <span class="nv">SYSCALL_MMAP</span>          <span class="c1">; set up mmap()</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdx</span><span class="p">,</span> <span class="nv">PROT_READ</span><span class="o">|</span><span class="nv">PROT_WRITE</span>    <span class="c1">; We&#39;d like a read/write mapping</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdi</span><span class="p">,</span>  <span class="mi">0</span>                      <span class="c1">; at no pre-specified memory location.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rsi</span><span class="p">,</span> <span class="nv">r14</span>                     <span class="c1">; Length of the mapping in bytes.</span>
+</code></div><div class='line'><code>  <span class="nf">syscall</span>                        <span class="c1">; do mmap() system call.</span>
+</code></div><div class='line'><code>  <span class="nf">test</span> <span class="nb">rax</span><span class="p">,</span> <span class="nb">rax</span>                  <span class="c1">; Return value will be in rax.</span>
+</code></div><div class='line'><code>  <span class="nf">js</span> <span class="nv">error</span>                       <span class="c1">; If it&#39;s negative, that&#39;s trouble.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rbp</span><span class="p">,</span> <span class="nb">rax</span>                   <span class="c1">; Otherwise, we have our memory region [rbp].</span>
+</code></div></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption>
+concurrency.asm<a href='https://github.com/davidad/asm_concurrency/blob/TJ-1/concurrency.asm#L141-145'>context</a>
+</figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='141' class='line-number'></div><div data-line='142' class='line-number'></div><div data-line='143' class='line-number'></div><div data-line='144' class='line-number'></div><div data-line='145' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="nl">error:</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdi</span><span class="p">,</span> <span class="nb">rax</span>                   <span class="c1">; In case of error, return code is -errno...</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rax</span><span class="p">,</span> <span class="nv">SYSCALL_EXIT</span>
+</code></div><div class='line'><code>  <span class="nf">neg</span> <span class="nb">rdi</span>                        <span class="c1">; ...so negate to get actual errno</span>
+</code></div><div class='line'><code>  <span class="nf">syscall</span>
+</code></div></pre></td></tr></table></div></figure>
+
+
+<p>We actually have to make three system calls to get this set up: one to open the file (<code>SYSCALL_OPEN</code>), one to extend it to the appropriate size (<code>SYSCALL_FTRUNCATE</code>), and finally one to make the memory mapping (<code>SYSCALL_MMAP</code>).</p>
+<p><a name="lock-add"></a></p>
+<h2 id="lock-add"><code>lock add</code> <a href="#lock-add">#</a></h2>
+<figure class='code'><figcaption>
+concurrency.asm<a href='https://github.com/davidad/asm_concurrency/blob/TJ-1/concurrency.asm#L45-47'>context</a>
+</figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='45' class='line-number'></div><div data-line='46' class='line-number'></div><div data-line='47' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code>  <span class="nf">lock</span> <span class="nv">add</span> <span class="p">[</span><span class="nb">rbp</span><span class="p">],</span> <span class="nv">r15</span>            <span class="c1">; Add NPROCS to the file&#39;s first machine word.</span>
+</code></div><div class='line'><code>                                 <span class="c1">; We&#39;ll use it to track the # of still-running</span>
+</code></div><div class='line'><code>                                 <span class="c1">; worker processes.</span>
+</code></div></pre></td></tr></table></div></figure>
+
+
+<p>Here’s our first concurrency primitive! We’re going to add <code>NPROCS</code> to the first machine word of this file. We’re counting on the fact that when the file is first created, all bytes will appear to be zero (a fact which <a href="http://unixhelp.ed.ac.uk/CGI/man-cgi?truncate+2">is actually true on most Unix implementations</a>). Why aren’t we just <em>setting</em> the word to zero? Well, a neat feature of this program is that we can run multiple copies of it on the same file, and they’ll share the work as if by magic. So, if we’re running as the second copy of the program, we don’t want to clobber this piece of bookkeeping state – we just want to contribute <code>NPROCS</code> workers to the worker pool.</p>
+<p><a name="fork"></a></p>
+<h2 id="fork"><code>fork()</code> <a href="#fork">#</a></h2>
+<figure class='code'><figcaption>
+concurrency.asm<a href='https://github.com/davidad/asm_concurrency/blob/TJ-1/concurrency.asm#L49-61'>context</a>
+</figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='49' class='line-number'></div><div data-line='50' class='line-number'></div><div data-line='51' class='line-number'></div><div data-line='52' class='line-number'></div><div data-line='53' class='line-number'></div><div data-line='54' class='line-number'></div><div data-line='55' class='line-number'></div><div data-line='56' class='line-number'></div><div data-line='57' class='line-number'></div><div data-line='58' class='line-number'></div><div data-line='59' class='line-number'></div><div data-line='60' class='line-number'></div><div data-line='61' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code>  <span class="c1">; Next, fork NPROCS processes.</span>
+</code></div><div class='line'><code><span class="nl">fork:</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span> <span class="nv">SYSCALL_FORK</span>
+</code></div><div class='line'><code>  <span class="nf">syscall</span>
+</code></div><div class='line'><code><span class="cp">%ifidn __OUTPUT_FORMAT__,elf64     </span><span class="c1">; (This means we&#39;re running on Linux)</span>
+</code></div><div class='line'><code>  <span class="nf">test</span> <span class="nb">rax</span><span class="p">,</span> <span class="nb">rax</span>                  <span class="c1">; We&#39;re a child iff return value of fork()==0.</span>
+</code></div><div class='line'><code>  <span class="nf">jz</span> <span class="nb">ch</span><span class="nv">ild</span>
+</code></div><div class='line'><code><span class="cp">%elifidn __OUTPUT_FORMAT__,macho64 </span><span class="c1">; (This means we&#39;re running on OSX)</span>
+</code></div><div class='line'><code>  <span class="nf">test</span> <span class="nb">rdx</span><span class="p">,</span> <span class="nb">rdx</span>                  <span class="c1">; Apple...you&#39;re not supposed to touch rdx here</span>
+</code></div><div class='line'><code>  <span class="nf">jnz</span> <span class="nb">ch</span><span class="nv">ild</span>                      <span class="c1">; Apple, what</span>
+</code></div><div class='line'><code><span class="cp">%endif</span>
+</code></div><div class='line'><code>  <span class="nf">dec</span> <span class="nv">r15</span>
+</code></div><div class='line'><code>  <span class="nf">jnz</span> <span class="nv">fork</span>
+</code></div></pre></td></tr></table></div></figure>
+
+
+<p>Apple’s implementation of <code>fork()</code> is a little messed up, so unfortunately we’re forced to put some OS-dependent logic in here. But the basic idea is, we’re going to keep calling <code>fork()</code> only if (a) we’re the parent process, and not a newly <code>fork()</code>ed worked process, and (b) the number of processes we were supposed to spawn hasn’t decremented to zero yet.</p>
+<p><a name="the-parent"></a></p>
+<h2 id="the-parent-process">The parent process <a href="#the-parent">#</a></h2>
+<figure class='code'><figcaption>
+concurrency.asm<a href='https://github.com/davidad/asm_concurrency/blob/TJ-1/concurrency.asm#L63-66'>context</a>
+</figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='63' class='line-number'></div><div data-line='64' class='line-number'></div><div data-line='65' class='line-number'></div><div data-line='66' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="nl">parent:</span>
+</code></div><div class='line'><code>  <span class="nf">pause</span>
+</code></div><div class='line'><code>  <span class="nf">cmp</span> <span class="kt">qword</span> <span class="p">[</span><span class="nb">rbp</span><span class="p">],</span> <span class="mi">0</span>
+</code></div><div class='line'><code>  <span class="nf">jnz</span> <span class="nv">parent</span>                     <span class="c1">; Wait for [rbp], the worker count, to be zero</span>
+</code></div></pre></td></tr></table></div></figure>
+
+
+<p>Now, the parent process simply waits until there aren’t any active workers/child processes (they’ll gracefully disappear once there’s no more work for them to do). The <code>pause</code> instruction is a hint to the system that it shouldn’t actually spend a lot of energy spinning in this loop.</p>
+<figure class='code'><figcaption>
+concurrency.asm<a href='https://github.com/davidad/asm_concurrency/blob/TJ-1/concurrency.asm#L84-87'>context</a>
+</figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='84' class='line-number'></div><div data-line='85' class='line-number'></div><div data-line='86' class='line-number'></div><div data-line='87' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="nl">exit_success:</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">eax</span><span class="p">,</span> <span class="nv">SYSCALL_EXIT</span>          <span class="c1">; Normal exit</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">edi</span><span class="p">,</span> <span class="mi">0</span>
+</code></div><div class='line'><code>  <span class="nf">syscall</span>
+</code></div></pre></td></tr></table></div></figure>
+
+
+<p>Once the number of active workers is zero, the parent bails out, returning the sucess code, <code>0</code>.</p>
+<p><a name="the-worker"></a></p>
+<h2 id="dividing-up-work">Dividing up work <a href="#the-worker">#</a></h2>
+<p>Here’s where our workers divide up their tasks – the most important concurrency-related operation in the program:</p>
+<figure class='code'><figcaption>
+concurrency.asm<a href='https://github.com/davidad/asm_concurrency/blob/TJ-1/concurrency.asm#L89-104'>context</a>
+</figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='89' class='line-number'></div><div data-line='90' class='line-number'></div><div data-line='91' class='line-number'></div><div data-line='92' class='line-number'></div><div data-line='93' class='line-number'></div><div data-line='94' class='line-number'></div><div data-line='95' class='line-number'></div><div data-line='96' class='line-number'></div><div data-line='97' class='line-number'></div><div data-line='98' class='line-number'></div><div data-line='99' class='line-number'></div><div data-line='100' class='line-number'></div><div data-line='101' class='line-number'></div><div data-line='102' class='line-number'></div><div data-line='103' class='line-number'></div><div data-line='104' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="nl">child:</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rsi</span><span class="p">,</span> <span class="nv">r14</span>                   <span class="c1">; Restore rsi from r14 (saved earlier)</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">cl</span><span class="p">,</span> <span class="mh">0xff</span>                   <span class="c1">; Set rcx to be nonzero</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdi</span><span class="p">,</span> <span class="mi">8</span>                     <span class="c1">; Start from index 8 (past the bookkeeping)</span>
+</code></div><div class='line'><code><span class="nl">find_work:</span>                       <span class="c1">; and try to find a piece of work to claim</span>
+</code></div><div class='line'><code>  <span class="nf">xor</span> <span class="nb">rax</span><span class="p">,</span> <span class="nb">rax</span>
+</code></div><div class='line'><code>  <span class="nf">cmp</span> <span class="kt">qword</span> <span class="p">[</span><span class="nb">rbp</span><span class="o">+</span><span class="nb">rdi</span><span class="p">],</span> <span class="mi">0</span>         <span class="c1">; Check if qword [rbp+rdi] is unclaimed.</span>
+</code></div><div class='line'><code>  <span class="nf">jnz</span> <span class="nv">.moveon</span>                    <span class="c1">; If not, move on - no use trying to lock.</span>
+</code></div><div class='line'><code>  <span class="nf">lock</span> <span class="nv">cmpxchg</span> <span class="p">[</span><span class="nb">rbp</span><span class="o">+</span><span class="nb">rdi</span><span class="p">],</span> <span class="nb">rcx</span>    <span class="c1">; Try to &quot;claim&quot; qword [rbp+rdi] if it is still</span>
+</code></div><div class='line'><code>                                 <span class="c1">; unclaimed.</span>
+</code></div><div class='line'><code>  <span class="nf">jz</span> <span class="nv">found_work</span>                  <span class="c1">; If successful, zero flag is set</span>
+</code></div><div class='line'><code><span class="nl">.moveon:</span>
+</code></div><div class='line'><code>  <span class="nf">add</span> <span class="nb">rdi</span><span class="p">,</span> <span class="mi">8</span>                     <span class="c1">; Otherwise, try a different piece.</span>
+</code></div><div class='line'><code><span class="nl">find_work.next:</span>
+</code></div><div class='line'><code>  <span class="nf">cmp</span> <span class="nb">rdi</span><span class="p">,</span> <span class="nb">rsi</span>                   <span class="c1">; Make sure we haven&#39;t hit the end.</span>
+</code></div><div class='line'><code>  <span class="nf">jne</span> <span class="nv">find_work</span>
+</code></div></pre></td></tr></table></div></figure>
+
+
+<p>The worker is linearly scanning each 8-byte word, starting with the second one in the <code>[rbp]</code> region (since the word right at <code>[rbp]</code> just represents how many workers there are), looking for one that is zero. As we covered earlier, the file is going to start out being all zeroes. The way I imagine this setup in my head, the file starts out as a barren desert of zeroes, like the old American West, and the workers are searching for a plot of land to homestead on. The first empty plot of land they find, they put up a sign that says “RESERVED” and they start building their homestead (that’s the task). In this case, the RESERVED sign is <code>0xff</code>. Now, other workers will keep on movin’ until they find their own plot of land. The key here is to prevent two workers from putting up a RESERVED sign at the same location. That’s where <strong><code>lock cmpxchg</code></strong> comes in.</p>
+<p><a name="lock-cmpxchg"></a></p>
+<h3 id="lock-cmpxchg"><code>lock cmpxchg</code> <a href="#lock-cmpxchg">#</a></h3>
+<p>This is a slightly complex but beautiful operation. It takes three parameters: a memory location (<code>[rbp+rdi]</code> in this case), a value to store (<code>rcx</code> in this case, holding the value <code>0xff</code>), and a value to compare against (always <code>rax</code>, an implicit parameter, and in this case zeroed out by <code>xor rax, rax</code>). It locks that memory location and compares it against <code>rax</code>. The intuition here is that <code>rax</code> contains the value we <em>expect</em> to be in that memory location currently. If the comparison fails, that means the value has changed since we last looked. Then, rax is loaded with the <em>new</em> value (in case we want to use it to re-calculate our intended update). But, if the value in memory <em>does</em> match what we expected (<code>rax</code>), then our updated value (in this case, <code>rcx</code>) goes back into that memory location before any other CPU/core has a chance to access it. The upshot is that it’s impossible for more than one worker to reserve the same region. The zero-flag <code>ZF</code> tells us whether the operation was a success (i.e. whether the value did match our expectation and the update was stored).</p>
+<p><a name="tatas"></a></p>
+<h3 id="test-and-test-and-set">“test-and-test-and-set” <a href="#tatas">#</a></h3>
+<p>You may notice that we do an ordinary <code>cmp</code> in advance of the <code>lock cmpxchg</code>. That’s not strictly necessary, but it speeds up this part of the program quite bit; if a location was already claimed some time ago, we may as well notice that before putting a <code>lock</code> on it (which is a moderately expensive operation) and simply move on until we find something that <em>looks</em> empty (then <code>lock cmpxchg</code> to be <em>sure</em> it’s empty).</p>
+<p><a name="doing-the-task"></a></p>
+<h2 id="doing-the-task">Doing the task <a href="#doing-the-task">#</a></h2>
+<figure class='code'><figcaption>
+concurrency.asm<a href='https://github.com/davidad/asm_concurrency/blob/TJ-1/concurrency.asm#L110-139'>context</a>
+</figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='110' class='line-number'></div><div data-line='111' class='line-number'></div><div data-line='112' class='line-number'></div><div data-line='113' class='line-number'></div><div data-line='114' class='line-number'></div><div data-line='115' class='line-number'></div><div data-line='116' class='line-number'></div><div data-line='117' class='line-number'></div><div data-line='118' class='line-number'></div><div data-line='119' class='line-number'></div><div data-line='120' class='line-number'></div><div data-line='121' class='line-number'></div><div data-line='122' class='line-number'></div><div data-line='123' class='line-number'></div><div data-line='124' class='line-number'></div><div data-line='125' class='line-number'></div><div data-line='126' class='line-number'></div><div data-line='127' class='line-number'></div><div data-line='128' class='line-number'></div><div data-line='129' class='line-number'></div><div data-line='130' class='line-number'></div><div data-line='131' class='line-number'></div><div data-line='132' class='line-number'></div><div data-line='133' class='line-number'></div><div data-line='134' class='line-number'></div><div data-line='135' class='line-number'></div><div data-line='136' class='line-number'></div><div data-line='137' class='line-number'></div><div data-line='138' class='line-number'></div><div data-line='139' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="nl">found_work:</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r8</span><span class="p">,</span> <span class="mi">8</span>                      <span class="c1">; There are 8 pieces per task.</span>
+</code></div><div class='line'><code><span class="nl">do_piece:</span>                       <span class="c1">; This part does the actual work of mod-exp.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r13</span><span class="p">,</span> <span class="nv">r12</span>                   <span class="c1">; Copy exponent to r13.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rax</span><span class="p">,</span> <span class="nb">rdi</span>                   <span class="c1">; The actual value to mod-exp should start</span>
+</code></div><div class='line'><code>  <span class="nf">sub</span> <span class="nb">eax</span><span class="p">,</span> <span class="mh">0x7</span>                   <span class="c1">; at 1 for the first byte after the bookkeeping</span>
+</code></div><div class='line'><code>  <span class="nf">xor</span> <span class="nb">rdx</span><span class="p">,</span> <span class="nb">rdx</span>                   <span class="c1">; word. This value is now in rax.</span>
+</code></div><div class='line'><code>  <span class="nf">div</span> <span class="nb">rbx</span>                        <span class="c1">; Do modulo with modulus.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r11</span><span class="p">,</span> <span class="nb">rdx</span>                   <span class="c1">; Save remainder -- &quot;modded&quot; base -- to r11.</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rax</span><span class="p">,</span> <span class="mi">1</span>                     <span class="c1">; Initialize &quot;result&quot; to 1.</span>
+</code></div><div class='line'><code><span class="nl">.modexploop:</span>
+</code></div><div class='line'><code>  <span class="nf">test</span> <span class="nv">r13</span><span class="p">,</span> <span class="mi">1</span>                    <span class="c1">; Check low bit of exponent</span>
+</code></div><div class='line'><code>  <span class="nf">jz</span> <span class="nv">.shift</span>
+</code></div><div class='line'><code>  <span class="nf">mul</span> <span class="nv">r11</span>                        <span class="c1">; If set, multiply result by base</span>
+</code></div><div class='line'><code>  <span class="nf">div</span> <span class="nb">rbx</span>                        <span class="c1">; Modulo by modulus</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rax</span><span class="p">,</span> <span class="nb">rdx</span>                   <span class="c1">; result &lt;- remainder</span>
+</code></div><div class='line'><code><span class="nl">.shift:</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r14</span><span class="p">,</span> <span class="nb">rax</span>                   <span class="c1">; Save result to r14</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rax</span><span class="p">,</span> <span class="nv">r11</span>                   <span class="c1">; and work with the base instead.</span>
+</code></div><div class='line'><code>  <span class="nf">mul</span> <span class="nb">rax</span>                        <span class="c1">; Square the base.</span>
+</code></div><div class='line'><code>  <span class="nf">div</span> <span class="nb">rbx</span>                        <span class="c1">; Modulo by modulus</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nv">r11</span><span class="p">,</span> <span class="nb">rdx</span>                   <span class="c1">; base &lt;- remainder</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rax</span><span class="p">,</span> <span class="nv">r14</span>                   <span class="c1">; Restore result from r14</span>
+</code></div><div class='line'><code>  <span class="nf">shr</span> <span class="nv">r13</span><span class="p">,</span> <span class="mi">1</span>                     <span class="c1">; Shift exponent right by one bit</span>
+</code></div><div class='line'><code>  <span class="nf">jnz</span> <span class="nv">.modexploop</span>                <span class="c1">; If the exponent isn&#39;t zero, keep working</span>
+</code></div><div class='line'><code>  <span class="nf">mov</span> <span class="kt">byte</span> <span class="p">[</span><span class="nb">rbp</span><span class="o">+</span><span class="nb">rdi</span><span class="p">],</span> <span class="nb">al</span>         <span class="c1">; Else, store result byte.</span>
+</code></div><div class='line'><code>  <span class="nf">inc</span> <span class="nb">rdi</span>                        <span class="c1">; Move forward</span>
+</code></div><div class='line'><code>  <span class="nf">dec</span> <span class="nv">r8</span>                         <span class="c1">; Decrement piece counter</span>
+</code></div><div class='line'><code>  <span class="nf">jnz</span> <span class="nv">do_piece</span>                   <span class="c1">; Do the next piece if there is one.</span>
+</code></div><div class='line'><code>  <span class="nf">jmp</span> <span class="nv">find_work.next</span>             <span class="c1">; Else, find the next task.</span>
+</code></div></pre></td></tr></table></div></figure>
+
+
+<p>This article is long enough without a detailed prose explanation of <a href="http://en.wikipedia.org/wiki/Modular_exponentiation#Right-to-left_binary_method">binary exponentiation</a> (which isn’t what it’s about, anyway). Suffice it to say that given an offset into the <code>[rbp]</code> region <code>rdi</code>, this chunk of code will replace each byte from <code>[rbp+rdi]</code> to <code>[rbp+rdi+7]</code> with the appropriate mod-exps of the values <code>rdi</code> through <code>rdi+7</code>. The code is somewhat deliberately inefficient (lots of <code>div</code>s, which consume dozens of clock cycles each) for realism’s sake—we want tasks to take a nontrivial length of time.</p>
+<p><a name="being-done"></a></p>
+<h2 id="being-done">Being done <a href="#being-done">#</a></h2>
+<p><em>Note:</em> the block of code below is out-of-order and overlaps both of the previous two.</p>
+<figure class='code'><figcaption>
+concurrency.asm<a href='https://github.com/davidad/asm_concurrency/blob/TJ-1/concurrency.asm#L102-110'>context</a>
+</figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='102' class='line-number'></div><div data-line='103' class='line-number'></div><div data-line='104' class='line-number'></div><div data-line='105' class='line-number'></div><div data-line='106' class='line-number'></div><div data-line='107' class='line-number'></div><div data-line='108' class='line-number'></div><div data-line='109' class='line-number'></div><div data-line='110' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="nl">find_work.next:</span>
+</code></div><div class='line'><code>  <span class="nf">cmp</span> <span class="nb">rdi</span><span class="p">,</span> <span class="nb">rsi</span>                   <span class="c1">; Make sure we haven&#39;t hit the end.</span>
+</code></div><div class='line'><code>  <span class="nf">jne</span> <span class="nv">find_work</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code><span class="nl">child_exit:</span>                      <span class="c1">; If we have hit the end, we&#39;re done.</span>
+</code></div><div class='line'><code>  <span class="nf">lock</span> <span class="nv">dec</span> <span class="kt">qword</span> <span class="p">[</span><span class="nb">rbp</span><span class="p">]</span>           <span class="c1">; Atomic-decrement the # of active processes.</span>
+</code></div><div class='line'><code>  <span class="nf">jmp</span> <span class="nv">exit_success</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code><span class="nl">found_work:</span>
+</code></div></pre></td></tr></table></div></figure>
+
+<p>Once there are no more unclaimed tasks to claim, we’re going to successfully terminate the worker. But first, we need to decrement the number of active workers.</p>
+<p><a name="lock dec"></a></p>
+<h3 id="lock-dec"><code>lock dec</code> <a href="#lock-dec">#</a></h3>
+<p>By now you can probably guess that <code>lock dec</code> is a version of the <code>dec</code> (decrement) operation which will ensure that no other worker can decrement the number-of-active-workers variable at the same time (e.g. the last two workers reading the value <code>2</code>, decrementing it, and both writing back <code>1</code> and exiting, with nobody left to decrease it to <code>0</code>).</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>In whichever abstraction we’re working, if we’re doing concurrent processing on an Intel platform, it may be worth considering how the abstraction resolves down to concepts like these. See if your platform exposes a thing like <code>mmap()</code>, for instance, and consider how your “concurrency primitives” might translate into individual <code>lock</code>ed operations. This will assist in reasoning about performance issues, as well as providing a deeper understanding of your concurrency primitives’ guarantees.</p>
+<p>And, of course, make sure that you’ve given assembly a big check-mark under “Has Concurrency Primitives?” on your personal programming-environment scorecard.</p>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>This may be counterintuitive if you think of assembly as a conspicuously old-school way to program. I won’t deny that it is, but <code>nasm</code>, DynASM, <code>r2</code>, and the other tools I use for assembly hacking are relentlessly kept in sync with Intel’s assembly-language specification, which is updated in advance of every new CPU release. Other tools take much longer to adapt because, well, Intel doesn’t <em>specify</em> exactly how they should make use of new features. So, in fact, the latest hardware is supported in assembly before it’s supported anywhere else.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>If I had been doing serious work, instead of using a flat binary file, I would be using <a href="http://kentonv.github.io/capnproto/">Cap’n Proto</a>, so the bookkeeping field(s) would be well-delineated. Perhaps in a future article, I’ll show how to do that from assembly. Then, instead of <code>hexdump</code>, I’d be using <code>capnp</code> to explore the data. But <code>hexdump</code> is a quite versatile tool and nice to know anyway.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Pun not intended.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>The code displayed here violates this rule pretty badly, which is probably why the speedup from running in parallel is noticeably worse than ideal, but I think to do better would overcomplicate the presentation.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>I could (should?) have used command-line arguments for these values, but let’s face it, parsing command-line arguments is annoying in <em>any</em> language, let alone assembly.<a href="#fnref5">↩</a></p></li>
+</ol>
+</section></div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">davidad (David A. Dalrymple)</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-23T20:36:47-04:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2014</time>
+      
+
+
+    </p>
+    
+      
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/03/16/infosec-the-product-design-correspondence/" title="Previous Post: The Security/Product Design Correspondence">&laquo; The Security/Product Design Correspondence</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/23/concurrency-primitives-in-intel-64-assembly/">Concurrency Primitives in Intel 64 Assembly</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/16/infosec-the-product-design-correspondence/">The Security/Product Design Correspondence</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/12/the-operating-system-is-out-of-date/">Systems Past: the only 8 software innovations we actually use</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/10/how-i-think-about-math-relations/">How I Think About Math, <br/>Lecture 1: Relations</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/28/python-to-scheme-to-assembly-1/">Python to Scheme to Assembly, <br>Part 1: Recursion and Named Let</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/davidad">@davidad</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'davidad',
+            count: 10,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+Copyright &copy; 2014 - <a href="http://davidad.org">davidad</a> (David A. Dalrymple) -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<a class="davidadlink" href="http://davidad.org" target="_blank"><div>a <span>davidad</span> production</div></a>
+
+
+</body>
+</html>

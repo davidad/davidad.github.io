@@ -9,8 +9,7 @@
   <meta name="author" content="davidad (David A. Dalrymple)">
 
   
-  <meta name="description" content="One of my 3 major goals for Hacker School was to create a bootable, 64-bit
-kernel image from scratch, using only nasm and my text editor. Well, folks &hellip;">
+  <meta name="description" content="One of my 3 major goals for Hacker School was to create a bootable, 64-bit kernel image from scratch, using only nasm and my text editor. Well, folks &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -90,34 +89,16 @@ kernel image from scratch, using only nasm and my text editor. Well, folks &hell
   </header>
 
 
-<div class="entry-content"><p>One of my 3 major goals for Hacker School was to create a bootable, 64-bit
-kernel image from scratch, using only <code>nasm</code> and my text editor. Well, folks,
-one down, two to go.</p>
-
-<p><img src="http://i.imgur.com/vnYFaFZ.png" alt="Hello, kernel!" /></p>
-
-<!-- more -->
-
-
-<p>The NASM/x64 assembly code is listed below, with copious comments for your
-pleasure.  It comprises 136 lines including comments; 75 with comments
-removed.  You may wish to refer to the <a href="http://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-manual-325462.pdf">Intel&reg; 64 Software Developers'
-Manual (16.5MB
-PDF)</a>,
-especially if you&rsquo;re interested in doing something similar yourself.
-Building and running is as simple as</p>
-
+<div class="entry-content"><p>One of my 3 major goals for Hacker School was to create a bootable, 64-bit kernel image from scratch, using only <code>nasm</code> and my text editor. Well, folks, one down, two to go.</p>
+<p><img src="http://i.imgur.com/vnYFaFZ.png" alt="Hello, kernel!" /> <!-- more --></p>
+<p>The NASM/x64 assembly code is listed below, with copious comments for your pleasure. It comprises 136 lines including comments; 75 with comments removed. You may wish to refer to the <a href="http://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-manual-325462.pdf">Intel® 64 Software Developers’ Manual (16.5MB PDF)</a>, especially if you’re interested in doing something similar yourself. Building and running is as simple as</p>
 <pre><code>$ nasm boot.asm -o bootable.bin
-$ qemu-system-x86_64 bootable.bin
-</code></pre>
-
-<p>That is, assuming that you have recent versions of
-<a href="http://www.nasm.us/pub/nasm/releasebuilds/2.11/macosx/">nasm</a> and
-<a href="http://wiki.qemu.org/Download">qemu</a> installed.</p>
-
-<p>Let&rsquo;s get to the code!</p>
-
-<p><figure class='code'><figcaption>boot.asm<a href='https://raw.github.com/davidad/mesh/ffbd5935d7218eddbaa43b991d1eaa4e277ecf86/boot.asm'>raw</a></figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div><div data-line='14' class='line-number'></div><div data-line='15' class='line-number'></div><div data-line='16' class='line-number'></div><div data-line='17' class='line-number'></div><div data-line='18' class='line-number'></div><div data-line='19' class='line-number'></div><div data-line='20' class='line-number'></div><div data-line='21' class='line-number'></div><div data-line='22' class='line-number'></div><div data-line='23' class='line-number'></div><div data-line='24' class='line-number'></div><div data-line='25' class='line-number'></div><div data-line='26' class='line-number'></div><div data-line='27' class='line-number'></div><div data-line='28' class='line-number'></div><div data-line='29' class='line-number'></div><div data-line='30' class='line-number'></div><div data-line='31' class='line-number'></div><div data-line='32' class='line-number'></div><div data-line='33' class='line-number'></div><div data-line='34' class='line-number'></div><div data-line='35' class='line-number'></div><div data-line='36' class='line-number'></div><div data-line='37' class='line-number'></div><div data-line='38' class='line-number'></div><div data-line='39' class='line-number'></div><div data-line='40' class='line-number'></div><div data-line='41' class='line-number'></div><div data-line='42' class='line-number'></div><div data-line='43' class='line-number'></div><div data-line='44' class='line-number'></div><div data-line='45' class='line-number'></div><div data-line='46' class='line-number'></div><div data-line='47' class='line-number'></div><div data-line='48' class='line-number'></div><div data-line='49' class='line-number'></div><div data-line='50' class='line-number'></div><div data-line='51' class='line-number'></div><div data-line='52' class='line-number'></div><div data-line='53' class='line-number'></div><div data-line='54' class='line-number'></div><div data-line='55' class='line-number'></div><div data-line='56' class='line-number'></div><div data-line='57' class='line-number'></div><div data-line='58' class='line-number'></div><div data-line='59' class='line-number'></div><div data-line='60' class='line-number'></div><div data-line='61' class='line-number'></div><div data-line='62' class='line-number'></div><div data-line='63' class='line-number'></div><div data-line='64' class='line-number'></div><div data-line='65' class='line-number'></div><div data-line='66' class='line-number'></div><div data-line='67' class='line-number'></div><div data-line='68' class='line-number'></div><div data-line='69' class='line-number'></div><div data-line='70' class='line-number'></div><div data-line='71' class='line-number'></div><div data-line='72' class='line-number'></div><div data-line='73' class='line-number'></div><div data-line='74' class='line-number'></div><div data-line='75' class='line-number'></div><div data-line='76' class='line-number'></div><div data-line='77' class='line-number'></div><div data-line='78' class='line-number'></div><div data-line='79' class='line-number'></div><div data-line='80' class='line-number'></div><div data-line='81' class='line-number'></div><div data-line='82' class='line-number'></div><div data-line='83' class='line-number'></div><div data-line='84' class='line-number'></div><div data-line='85' class='line-number'></div><div data-line='86' class='line-number'></div><div data-line='87' class='line-number'></div><div data-line='88' class='line-number'></div><div data-line='89' class='line-number'></div><div data-line='90' class='line-number'></div><div data-line='91' class='line-number'></div><div data-line='92' class='line-number'></div><div data-line='93' class='line-number'></div><div data-line='94' class='line-number'></div><div data-line='95' class='line-number'></div><div data-line='96' class='line-number'></div><div data-line='97' class='line-number'></div><div data-line='98' class='line-number'></div><div data-line='99' class='line-number'></div><div data-line='100' class='line-number'></div><div data-line='101' class='line-number'></div><div data-line='102' class='line-number'></div><div data-line='103' class='line-number'></div><div data-line='104' class='line-number'></div><div data-line='105' class='line-number'></div><div data-line='106' class='line-number'></div><div data-line='107' class='line-number'></div><div data-line='108' class='line-number'></div><div data-line='109' class='line-number'></div><div data-line='110' class='line-number'></div><div data-line='111' class='line-number'></div><div data-line='112' class='line-number'></div><div data-line='113' class='line-number'></div><div data-line='114' class='line-number'></div><div data-line='115' class='line-number'></div><div data-line='116' class='line-number'></div><div data-line='117' class='line-number'></div><div data-line='118' class='line-number'></div><div data-line='119' class='line-number'></div><div data-line='120' class='line-number'></div><div data-line='121' class='line-number'></div><div data-line='122' class='line-number'></div><div data-line='123' class='line-number'></div><div data-line='124' class='line-number'></div><div data-line='125' class='line-number'></div><div data-line='126' class='line-number'></div><div data-line='127' class='line-number'></div><div data-line='128' class='line-number'></div><div data-line='129' class='line-number'></div><div data-line='130' class='line-number'></div><div data-line='131' class='line-number'></div><div data-line='132' class='line-number'></div><div data-line='133' class='line-number'></div><div data-line='134' class='line-number'></div><div data-line='135' class='line-number'></div><div data-line='136' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="k">bits</span> <span class="mi">16</span>
+$ qemu-system-x86_64 bootable.bin</code></pre>
+<p>That is, assuming that you have recent versions of <a href="http://www.nasm.us/pub/nasm/releasebuilds/2.11/macosx/">nasm</a> and <a href="http://wiki.qemu.org/Download">qemu</a> installed.</p>
+<p>Let’s get to the code!</p>
+<figure class='code'><figcaption>
+boot.asm<a href='https://raw.github.com/davidad/mesh/ffbd5935d7218eddbaa43b991d1eaa4e277ecf86/boot.asm'>raw</a>
+</figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div><div data-line='14' class='line-number'></div><div data-line='15' class='line-number'></div><div data-line='16' class='line-number'></div><div data-line='17' class='line-number'></div><div data-line='18' class='line-number'></div><div data-line='19' class='line-number'></div><div data-line='20' class='line-number'></div><div data-line='21' class='line-number'></div><div data-line='22' class='line-number'></div><div data-line='23' class='line-number'></div><div data-line='24' class='line-number'></div><div data-line='25' class='line-number'></div><div data-line='26' class='line-number'></div><div data-line='27' class='line-number'></div><div data-line='28' class='line-number'></div><div data-line='29' class='line-number'></div><div data-line='30' class='line-number'></div><div data-line='31' class='line-number'></div><div data-line='32' class='line-number'></div><div data-line='33' class='line-number'></div><div data-line='34' class='line-number'></div><div data-line='35' class='line-number'></div><div data-line='36' class='line-number'></div><div data-line='37' class='line-number'></div><div data-line='38' class='line-number'></div><div data-line='39' class='line-number'></div><div data-line='40' class='line-number'></div><div data-line='41' class='line-number'></div><div data-line='42' class='line-number'></div><div data-line='43' class='line-number'></div><div data-line='44' class='line-number'></div><div data-line='45' class='line-number'></div><div data-line='46' class='line-number'></div><div data-line='47' class='line-number'></div><div data-line='48' class='line-number'></div><div data-line='49' class='line-number'></div><div data-line='50' class='line-number'></div><div data-line='51' class='line-number'></div><div data-line='52' class='line-number'></div><div data-line='53' class='line-number'></div><div data-line='54' class='line-number'></div><div data-line='55' class='line-number'></div><div data-line='56' class='line-number'></div><div data-line='57' class='line-number'></div><div data-line='58' class='line-number'></div><div data-line='59' class='line-number'></div><div data-line='60' class='line-number'></div><div data-line='61' class='line-number'></div><div data-line='62' class='line-number'></div><div data-line='63' class='line-number'></div><div data-line='64' class='line-number'></div><div data-line='65' class='line-number'></div><div data-line='66' class='line-number'></div><div data-line='67' class='line-number'></div><div data-line='68' class='line-number'></div><div data-line='69' class='line-number'></div><div data-line='70' class='line-number'></div><div data-line='71' class='line-number'></div><div data-line='72' class='line-number'></div><div data-line='73' class='line-number'></div><div data-line='74' class='line-number'></div><div data-line='75' class='line-number'></div><div data-line='76' class='line-number'></div><div data-line='77' class='line-number'></div><div data-line='78' class='line-number'></div><div data-line='79' class='line-number'></div><div data-line='80' class='line-number'></div><div data-line='81' class='line-number'></div><div data-line='82' class='line-number'></div><div data-line='83' class='line-number'></div><div data-line='84' class='line-number'></div><div data-line='85' class='line-number'></div><div data-line='86' class='line-number'></div><div data-line='87' class='line-number'></div><div data-line='88' class='line-number'></div><div data-line='89' class='line-number'></div><div data-line='90' class='line-number'></div><div data-line='91' class='line-number'></div><div data-line='92' class='line-number'></div><div data-line='93' class='line-number'></div><div data-line='94' class='line-number'></div><div data-line='95' class='line-number'></div><div data-line='96' class='line-number'></div><div data-line='97' class='line-number'></div><div data-line='98' class='line-number'></div><div data-line='99' class='line-number'></div><div data-line='100' class='line-number'></div><div data-line='101' class='line-number'></div><div data-line='102' class='line-number'></div><div data-line='103' class='line-number'></div><div data-line='104' class='line-number'></div><div data-line='105' class='line-number'></div><div data-line='106' class='line-number'></div><div data-line='107' class='line-number'></div><div data-line='108' class='line-number'></div><div data-line='109' class='line-number'></div><div data-line='110' class='line-number'></div><div data-line='111' class='line-number'></div><div data-line='112' class='line-number'></div><div data-line='113' class='line-number'></div><div data-line='114' class='line-number'></div><div data-line='115' class='line-number'></div><div data-line='116' class='line-number'></div><div data-line='117' class='line-number'></div><div data-line='118' class='line-number'></div><div data-line='119' class='line-number'></div><div data-line='120' class='line-number'></div><div data-line='121' class='line-number'></div><div data-line='122' class='line-number'></div><div data-line='123' class='line-number'></div><div data-line='124' class='line-number'></div><div data-line='125' class='line-number'></div><div data-line='126' class='line-number'></div><div data-line='127' class='line-number'></div><div data-line='128' class='line-number'></div><div data-line='129' class='line-number'></div><div data-line='130' class='line-number'></div><div data-line='131' class='line-number'></div><div data-line='132' class='line-number'></div><div data-line='133' class='line-number'></div><div data-line='134' class='line-number'></div><div data-line='135' class='line-number'></div><div data-line='136' class='line-number'></div></pre></td><td class='main  nasm'><pre><div class='line'><code><span class="k">bits</span> <span class="mi">16</span>
 </code></div><div class='line'><code><span class="k">org</span> <span class="mh">0x7c00</span>
 </code></div><div class='line'><code><span class="nl">k_boot_start:</span>
 </code></div><div class='line'><code> </code></div><div class='line'><code>  <span class="c1">; The cli instruction disables maskable external interrupts.</span>
@@ -192,7 +173,7 @@ $ qemu-system-x86_64 bootable.bin
 </code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rcx</span><span class="p">,</span> <span class="mi">80</span><span class="o">&ast;</span><span class="mi">25</span>   <span class="c1">; This is how many characters are on the screen.</span>
 </code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">ax</span><span class="p">,</span> <span class="mh">0x7400</span>   <span class="c1">; Video memory uses 2 bytes per character. The high byte</span>
 </code></div><div class='line'><code>                   <span class="c1">; determines foreground and background colors. See also</span>
-</code></div><div class='line'><code><span class="c1">; <a href="http://en.wikipedia.org/wiki/List_of_8-bit_computer_hardware_palettes#CGA">http://en.wikipedia.org/wiki/List_of_8-bit_computer_hardware_palettes#CGA</a></span>
+</code></div><div class='line'><code><span class="c1">; http://en.wikipedia.org/wiki/List_of_8-bit_computer_hardware_palettes#CGA</span>
 </code></div><div class='line'><code>                   <span class="c1">; In this case, we&#39;re setting red-on-gray (MIT colors!)</span>
 </code></div><div class='line'><code>  <span class="nf">rep</span> <span class="nv">stosw</span>        <span class="c1">; Copies whatever is in ax to [rdi], rcx times.</span>
 </code></div><div class='line'><code> </code></div><div class='line'><code>  <span class="nf">mov</span> <span class="nb">rdi</span><span class="p">,</span> <span class="nb">rdx</span>       <span class="c1">; Restore rdi to the beginning of video memory.</span>
@@ -209,7 +190,7 @@ $ qemu-system-x86_64 bootable.bin
 </code></div><div class='line'><code><span class="nl">hello_end:</span>
 </code></div><div class='line'><code> </code></div><div class='line'><code><span class="c1">; Global descriptor table entry format</span>
 </code></div><div class='line'><code><span class="c1">; See Intel 64 Software Developers&#39; Manual, Vol. 3A, Figure 3-8</span>
-</code></div><div class='line'><code><span class="c1">; or <a href="http://en.wikipedia.org/wiki/Global_Descriptor_Table">http://en.wikipedia.org/wiki/Global_Descriptor_Table</a></span>
+</code></div><div class='line'><code><span class="c1">; or http://en.wikipedia.org/wiki/Global_Descriptor_Table</span>
 </code></div><div class='line'><code><span class="cp">%macro GDT_ENTRY 4</span>
 </code></div><div class='line'><code>  <span class="c1">; %1 is base address, %2 is segment limit, %3 is flags, %4 is type.</span>
 </code></div><div class='line'><code>  <span class="kd">dw</span> <span class="o">%</span><span class="mi">2</span> <span class="o">&amp;</span> <span class="mh">0xffff</span>
@@ -225,7 +206,7 @@ $ qemu-system-x86_64 bootable.bin
 </code></div><div class='line'><code>                   <span class="c1">; Note: Ring is determined by bits 1 and 2 (the only &quot;00&quot;)</span>
 </code></div><div class='line'><code> </code></div><div class='line'><code><span class="c1">; Global descriptor table (loaded by lgdt instruction)</span>
 </code></div><div class='line'><code><span class="nl">gdt_hdr:</span>
-</code></div><div class='line'><code>  <span class="kd">dw</span> <span class="nv">gdt_end</span> <span class="o">&ndash;</span> <span class="nv">gdt</span> <span class="o">&ndash;</span> <span class="mi">1</span>
+</code></div><div class='line'><code>  <span class="kd">dw</span> <span class="nv">gdt_end</span> <span class="o">-</span> <span class="nv">gdt</span> <span class="o">-</span> <span class="mi">1</span>
 </code></div><div class='line'><code>  <span class="kd">dd</span> <span class="nv">gdt</span>
 </code></div><div class='line'><code><span class="nl">gdt:</span>
 </code></div><div class='line'><code>  <span class="nf">GDT_ENTRY</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
@@ -233,11 +214,10 @@ $ qemu-system-x86_64 bootable.bin
 </code></div><div class='line'><code>  <span class="nf">GDT_ENTRY</span> <span class="mi">0</span><span class="p">,</span> <span class="mh">0xffffff</span><span class="p">,</span> <span class="nv">RING0</span><span class="p">,</span> <span class="nv">READ_WRITE</span>
 </code></div><div class='line'><code>  <span class="c1">; You&#39;d want to have entries for other rings here, if you were using them.</span>
 </code></div><div class='line'><code><span class="nl">gdt_end:</span>
-</code></div><div class='line'><code> </code></div><div class='line'><code><span class="c1">; Very important &ndash; mark the sector as bootable. </span>
-</code></div><div class='line'><code><span class="kd">times</span> <span class="mi">512</span> <span class="o">&ndash;</span> <span class="mi">2</span> <span class="o">&ndash;</span> <span class="p">(</span><span class="kc">$</span> <span class="o">&ndash;</span> <span class="kc">$$</span><span class="p">)</span> <span class="nv">db</span> <span class="mi">0</span> <span class="c1">; zero-pad the 512-byte sector to the last 2 bytes</span>
+</code></div><div class='line'><code> </code></div><div class='line'><code><span class="c1">; Very important - mark the sector as bootable. </span>
+</code></div><div class='line'><code><span class="kd">times</span> <span class="mi">512</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="kc">$</span> <span class="o">-</span> <span class="kc">$$</span><span class="p">)</span> <span class="nv">db</span> <span class="mi">0</span> <span class="c1">; zero-pad the 512-byte sector to the last 2 bytes</span>
 </code></div><div class='line'><code><span class="kd">dw</span> <span class="mh">0xaa55</span> <span class="c1">; Magic &quot;boot signature&quot;</span>
-</code></div></pre></td></tr></table></div></figure></p>
-</div>
+</code></div></pre></td></tr></table></div></figure></div>
 
 
   <footer>
@@ -288,6 +268,10 @@ $ qemu-system-x86_64 bootable.bin
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/23/concurrency-primitives-in-intel-64-assembly/">Concurrency Primitives in Intel 64 Assembly</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/03/16/infosec-the-product-design-correspondence/">The Security/Product Design Correspondence</a>
       </li>
     
@@ -301,10 +285,6 @@ $ qemu-system-x86_64 bootable.bin
     
       <li class="post">
         <a href="/blog/2014/02/28/python-to-scheme-to-assembly-1/">Python to Scheme to Assembly, <br>Part 1: Recursion and Named Let</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/02/25/overkilling-the-8-queens-problem/">Overkilling the 8-queens problem</a>
       </li>
     
   </ul>
