@@ -345,25 +345,31 @@ RESERVED sign at the same location. That's where **`lock cmpxchg`** comes in.
 This is a slightly complex but beautiful operation. It takes three parameters:
 
 * a _memory location_ (`[rbp+rdi]` in this case),
-* an _update value_ to store (`rcx` in this case, holding the value `0xff`),
-* and an _expected value_ to compare against (always `rax`, an implicit parameter, and in this case zeroed out by `xor rax, rax`).
+* an _update value_ to store (`rcx` in this case, holding the value `0xff`), and
+* an _expected value_ to compare against (always `rax`, an implicit parameter, and in this case zeroed out by `xor rax, rax`).
 
 The first thing `lock cmpxchg` will do is lock the memory location and compare
-it to the expected value. Then, depending on the result, it will do one of two
-things:
+it to the expected value. Then, depending on the result, one of two things will
+happen:
 
 * If the comparison fails, that means the state of memory isn't what we
   expected---it must have changed since we last looked. This is bad news; the
   update is aborted. To inform us exactly what went wrong, `cmpxchg` will
   overwrite `rax` with whatever is actually in memory _now_ (instead of what we
-  expected). The zero-flag `ZF` will be cleared to signal non-equality.
+  expected). The zero-flag `ZF` will be cleared to signal non-equality, and the
+  memory location will be unlocked.
 * If the value in memory _does_ match what we expected, then our update
   value replaces it in that memory location before any other CPU/core has a
-  chance to either read or write there. That's a "successful" compare-and-swap,
-  and the zero-flag `ZF` will be set.
+  chance to either read or write there. That's a "successful" compare-and-swap.
+  The zero-flag `ZF` will be set to signal success, and the memory location will
+  be unlocked as soon as it is updated.
 
-The upshot is that it's impossible for more than one worker to reserve the same
-region.
+The upshot in our application is that it's impossible for more than one worker
+to reserve the same task, because reservation always happens in an _atomic_
+(`lock`ed) operation, which:
+
+* will be aborted if another reservation happened before it, and
+* will prevent any other atomic operation from starting until this one is done.
 
 <a name="tatas"></a>
 ### "test-and-test-and-set" [#](#tatas)
@@ -460,12 +466,15 @@ here that don't actually make so much sense.
   whole program on the same file. If that requirement is relaxed, then it makes
   a lot more sense to divide up the work by starting each worker at a different
   offset and having them all skip $n$ tasks ahead when they finish (e.g. with
-  seven workers, the fifth worker would take the $(7k+4)$th task for every
+  $n=7$ workers, the seventh worker would take the $(7k+6)$th task for every
   integer $k$).
 * Even with the requirement in question, there would be more efficient ways to
   divide up tasks---for instance, instead of trying to claim every task in
   order, workers could maintain a second bookkeeping word which would track the
   address of the current next-unclaimed-task.
+* Tasks should have been rather larger than single 8-byte machine words; the
+  coordination overhead for tasks at this fine granularity is unlikely to pay
+  off.
 * The modular exponentiation could have been implemented more efficiently.
 * In fact, since the result is just a single 235-byte pattern that repeats over
   and over, I could have just computed it once and repeatedly written it into
