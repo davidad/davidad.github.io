@@ -33,7 +33,10 @@ destination: public
 plugins: plugins
 code_dir: downloads/code
 category_dir: blog/categories
-markdown: rdiscount
+markdown: pandoc
+pandoc:
+  skip: false
+  flags: '-f markdown-blank_before_header --smart --mathjax'
 rdiscount:
   extensions:
     - autolink
