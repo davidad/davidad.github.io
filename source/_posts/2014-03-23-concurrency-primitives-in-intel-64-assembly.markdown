@@ -347,8 +347,11 @@ This is a slightly complex but beautiful operation. It takes three parameters:
 * a _memory location_ (`[rbp+rdi]` in this case), which has operand size
   dependent on the operand size of the next parameter (in this case, it's an
   8-byte machine word, because the next parameter is an 8-byte register)[^6],
-* an _update value_ to store (`rcx` in this case, holding the value `0xff`), and
-* an _expected value_ to compare against (always `rax`, an implicit parameter, and in this case zeroed out by `xor rax, rax`).
+* an _update value_ to store (`rcx` in this case, holding the value `0xff`, our
+  sentinel for RESERVED), and
+* an _expected value_ to compare against (always `rax`, an implicit parameter,
+  and in this case zeroed out by `xor rax, rax`; zero is the value of unreserved
+  words because it is the value freshly allocated files are filled with).
 
 The first thing `lock cmpxchg` will do is lock the memory location and compare
 it to the expected value. Then, depending on the result, one of two things will
