@@ -10,7 +10,7 @@ The [Virtual Network Computing
 (VNC)](http://en.wikipedia.org/wiki/Virtual_Network_Computing) system for
 accessing the GUI environments of remote computers uses a protocol called
 [Remote Frame Buffer (RFB)](http://en.wikipedia.org/wiki/RFB_protocol) to
-exchange data about graphics output as well as keyboard and mouse input. It
+exchange data about graphics output as well as keyboard and mouse input. RFB
 turns out to be a very sane protocol (specification PDF
 [here](http://www.realvnc.com/docs/rfbproto.pdf)) compared with X11, and
 infinitely more sane than Cocoa (which requires the ObjC runtime) or Win32 (no
