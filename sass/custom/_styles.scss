@@ -93,3 +93,21 @@ blockquote p {
   color: $solar-blue;
   text-shadow: 0 0 1px $solar-blue;
 }
+
+/*
+body:after {
+  content: "";
+  position: fixed;
+  background-image:url('https://d29xw0ra2h4o4u.cloudfront.net/assets/logo-no-text-d8ed16eddb595505005e8a9c69eb6011.png');
+  background-repeat:no-repeat;
+  background-position:center;
+  background-color:white;
+  padding: 9px;
+  border-top-left-radius: 15px;
+  box-shadow: 0px 0px 15px white;
+  width: 84px;
+  height: 105px;
+  bottom:0;
+  right:0;
+}
+*/
