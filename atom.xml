@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-03-31T08:41:46-04:00</updated>
+  <updated>2014-03-31T08:42:46-04:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -18,7 +18,7 @@
     <link href="http://davidad.github.io/blog/2014/03/30/vnc-as-an-interface/"/>
     <updated>2014-03-30T19:21:34-04:00</updated>
     <id>http://davidad.github.io/blog/2014/03/30/vnc-as-an-interface</id>
-    <content type="html"><![CDATA[<p>The <a href="http://en.wikipedia.org/wiki/Virtual_Network_Computing">Virtual Network Computing (VNC)</a> system for accessing the GUI environments of remote computers uses a protocol called <a href="http://en.wikipedia.org/wiki/RFB_protocol">Remote Frame Buffer (RFB)</a> to exchange data about graphics output as well as keyboard and mouse input. It turns out to be a very sane protocol (specification PDF <a href="http://www.realvnc.com/docs/rfbproto.pdf">here</a>) compared with X11, and infinitely more sane than Cocoa (which requires the ObjC runtime) or Win32 (no explanation needed). So, I thought, why not just expose a program’s graphical interface as a VNC server? Then we can let a VNC client deal with the vagaries of the host windowing environment, and we only need to speak a well-specified protocol on a socket.</p>
+    <content type="html"><![CDATA[<p>The <a href="http://en.wikipedia.org/wiki/Virtual_Network_Computing">Virtual Network Computing (VNC)</a> system for accessing the GUI environments of remote computers uses a protocol called <a href="http://en.wikipedia.org/wiki/RFB_protocol">Remote Frame Buffer (RFB)</a> to exchange data about graphics output as well as keyboard and mouse input. RFB turns out to be a very sane protocol (specification PDF <a href="http://www.realvnc.com/docs/rfbproto.pdf">here</a>) compared with X11, and infinitely more sane than Cocoa (which requires the ObjC runtime) or Win32 (no explanation needed). So, I thought, why not just expose a program’s graphical interface as a VNC server? Then we can let a VNC client deal with the vagaries of the host windowing environment, and we only need to speak a well-specified protocol on a socket.</p>
 <p>So far, this is what I have to show (<a href="https://github.com/davidad/vnchacks">code on github</a>):<br /><img src="http://davidad.github.io/assets/color_rotate.gif" /></p>
 <!-- more -->
 
