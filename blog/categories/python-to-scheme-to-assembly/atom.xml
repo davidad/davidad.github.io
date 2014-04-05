@@ -4,7 +4,7 @@
   <title><![CDATA[Category: python-to-scheme-to-assembly | Technical Journal]]></title>
   <link href="http://davidad.github.io/blog/categories/python-to-scheme-to-assembly/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-03-31T08:42:46-04:00</updated>
+  <updated>2014-04-05T04:44:30-04:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -20,7 +20,7 @@
     <id>http://davidad.github.io/blog/2014/02/28/python-to-scheme-to-assembly-1</id>
     <content type="html"><![CDATA[<p><em>In 2001, my favorite programming language was Python. In 2008, my favorite programming language was Scheme. In 2014, my favorite programming language is x64 assembly. For some reason, that progression tends to surprise people. Come on a journey with me.</em></p>
 <h2 id="python">Python</h2>
-<p>In this article, we’re going to consider a very simple toy problem: recursively summing up a list of numbers<sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup>.</p>
+<p>In this article, we’re going to consider a very simple toy problem: recursively summing up a list of numbers<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>.</p>
 <pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> sum_list(<span class="dt">list</span>):
   <span class="kw">if</span> <span class="dt">len</span>(<span class="dt">list</span>) == <span class="dv">0</span>:
     <span class="kw">return</span> <span class="dv">0</span>
@@ -72,7 +72,7 @@
 <p>Still, if someone was determined to add TRE to CPython, they could modify the compiler roughly as follows…</p>
 </blockquote>
 </blockquote>
-<p>In other words, the <em>only</em> reason this doesn’t work is that Guido van Rossum<sup><a href="#fn2" class="footnoteRef" id="fnref2">2</a></sup> <em>prefers it that way</em>. Guido, I respect your right to your opinion, but the reader and I are switching to Scheme.</p>
+<p>In other words, the <em>only</em> reason this doesn’t work is that Guido van Rossum<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> <em>prefers it that way</em>. Guido, I respect your right to your opinion, but the reader and I are switching to Scheme.</p>
 <h2 id="scheme">Scheme</h2>
 <p>Here’s a line-by-line translation:</p>
 <pre class="sourceCode scheme"><code class="sourceCode scheme">(<span class="kw">define</span><span class="fu"> </span>(sum_list <span class="kw">list</span>)
@@ -91,11 +91,17 @@
 <pre><code> guile&gt; (sum_list (iota 10000001))
  50000005000000</code></pre>
 </blockquote>
-<p>Well, isn’t that neat? If we go much bigger, it’ll take a long time, but as long as the output fits into memory, we’ll get the right answer<sup><a href="#fn3" class="footnoteRef" id="fnref3">3</a></sup>.</p>
+<p>Well, isn’t that neat? If we go much bigger, it’ll take a long time, but as long as the output fits into memory, we’ll get the right answer<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>.</p>
 <h3 id="named-let">Named Let</h3>
-<p>In our last two versions of <code>sum_list</code>, we defined a helper function (<code>sum_sublist</code>), and the rest of the body of <code>sum_list</code> was just a single invocation of that helper function. This is an inelegant pattern<sup><a href="#fn4" class="footnoteRef" id="fnref4">4</a></sup>, which Scheme has a construct to address.</p>
-<p><a name="named-let-1"></a> <code>scheme (define (sum_list list)   (let sum_sublist ((accum 0) (sublist list))  ; the named let!     (cond ((null? sublist)            accum )           (else            (sum_sublist (+ accum (car sublist)) (cdr sublist)) ))))</code></p>
-<p><a href="http://people.csail.mit.edu/jaffer/r5rs_6.html#IDX130"><strong>Named let</strong></a> creates a function and invokes it (with the provided initial values) in one step. It is decidedly my favorite control structure of all time. You can have your <code>while</code> loops and your <code>for</code> loops, and your <code>do</code>…<code>until</code> loops too<sup><a href="#fn5" class="footnoteRef" id="fnref5">5</a></sup>. I’ll take named let any day, because it provides the abstraction barrier of recursion without compromising the conciseness and efficiency of iteration. In case you’re not sufficiently impressed, I discuss the delightful properties of using recursion instead of non-recursive loops <a href="#recursion">below</a>.</p>
+<p>In our last two versions of <code>sum_list</code>, we defined a helper function (<code>sum_sublist</code>), and the rest of the body of <code>sum_list</code> was just a single invocation of that helper function. This is an inelegant pattern<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>, which Scheme has a construct to address.</p>
+<p><a name="named-let-1"></a></p>
+<pre class="sourceCode scheme"><code class="sourceCode scheme">(<span class="kw">define</span><span class="fu"> </span>(sum_list <span class="kw">list</span>)
+  (<span class="kw">let</span> sum_sublist ((accum <span class="dv">0</span>) (sublist <span class="kw">list</span>))  <span class="co">; the named let!</span>
+    (<span class="kw">cond</span> ((<span class="kw">null?</span> sublist)
+           accum )
+          (<span class="kw">else</span>
+           (sum_sublist (<span class="kw">+</span> accum (<span class="kw">car</span> sublist)) (<span class="kw">cdr</span> sublist)) ))))</code></pre>
+<p><a href="http://people.csail.mit.edu/jaffer/r5rs_6.html#IDX130"><strong>Named let</strong></a> creates a function and invokes it (with the provided initial values) in one step. It is decidedly my favorite control structure of all time. You can have your <code>while</code> loops and your <code>for</code> loops, and your <code>do</code>…<code>until</code> loops too<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a>. I’ll take named let any day, because it provides the abstraction barrier of recursion without compromising the conciseness and efficiency of iteration. In case you’re not sufficiently impressed, I discuss the delightful properties of using recursion instead of non-recursive loops <a href="#recursion">below</a>.</p>
 <h2 id="assembly">Assembly</h2>
 <p><a name="neatly-into-assembly"></a> Named let style translates amazingly naturally into assembly.</p>
 <pre class="sourceCode nasm"><code class="sourceCode nasm"><span class="kw">bits</span> <span class="dv">64</span>
@@ -121,9 +127,9 @@
 5050
 &gt; sum_list(from(1,10000000))
 50000005000000</code></pre>
-<p>(Sadly, my assembler doesn’t come with its own REPL; we’re borrowing the <a href="http://luajit.org">LuaJIT</a> REPL instead<sup><a href="#fn6" class="footnoteRef" id="fnref6">6</a></sup>.)</p>
+<p>(Sadly, my assembler doesn’t come with its own REPL; we’re borrowing the <a href="http://luajit.org">LuaJIT</a> REPL instead<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a>.)</p>
 </blockquote>
-<p>In fact, if I weren’t so comfortable with named let, I doubt I’d be an effective assembly coder, because assembly doesn’t really have any other iteration constructs<sup><a href="#fn7" class="footnoteRef" id="fnref7">7</a></sup>. But I don’t miss them. <a href="#iteration">What would they look like, anyway?</a></p>
+<p>In fact, if I weren’t so comfortable with named let, I doubt I’d be an effective assembly coder, because assembly doesn’t really have any other iteration constructs<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a>. But I don’t miss them. <a href="#iteration">What would they look like, anyway?</a></p>
 <hr />
 <p>In the next installment of <strong>Python to Scheme to Assembly</strong>, we will look at <code>call-with-current-continuation</code>.</p>
 <h2 id="addendum-c">Addendum: C</h2>
@@ -152,7 +158,7 @@
   <span class="kw">jnz</span> .else            <span class="co">; &lt;- same as ours</span>
 <span class="fu">.done:</span>
   rep <span class="kw">ret</span>          <span class="co">; equivalent to &quot;ret&quot;, but faster on old AMD chips for no good reason</span></code></pre>
-<p>This is <em>almost</em> identical to the assembly that I wrote, except that it clobbers one of its inputs (which is perfectly allowed by the C calling convention<sup><a href="#fn8" class="footnoteRef" id="fnref8">8</a></sup>), it uses <code>xor</code> instead of <code>mov</code> to load <code>0</code> (a solid optimization<sup><a href="#fn9" class="footnoteRef" id="fnref9">9</a></sup>), it uses <code>rep ret</code> (less compact and no benefit on Intel chips), and it shuffles the instructions around such that two <code>test</code>s are needed (almost certainly not helpful with modern branch prediction and loop detection). I haven’t run benchmarks on this, but my guess is that it would come out about even. (Both versions are eight instructions long.) I also think the shuffling makes this “iterative” version more opaque and difficult to reason about (not least because of the duplicated <code>test</code>) than my “named let”-style code.</p>
+<p>This is <em>almost</em> identical to the assembly that I wrote, except that it clobbers one of its inputs (which is perfectly allowed by the C calling convention<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a>), it uses <code>xor</code> instead of <code>mov</code> to load <code>0</code> (a solid optimization<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a>), it uses <code>rep ret</code> (less compact and no benefit on Intel chips), and it shuffles the instructions around such that two <code>test</code>s are needed (almost certainly not helpful with modern branch prediction and loop detection). I haven’t run benchmarks on this, but my guess is that it would come out about even. (Both versions are eight instructions long.) I also think the shuffling makes this “iterative” version more opaque and difficult to reason about (not least because of the duplicated <code>test</code>) than my “named let”-style code.</p>
 <h3 id="non-tail-recursion">Non-Tail Recursion</h3>
 <p><code>c start:6 uint64_t sum_list(struct number_list* list) {   if(!list) {     return 0;   } else {     return list-&gt;number+sum_list(list-&gt;next);   } }</code></p>
 <p><code>gcc -O3</code> can <em>almost</em> completely convert this version to iteration, so let’s look at the generated assembly from <code>gcc -O1</code> to get a better sense of what it might look like in a language implementation for which the necessary optimizations are too complex to be made automatically.</p>
@@ -169,12 +175,30 @@
 <span class="fu">.else:</span>
   <span class="kw">pop</span> rbx           <span class="co">; restore the state of rbx</span>
   <span class="kw">ret</span>               <span class="co">; return rax</span></code></pre>
-<p>We can see immediately that some new instructions (<code>push</code>, <code>pop</code>, and <code>call</code>) have been introduced. These are all <strong>stack manipulation instructions</strong><sup><a href="#fn10" class="footnoteRef" id="fnref10">10</a></sup>. If we carefully pretend to be the CPU running this program, we can see that it pushes the address of every number in the linked list, and then dereferences and adds them up as it pops them from the stack. This is not good; if we wanted our entire data structure to be replicated on the stack, we would have passed it by value<sup><a href="#fn11" class="footnoteRef" id="fnref11">11</a></sup>! It’s generally the amount of memory set aside for the stack that we’ve actually run out of in the case of a <code>recursion depth exceeded</code> error.</p>
+<p>We can see immediately that some new instructions (<code>push</code>, <code>pop</code>, and <code>call</code>) have been introduced. These are all <strong>stack manipulation instructions</strong><a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a>. If we carefully pretend to be the CPU running this program, we can see that it pushes the address of every number in the linked list, and then dereferences and adds them up as it pops them from the stack. This is not good; if we wanted our entire data structure to be replicated on the stack, we would have passed it by value<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a>! It’s generally the amount of memory set aside for the stack that we’ve actually run out of in the case of a <code>recursion depth exceeded</code> error.</p>
 <h3 id="tail-recursion">Tail Recursion</h3>
 <p>What about translating the tail-recursive version into C? Like Scheme and Python, <code>gcc</code> supports nested function definitions (as a GNU extension to C), so this is no problem:</p>
 <p><code>c start:6 uint64_t sum_list(struct number_list* list) {   uint64_t sum_sublist(uint64_t accum, struct number_list* sublist) {     if(!sublist) {       return accum;     } else {       return sum_sublist(accum+sublist-&gt;number,sublist-&gt;next);     }   }   return sum_sublist(0,list); }</code></p>
-<p>Here’s what <code>gcc -O1</code> gives us (translated and commented as before): ```nasm sum_sublist.1867: ; A random constant has been added to avoid polluting the namespace. Not the best solution, but okay. sub rsp, 8 ; Decrement the stack by one 8-byte machine word. Seems unnecessary… mov rax, rdi ; Copy first argument (rdi/“accum”) into result register (rax). test rsi, rsi ; Test second argument (rsi/“sublist”) for nullity. jz .else ; If null, goto else. add rdi, [rsi] ; ~ accum = accum + sublist-&gt;number; mov rsi, [rsi+8] ; sublist = sublist-&gt;next; call sum_sublist.1867 ; recurse. result appears in rax, ready to pass along (as the return value) to the next caller in the stack. .else: add rsp, 8 ; seems unnecessary ret ; return rax</p>
-<p>sum_list: sub rsp, 8 mov rsi, rdi ; first argument (rdi/“list”) of sum_list becomes 2nd argument (rsi/“sublist”) of sum_sublist mov rdi, 0 ; first argument (rdi/“accum”) of sum_sublist is 0 call sum_sublist.1867 ; call sum_sublist! add rsp, 8 ret ```</p>
+<p>Here’s what <code>gcc -O1</code> gives us (translated and commented as before):</p>
+<pre class="sourceCode nasm"><code class="sourceCode nasm"><span class="fu">sum_sublist.1867:</span>       <span class="co">; A random constant has been added to avoid polluting the namespace. Not the best solution, but okay.</span>
+  <span class="kw">sub</span> rsp, <span class="dv">8</span>            <span class="co">; Decrement the stack by one 8-byte machine word. Seems unnecessary...</span>
+  <span class="kw">mov</span> rax, rdi          <span class="co">; Copy first argument (rdi/&quot;accum&quot;) into result register (rax).</span>
+  <span class="kw">test</span> rsi, rsi         <span class="co">; Test second argument (rsi/&quot;sublist&quot;) for nullity.</span>
+  <span class="kw">jz</span> .else              <span class="co">; If null, goto else.</span>
+  <span class="kw">add</span> rdi, [rsi]        <span class="co">; ~ accum = accum + sublist-&gt;number;</span>
+  <span class="kw">mov</span> rsi, [rsi<span class="dv">+8</span>]      <span class="co">; sublist = sublist-&gt;next;</span>
+  <span class="kw">call</span> sum_sublist<span class="fl">.1867</span> <span class="co">; recurse. result appears in rax, ready to pass along (as the return value) to the next caller in the stack.</span>
+<span class="fu">.else:</span>
+  <span class="kw">add</span> rsp, <span class="dv">8</span>            <span class="co">; seems unnecessary</span>
+  <span class="kw">ret</span>                   <span class="co">; return rax</span>
+
+<span class="fu">sum_list:</span>
+  <span class="kw">sub</span> rsp, <span class="dv">8</span>
+  <span class="kw">mov</span> rsi, rdi          <span class="co">; first argument (rdi/&quot;list&quot;) of sum_list becomes 2nd argument (rsi/&quot;sublist&quot;) of sum_sublist</span>
+  <span class="kw">mov</span> rdi, <span class="dv">0</span>            <span class="co">; first argument (rdi/&quot;accum&quot;) of sum_sublist is 0</span>
+  <span class="kw">call</span> sum_sublist<span class="fl">.1867</span> <span class="co">; call sum_sublist!</span>
+  <span class="kw">add</span> rsp, <span class="dv">8</span>
+  <span class="kw">ret</span></code></pre>
 <p>In this mode, the tail <code>call</code> is not being eliminated – although we’re no longer <code>push</code>ing <code>rbx</code>, we’re still pushing <code>rip</code> to stack with every <code>call</code>, and eventually we’ll run out of stack that way. The only way to get around this is to replace each <code>call</code> with <code>jmp</code>: since we’re just going to take the return value of the next recursive invocation and then immediately <code>ret</code> back to the previous caller on the stack, there’s no point in even inserting our own address on the stack (as <code>call</code> does); we can just set up the next guy to pass the return value straight back to the previous guy, and quietly disappear.</p>
 <p><code>gcc -O3</code> does this. In fact, somewhat surprisingly, it generates <em>exactly</em> the same assembly, line for line, for this version as for the purely iterative version above. That’s “<strong>tail call optimization</strong>” (TCO) or “<strong>tail recursion elimination</strong>” (TRE) in its most agressive form: it literally just gets rid of all calls and recursions and replaces them with an equivalent iteration (complete with duplicate <code>test</code>).</p>
 <p>The upshot of all this is that <em>not only does Scheme’s “named let” recursion form translate <a href="#neatly-into-assembly">neatly into assembly</a>, it provides – penalty-free – a better abstraction than either iteration</em> (while-loop imitation) <em>or stack-driven recursion</em>, the two options <code>gcc</code> appears to pick from when dealing with various ways to code a list traversal.</p>
@@ -182,9 +206,9 @@
 <p><a name="recursion"></a></p>
 <h2 id="appendix-whats-so-great-about-recursion-anyway">Appendix: What’s so great about recursion, anyway?</h2>
 <p>For me, the most important point in favor of a recursive representation of loops is that I find it easier to reason about <strong>correctness</strong> that way.</p>
-<p>Any function we define ought to implement some ideal mathematical function that maps inputs to outputs<sup><a href="#fn12" class="footnoteRef" id="fnref12">12</a></sup>. If our code truly does implement that ideal function, we say that the code is <strong>correct</strong>. Generally, we can break down the body of a function as a <a href="http://en.wikipedia.org/wiki/Function_composition">composition</a> of smaller functions; even in imperative languages, we can think of every statement as pulling in a state of the world, making well-defined changes, and passing the new state of the world into the next statement<sup><a href="#fn13" class="footnoteRef" id="fnref13">13</a></sup>. At each step, we ask ourselves, “are the outputs of this function going to be what I want them to be?” For loops, though, <a href="http://en.wikipedia.org/wiki/Loop_invariant#Informal_example">this gets tricky</a>.</p>
-<p>What recursion does for us as aspiring writers of correct functions is automatic translation of the loop verification problem into the much nicer problem of function verification. Intuitively, you can simply assume that all invocations of a recursive function within its own body are going to Do The Right Thing, ensure that the function as a whole Does The Right Thing under that assumption, and then conclude that the function Does The Right Thing in general. If this sounds like circular reasoning, it does<sup><a href="#fn14" class="footnoteRef" id="fnref14">14</a></sup>; but it turns out to be valid anyway.</p>
-<p>There are many ways to justify this procedure formally, all of which are truly mind-bending<sup><a href="#fn15" class="footnoteRef" id="fnref15">15</a></sup>. But once you’ve justified this procedure once, you never have to do it again (unlike ad-hoc reasoning about loops). I’ve determined that the most elegant way to explain it is by expanding our <a href="#named-let-1">named let example</a> into a non-recursive function, which just happens to accept as a parameter a correct<sup><a href="#fn16" class="footnoteRef" id="fnref16">16</a></sup> version of itself.</p>
+<p>Any function we define ought to implement some ideal mathematical function that maps inputs to outputs<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a>. If our code truly does implement that ideal function, we say that the code is <strong>correct</strong>. Generally, we can break down the body of a function as a <a href="http://en.wikipedia.org/wiki/Function_composition">composition</a> of smaller functions; even in imperative languages, we can think of every statement as pulling in a state of the world, making well-defined changes, and passing the new state of the world into the next statement<a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a>. At each step, we ask ourselves, “are the outputs of this function going to be what I want them to be?” For loops, though, <a href="http://en.wikipedia.org/wiki/Loop_invariant#Informal_example">this gets tricky</a>.</p>
+<p>What recursion does for us as aspiring writers of correct functions is automatic translation of the loop verification problem into the much nicer problem of function verification. Intuitively, you can simply assume that all invocations of a recursive function within its own body are going to Do The Right Thing, ensure that the function as a whole Does The Right Thing under that assumption, and then conclude that the function Does The Right Thing in general. If this sounds like circular reasoning, it does<a href="#fn14" class="footnoteRef" id="fnref14"><sup>14</sup></a>; but it turns out to be valid anyway.</p>
+<p>There are many ways to justify this procedure formally, all of which are truly mind-bending<a href="#fn15" class="footnoteRef" id="fnref15"><sup>15</sup></a>. But once you’ve justified this procedure once, you never have to do it again (unlike ad-hoc reasoning about loops). I’ve determined that the most elegant way to explain it is by expanding our <a href="#named-let-1">named let example</a> into a non-recursive function, which just happens to accept as a parameter a correct<a href="#fn16" class="footnoteRef" id="fnref16"><sup>16</sup></a> version of itself.</p>
 <pre class="sourceCode scheme"><code class="sourceCode scheme">(<span class="kw">define</span><span class="fu"> </span>(sum_list <span class="kw">list</span>)
   (<span class="kw">define</span><span class="fu"> </span>(sum_sublist_nonrec f_correct accum sublist)
     (<span class="kw">cond</span> ((<span class="kw">null?</span> sublist)
