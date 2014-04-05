@@ -10,7 +10,6 @@ group :development do
   gem 'sass-globbing', '~> 1.0.0'
   gem 'rubypants', '~> 0.2.0'
   gem 'stringex', '~> 1.4.0'
-  gem 'pandoc-ruby', '~> 0.7.5'
 
   gem 'guard-jekyll-plus', '~> 1.4.6'
   gem 'guard-compass', '~> 0.0.8'

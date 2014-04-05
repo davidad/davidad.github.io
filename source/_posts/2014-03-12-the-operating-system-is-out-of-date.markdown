@@ -78,9 +78,9 @@ also makes programs easier to understand and maintain.
 
 ### Exemplars
 
-* [Lisp](http://en.wikipedia.org/wiki/Lisp_(programming_language\))
-* [Forth](http://en.wikipedia.org/wiki/Forth_(programming_language\))
-* [C](http://en.wikipedia.org/wiki/C_(programming_language\))
+* [Lisp](http://en.wikipedia.org/wiki/Lisp_(programming_language))
+* [Forth](http://en.wikipedia.org/wiki/Forth_(programming_language))
+* [C](http://en.wikipedia.org/wiki/C_(programming_language))
 
 ### Drawbacks
 * FORTRAN's conflation of functions (an algebraic concept) and subroutines (a
@@ -253,7 +253,7 @@ available.
 Before computerization, American Airlines' booking process was labor-intensive
 and slow.  IBM realized that the basic idea behind SAGE could be applied to
 solve the airline reservation problem, resulting in
-[SABRE](http://en.wikipedia.org/wiki/Sabre_(computer_system\)#History). The core
+[SABRE](http://en.wikipedia.org/wiki/Sabre_(computer_system)#History). The core
 of the SABRE operating system later became known as TPF (Transaction Processing
 Facility).
 
@@ -290,9 +290,9 @@ the precise order in which it was applied.
 
 ### Exemplars
 
-* [Ingres](http://en.wikipedia.org/wiki/Ingres_(database\))
+* [Ingres](http://en.wikipedia.org/wiki/Ingres_(database))
 * [ZFS](http://en.wikipedia.org/wiki/ZFS)
-* [git](http://en.wikipedia.org/wiki/Git_(software\))
+* [git](http://en.wikipedia.org/wiki/Git_(software))
 * [ethereum](https://github.com/ethereum/wiki/wiki/%5BEnglish%5D-White-Paper#wiki-basic-building-blocks)
 
 ### Drawbacks
@@ -331,7 +331,7 @@ available whenever it is no longer being referred to.**
 
 ### Exemplars
 
-* [Genera](http://en.wikipedia.org/wiki/Genera_(operating_system\))
+* [Genera](http://en.wikipedia.org/wiki/Genera_(operating_system))
 * [LuaJIT](http://wiki.luajit.org/New-Garbage-Collector)
 
 ### Drawbacks
@@ -421,7 +421,7 @@ to themselves.** Common forms include:
 
 ### Archetype
 
-Doug Engelbart's [NLS](http://en.wikipedia.org/wiki/NLS_(computer_system\))
+Doug Engelbart's [NLS](http://en.wikipedia.org/wiki/NLS_(computer_system))
 introduced implementations of:
 
 * hypertext links
@@ -542,7 +542,7 @@ Network" and ultimately became known as simply "the Internet".
 > there ought to be one terminal that goes anywhere you want to go where you
 > have interactive computing. That idea is the ARPAnet.
 >
->--[Bob Taylor](http://en.wikipedia.org/wiki/Robert_Taylor_(computer_scientist\)) ([source](http://partners.nytimes.com/library/tech/99/12/biztech/articles/122099outlook-bobb.html)), ARPA IPTO director
+>--[Bob Taylor](http://en.wikipedia.org/wiki/Robert_Taylor_(computer_scientist)) ([source](http://partners.nytimes.com/library/tech/99/12/biztech/articles/122099outlook-bobb.html)), ARPA IPTO director
 
 ### Concept
 
@@ -627,11 +627,11 @@ something new in software systems for the first time since 1969.
 
 _To be continued..._
 
-[^1]: Since then, Smalltalk ([SqueakNOS](http://squeaknos.blogspot.com/)), Forth ([colorForth](http://www.colorforth.com/cf.htm)), and Lisp ([Genera](http://en.wikipedia.org/wiki/Genera_(operating_system\))) have all flirted with becoming operating systems, and [Oberon](http://en.wikipedia.org/wiki/Oberon_(programming_language\)) was [designed](http://www.inf.ethz.ch/personal/wirth/ProjectOberon/PO.System.pdf) to [be one](http://en.wikipedia.org/wiki/Oberon_(operating_system\)) from the start. But none achieved economic success, for the simple reason that none of the projects involved attempted to provide value to people. They solved technical problems to validate that their concepts can work in the real world, but did not pursue the delivery of better solutions to real-world problems than would otherwise be possible.
+[^1]: Since then, Smalltalk ([SqueakNOS](http://squeaknos.blogspot.com/)), Forth ([colorForth](http://www.colorforth.com/cf.htm)), and Lisp ([Genera](http://en.wikipedia.org/wiki/Genera_(operating_system))) have all flirted with becoming operating systems, and [Oberon](http://en.wikipedia.org/wiki/Oberon_(programming_language)) was [designed](http://www.inf.ethz.ch/personal/wirth/ProjectOberon/PO.System.pdf) to [be one](http://en.wikipedia.org/wiki/Oberon_(operating_system)) from the start. But none achieved economic success, for the simple reason that none of the projects involved attempted to provide value to people. They solved technical problems to validate that their concepts can work in the real world, but did not pursue the delivery of better solutions to real-world problems than would otherwise be possible.
 [^2]: Serious embedded systems people who write machine code from scratch, this is your time to gloat. You truly deserve the title of engineer. In fact, chances are good that you hold the title "electrical engineer". Chances are also good that whatever you engineer isn't computers, so hear me out. On the off-chance that you are an embedded systems person who writes machine code from scratch and you **do** make computers or computer parts, chances are good that you are (a) the bane of some free software driver author's existence, and/or (b) providing an incredibly hard-to-detect hideout for really clever malware. **Please compel your employers to publish technical documentation freely and to use ROMs in place of FLASH so that malware can't take over your lovingly crafted code.** Now, back to our regularly scheduled tirade.
 [^3]: Yes, there are exceptions, but they're not the ones you think. The exceptions are those derived from the work of [Cliff Shaw](http://en.wikipedia.org/wiki/Cliff_Shaw) (e.g.  [PLANNER](http://en.wikipedia.org/wiki/PLANNER), [Prolog](http://en.wikipedia.org/wiki/Prolog), [M](http://en.wikipedia.org/wiki/MUMPS)), those derived from [APL](http://c2.com/cgi/wiki?AplLanguage) (e.g.  [J](http://c2.com/cgi/wiki?JayLanguage), [K](http://c2.com/cgi/wiki?KayLanguage), and [arguably](https://www.princeton.edu/~hos/mike/transcripts/mcilroy.htm) the UNIX shell/pipeline environment), the [COMIT](http://www.mt-archive.info/MT-1958-Yngve.pdf) family (e.g.  [SNOBOL](http://c2.com/cgi/wiki?SnobolLanguage)), and the curious corner case of [Inform 7](https://gist.github.com/koo5/4129213). Lisp was inspired by FORTRAN ([source](http://www-formal.stanford.edu/jmc/history/lisp/node2.html)). ISWIM (which some programming language histories identify as the "root" of the ML family) is based on ALGOL 60 ([source](http://www.cs.cmu.edu/~crary/819-f09/Landin66.pdf)), which of course is based on FORTRAN. The [Forth](http://www.forth.com/resources/evolution/evolve_0.html) family (e.g.  [PostScript](http://en.wikipedia.org/wiki/PostScript), [Factor](http://c2.com/cgi/wiki?FactorLanguage), [Tcl](http://www.stanford.edu/~ouster/cgi-bin/papers/tcl-usenix.pdf) via [NeWS](http://c2.com/cgi/wiki?NetworkExtensibleWindowSystem)) was rooted in Lisp ([source](http://www.colorforth.com/HOPL.html)).  Even COMIT was loosely inspired by FORTRAN ([source](http://books.google.com/books?id=-GW8lOYl3AAC&lpg=PA53&ots=OzMYwEw0kz&dq=COMIT+FORTRAN&pg=PA53)).  Some **esolangs** ("esoteric languages", viz. languages not intended for serious use) like [Befunge](http://en.wikipedia.org/wiki/Befunge) and [Wierd](http://c2.com/cgi/wiki?TheWierdLanguage) are very much non-FORTRAN, but they are not seriously used by anyone. Machine code could simply be disqualified on the basis that it is not software (the subject of this article), but even all current machine languages feature stack operators, which derive from ALGOL via [Burroughs Large Systems](http://research.microsoft.com/en-us/um/people/gbell/computer_structures_principles_and_examples/csp0260.htm).
 [^4]: ([source](http://books.google.com/books?id=-PDPBvIPYBkC&lpg=PA1&ots=LgbTZ3Z1IO&dq=Classic%20Operating%20Systems%3A%20From%20Batch%20Processing%20to%20Distributed%20Systems&pg=PA7#v=onepage&q=atlas&f=false))
 [^5]: Yes, I'm aware of [all this $#!*](http://en.wikipedia.org/wiki/Graphical_programming). If you want to point out that graphical programming languages exist, and they aren't based on FORTRAN, well, they fall outside my definition of "programming language", so there. Riddle me this: why does nobody who knows how to program in text ever want to use them? Why do they break down for anything that isn't basically a signal processing task? Why don't they have lambdas, zooming, or style? You know, style. Like Edward Tufte has. Style. Nobody wants to use an ugly visual programming language.
 [^6]: I considered including cryptography as another major bullet point, but if I selected a particular algorithm (e.g.  [Diffie-Hellman-Merkle key exchange](http://en.wikipedia.org/wiki/Diffie-Hellman_key_exchange) or the [Merkle–Damgård hash function construction](http://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction)), then I'd have to include other important algorithms (I've left algorithms out of my list here; they're not "software innovations" in the sense I mean), and if I selected "encrypted communications", well, that surely predates computers. The fact that people started writing programs which encrypt communications is great, but it doesn't change the software environment on the level I'm talking about.  That said, I do consider the invention of the practical cryptographic hash a contender for most important innovation in _computer science_ in the last 25 years; asymmetric cryptography is about equally important.  Ralph Merkle really deserves more credit for having essentially conceived of both pillars of modern cryptography.
-[^7]: This disadvantage can be mitigated significantly (or, with great effort, completely eliminated) by the careful use of [incremental or concurrent](http://en.wikipedia.org/wiki/Garbage_collection_(computer_science\)#Stop-the-world_vs._incremental_vs._concurrent) garbage collectors.
+[^7]: This disadvantage can be mitigated significantly (or, with great effort, completely eliminated) by the careful use of [incremental or concurrent](http://en.wikipedia.org/wiki/Garbage_collection_(computer_science)#Stop-the-world_vs._incremental_vs._concurrent) garbage collectors.
 [^8]: These are examples of **non-multitasking** OSes. Multitasking (as practiced today) requires a separate idea, which I cover in the section marked [Virtualization](#Virtualization).

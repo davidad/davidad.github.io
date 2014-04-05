@@ -51,7 +51,6 @@ GEM
     lumberjack (1.0.4)
     maruku (0.7.1)
     method_source (0.8.2)
-    pandoc-ruby (0.7.5)
     posix-spawn (0.3.8)
     pry (0.9.12.6)
       coderay (~> 1.0)
@@ -91,7 +90,6 @@ DEPENDENCIES
   guard-jekyll-plus (~> 1.4.6)
   jekyll (~> 1.2.0)
   jekyll-page-hooks
-  pandoc-ruby (~> 0.7.5)
   rack (~> 1.5.2)
   rake (~> 10.1)
   rb-fchange (~> 0.0.6)
