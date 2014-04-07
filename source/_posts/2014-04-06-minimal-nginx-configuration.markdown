@@ -10,12 +10,12 @@ _Thanks to fellow [Hacker School](http://hackerschool.com)er Leah Steinberg for 
 
 * * *
 
-Having intermittently struggled with `apache2` configuration files for nearly
-half of my adult life, I find `nginx` an absolute joy to set up. I'm completely
-sincere about that. But, for those who are just getting into Web development,
-`nginx` is just about as much of a struggle as Apache used to be---in fact,
-probably more so, because there's less abundant learning materials out there on
-the Internet.
+Having intermittently struggled with `apache2` configuration files for the
+majority of my adult life, I find `nginx` an absolute joy to set up. I'm
+completely sincere about that. But, for those who are just getting into Web
+development, `nginx` is just about as much of a struggle as Apache used to
+be---in fact, probably more so, because there's less abundant learning materials
+out there on the Internet.
 
 So, here's an attempt to make that situation just the slightest bit better.
 
