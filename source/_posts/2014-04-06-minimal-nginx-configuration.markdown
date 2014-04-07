@@ -6,7 +6,8 @@ comments: true
 categories: 
 ---
 
-_Thanks to fellow [Hacker School](http://hackerschool.com)er Leah Steinberg for inspiring this post!_
+_Thanks to fellow [Hacker School](http://hackerschool.com)er [Leah
+Steinberg](http://twitter.com/leah_steinberg) for inspiring this post!_
 
 * * *
 
