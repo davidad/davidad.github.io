@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-04-07T00:10:57-04:00</updated>
+  <updated>2014-04-07T00:27:30-04:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -18,7 +18,7 @@
     <link href="http://davidad.github.io/blog/2014/04/06/minimal-nginx-configuration/"/>
     <updated>2014-04-06T20:05:53-04:00</updated>
     <id>http://davidad.github.io/blog/2014/04/06/minimal-nginx-configuration</id>
-    <content type="html"><![CDATA[<p><em>Thanks to fellow <a href="http://hackerschool.com">Hacker School</a>er Leah Steinberg for inspiring this post!</em></p>
+    <content type="html"><![CDATA[<p><em>Thanks to fellow <a href="http://hackerschool.com">Hacker School</a>er <a href="http://twitter.com/leah_steinberg">Leah Steinberg</a> for inspiring this post!</em></p>
 <hr />
 <p>Having intermittently struggled with <code>apache2</code> configuration files for the majority of my adult life, I find <code>nginx</code> an absolute joy to set up. I’m completely sincere about that. But, for those who are just getting into Web development, <code>nginx</code> is just about as much of a struggle as Apache used to be—in fact, probably more so, because there’s less abundant learning material out there on the Internet.</p>
 <p>So, here’s an attempt to make that situation just the slightest bit better.</p>
