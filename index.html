@@ -121,62 +121,12 @@ hi.conf
 </code></div><div class='line'><code><span class="k">events</span> <span class="p">{}</span>
 </code></div></pre></td></tr></table></div></figure>
 
-
-<p>I’ve chosen the number 4945 so as to hopefully not conflict with any services that may already be running on your machine for one reason or another. Now, let’s launch <code>nginx</code> using this configuration file and test it:</p>
-<pre><code>$ nginx -p `pwd`/ -c hi.conf
-nginx: [alert] could not open error log file: open() &quot;/var/log/nginx/error.log&quot; failed (13: Permission denied)
-$ telnet localhost 4945
-Trying 127.0.0.1...
-Connected to localhost.
-Escape character is &#39;^]&#39;.
-GET / HTTP/1.0
-
-HTTP/1.1 200 OK
-Server: nginx/1.2.3
-Date: Mon, 07 Apr 2014 01:50:28 GMT
-Content-Type: text/plain
-Content-Length: 0
-Connection: close
-
-Connection closed by foreign host.
-$ kill -QUIT `cat nginx.pid`</code></pre>
-<p>You’ll have to actually enter the line <code>GET / HTTP/1.0</code>. HTTP is a protocol intended for humans to be able to read and write, and you may as well take advantage of it! Of course, you could also navigate to <code>http://localhost:4945/</code> in a browser, but then all you see is a blank page, which is not quite as satisfying (to me, at least) as a <code>200 OK</code> on the terminal<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>.</p>
-<hr />
-<p>What’s that? You want to actually serve data, and not just a blank page?</p>
-<figure class='code'><figcaption>
-hi2.conf
-</figcaption><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div><div data-line='6' class='line-number'></div><div data-line='7' class='line-number'></div><div data-line='8' class='line-number'></div><div data-line='9' class='line-number'></div><div data-line='10' class='line-number'></div><div data-line='11' class='line-number'></div><div data-line='12' class='line-number'></div><div data-line='13' class='line-number'></div></pre></td><td class='main  nginx'><pre><div class='line'><code><span class="k">error_log</span> <span class="s">stderr</span><span class="p">;</span>
-</code></div><div class='line'><code><span class="k">pid</span> <span class="s">nginx.pid</span><span class="p">;</span>
-</code></div><div class='line'><code><span class="k">http</span> <span class="p">{</span>
-</code></div><div class='line'><code>    <span class="kn">access_log</span> <span class="no">off</span><span class="p">;</span>
-</code></div><div class='line'><code>    <span class="kn">root</span> <span class="s">.</span><span class="p">;</span>
-</code></div><div class='line'><code>    <span class="kn">server</span> <span class="p">{</span>
-</code></div><div class='line'><code>        <span class="kn">listen</span> <span class="mi">4945</span><span class="p">;</span>
-</code></div><div class='line'><code>        <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
-</code></div><div class='line'><code>            <span class="kn">try_files</span> <span class="s">/index.html</span> <span class="p">=</span><span class="mi">404</span><span class="p">;</span>
-</code></div><div class='line'><code>        <span class="p">}</span>
-</code></div><div class='line'><code>    <span class="p">}</span>
-</code></div><div class='line'><code><span class="p">}</span>
-</code></div><div class='line'><code><span class="k">events</span> <span class="p">{}</span>
-</code></div></pre></td></tr></table></div></figure>
-
-
-<p>Then just drop an <code>index.html</code> into the same folder as <code>hi2.conf</code> and run</p>
-<pre><code>$ nginx -p `pwd`/ -c hi2.conf</code></pre>
-<p>Now you should be able to load <code>http://localhost:4945/</code> and see what you wrote in <code>index.html</code>. Exciting!</p>
-<h2 id="next-steps">Next Steps</h2>
-<p>If you installed OpenResty, continue with their <a href="http://openresty.org/#GettingStarted">Getting Started</a>. Otherwise, I’ll leave you to other tutorials, or to <a href="http://nginx.org/en/docs/dirindex.html">the actual <code>nginx</code> documentation</a> – this was really just an exercise in getting something to work. But, I will offer this advice: I recommend against using any of your OS’s magic, like special files and folders where things are supposed to be put, or special incantations for invoking <code>nginx</code>. Just run <code>nginx</code> on the command line. It’s a smart enough program to <strong>stay</strong> running once you’ve started it, without the help of external infrastructure, and I think you’ll be much less frustrated working with it directly, having all the relevant files in one project directory, than struggling to configure both <code>nginx</code> itself and your OS’s favorite mechanism for managing server processes. Once you’ve figured out how to disable the OS’s auto-server-starting mechanisms, you can modify the <code>listen</code> line to <code>listen 80</code> so you can stop typing that pesky <code>:4945</code> in the browser.</p>
-<h3 id="reloading">Reloading</h3>
-<p>Oh, and one last trick: if you want to ask <code>nginx</code> to reload its configuration file without actually bringing down the server, just</p>
-<pre><code>$ kill -HUP `cat nginx.pid`</code></pre>
-<p>Happy hacking!</p>
-<section class="footnotes">
-<hr />
-<ol>
-<li id="fn1"><p>200 is the HTTP status code meaning “OK”, the status that accompanies most successful HTTP replies on the Web. As you might guess, that’s the same 200 referred to by the line <code>return 200</code> in <code>hi.conf</code>.<a href="#fnref1">↩</a></p></li>
-</ol>
-</section></div>
+</div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/04/06/minimal-nginx-configuration/">Read on &rarr;</a>
+    </footer>
   
 
 
