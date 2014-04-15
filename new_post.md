@@ -1,1 +1,1 @@
-source/_posts/2014-04-06-minimal-nginx-configuration.markdown
+source/_posts/2014-04-14-all-boolean-functions-are-polynomials.markdown
