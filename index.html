@@ -9,7 +9,22 @@
   <meta name="author" content="davidad (David A. Dalrymple)">
 
   
-  <meta name="description" content="Thanks to fellow Hacker Schooler Leah Steinberg for inspiring this post! Having intermittently struggled with apache2 configuration files for the &hellip;">
+  <meta name="description" content="…in the integers mod 2 (a.k.a. the finite field of order 2). Multiplication mod 2 is AND: A
+B
+(AB)
+A B AND 0
+0
+0
+0 0
+1
+0
+0 1
+0
+0
+0 1
+1
+1
+1 Adding one &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +80,141 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/14/all-boolean-functions-are-polynomials/">All Boolean functions are polynomials</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-14T10:47:37-04:00" pubdate data-updated="true">Apr 14<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>…in the integers mod 2 (a.k.a. the finite field of order 2). Multiplication mod 2 is <code>AND</code>:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">A</th>
+<th style="text-align: center;">B</th>
+<th style="text-align: center;">(AB)</th>
+<th style="text-align: center;">A B <code>AND</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+</tr>
+</tbody>
+</table>
+<p><br> Adding one mod 2 is <code>NOT</code>:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">A</th>
+<th style="text-align: center;">(A+1)</th>
+<th style="text-align: center;">A <code>NOT</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+</tbody>
+</table>
+<p><br> So, multiplication plus one is <code>NAND</code>:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">A</th>
+<th style="text-align: center;">B</th>
+<th style="text-align: center;">(AB+1)</th>
+<th style="text-align: center;">A B <code>NAND</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+</tbody>
+</table>
+<p><br> Since <code>NAND</code> is universal, and any finite composition of polynomials is a polynomial, any finite boolean circuit is a polynomial. Here’s all 16 two-input functions: </div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/04/14/all-boolean-functions-are-polynomials/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -524,46 +674,6 @@ Files foo and foo-4 are identical</code></pre>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/18/kernel-from-scratch/">Kernel from Scratch</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-18T02:58:08-05:00" pubdate data-updated="true">Feb 18<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>One of my 3 major goals for Hacker School was to create a bootable, 64-bit kernel image from scratch, using only <code>nasm</code> and my text editor. Well, folks, one down, two to go.</p>
-<p><img src="http://i.imgur.com/vnYFaFZ.png" alt="Hello, kernel!" /> </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/02/18/kernel-from-scratch/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/2">&larr; Older</a>
@@ -579,6 +689,10 @@ Files foo and foo-4 are identical</code></pre>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/04/14/all-boolean-functions-are-polynomials/">All Boolean functions are polynomials</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/04/06/minimal-nginx-configuration/">Getting started with nginx configuration</a>
       </li>
     
@@ -592,10 +706,6 @@ Files foo and foo-4 are identical</code></pre>
     
       <li class="post">
         <a href="/blog/2014/03/16/infosec-the-product-design-correspondence/">The Security/Product Design Correspondence</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/12/the-operating-system-is-out-of-date/">Systems Past: the only 8 software innovations we actually use</a>
       </li>
     
   </ul>

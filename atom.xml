@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-04-07T00:27:30-04:00</updated>
+  <updated>2014-04-15T16:12:57-04:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -12,6 +12,221 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[All Boolean functions are polynomials]]></title>
+    <link href="http://davidad.github.io/blog/2014/04/14/all-boolean-functions-are-polynomials/"/>
+    <updated>2014-04-14T10:47:37-04:00</updated>
+    <id>http://davidad.github.io/blog/2014/04/14/all-boolean-functions-are-polynomials</id>
+    <content type="html"><![CDATA[<p>…in the integers mod 2 (a.k.a. the finite field of order 2). Multiplication mod 2 is <code>AND</code>:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">A</th>
+<th style="text-align: center;">B</th>
+<th style="text-align: center;">(AB)</th>
+<th style="text-align: center;">A B <code>AND</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+</tr>
+</tbody>
+</table>
+<p><br> Adding one mod 2 is <code>NOT</code>:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">A</th>
+<th style="text-align: center;">(A+1)</th>
+<th style="text-align: center;">A <code>NOT</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+</tbody>
+</table>
+<p><br> So, multiplication plus one is <code>NAND</code>:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">A</th>
+<th style="text-align: center;">B</th>
+<th style="text-align: center;">(AB+1)</th>
+<th style="text-align: center;">A B <code>NAND</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+</tbody>
+</table>
+<p><br> Since <code>NAND</code> is universal, and any finite composition of polynomials is a polynomial, any finite boolean circuit is a polynomial. Here’s all 16 two-input functions: <!-- more --></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Lookup table</th>
+<th style="text-align: center;">Boolean function (<a href="http://en.wikipedia.org/wiki/Reverse_Polish_notation">RPN</a>)</th>
+<th style="text-align: right;">Polynomial</th>
+<th style="text-align: center;">Polynomial bitmap</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0000</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: center;">0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0001</td>
+<td style="text-align: center;">A B <code>AND</code></td>
+<td style="text-align: right;">AB</td>
+<td style="text-align: center;">0001</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">0010</td>
+<td style="text-align: center;">A (B <code>NOT</code>) <code>AND</code></td>
+<td style="text-align: right;">AB+A</td>
+<td style="text-align: center;">0101</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0011</td>
+<td style="text-align: center;">A</td>
+<td style="text-align: right;">A</td>
+<td style="text-align: center;">0100</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">0100</td>
+<td style="text-align: center;">(A <code>NOT</code>) B <code>AND</code></td>
+<td style="text-align: right;">AB+B</td>
+<td style="text-align: center;">0011</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0101</td>
+<td style="text-align: center;">B</td>
+<td style="text-align: right;">B</td>
+<td style="text-align: center;">0010</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">0110</td>
+<td style="text-align: center;">A B <code>XOR</code></td>
+<td style="text-align: right;">A+B</td>
+<td style="text-align: center;">0110</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0111</td>
+<td style="text-align: center;">A B <code>OR</code></td>
+<td style="text-align: right;">AB+A+B</td>
+<td style="text-align: center;">0111</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1000</td>
+<td style="text-align: center;">A B <code>OR</code> <code>NOT</code></td>
+<td style="text-align: right;">AB+A+B+1</td>
+<td style="text-align: center;">1111</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1001</td>
+<td style="text-align: center;">A B <code>XOR</code> <code>NOT</code></td>
+<td style="text-align: right;">A+B+1</td>
+<td style="text-align: center;">1110</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1010</td>
+<td style="text-align: center;">B <code>NOT</code></td>
+<td style="text-align: right;">B+1</td>
+<td style="text-align: center;">1010</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1011</td>
+<td style="text-align: center;">A (B <code>NOT</code>) <code>OR</code></td>
+<td style="text-align: right;">AB+B+1</td>
+<td style="text-align: center;">1011</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1100</td>
+<td style="text-align: center;">A <code>NOT</code></td>
+<td style="text-align: right;">A+1</td>
+<td style="text-align: center;">1100</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1101</td>
+<td style="text-align: center;">(A <code>NOT</code>) B <code>OR</code></td>
+<td style="text-align: right;">AB+A+1</td>
+<td style="text-align: center;">1101</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1110</td>
+<td style="text-align: center;">A B <code>AND</code> <code>NOT</code></td>
+<td style="text-align: right;">AB+1</td>
+<td style="text-align: center;">1001</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1111</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: center;">1000</td>
+</tr>
+</tbody>
+</table>
+<p><br> It’s interesting that in many cases, including those corresponding to the “basic” functions of <code>AND</code>, <code>OR</code>, <code>XOR</code> and <code>NOT</code>, the polynomial bitmap is identical to the lookup table.</p>
+<p>It’s also interesting that these polynomials are either multilinear (linear in each variable) or the sum of a multilinear polynomial with 1.</p>
+<p>Naturally, I’m not the first person to notice this. It was first noticed <a href="http://en.wikipedia.org/wiki/Zhegalkin_polynomial">by I. I. Zhegalkin in 1927</a>. And I haven’t yet found any especially compelling uses of the representation. (If you actually want to represent boolean functions, you’re probably better served by <a href="http://crypto.stanford.edu/pbc/notes/zdd/">ZDDs</a>.) But I found it an interesting discovery which might just come in handy someday.</p>]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Getting started with nginx configuration]]></title>
