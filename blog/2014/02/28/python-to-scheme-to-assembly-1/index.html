@@ -222,6 +222,14 @@
 <h2 id="addendum-c">Addendum: C</h2>
 <p>In this addendum, we’re going to look at the assembly for iteration, non-tail recursion, and tail recursion, as emitted by <code>gcc</code>, and get to the bottom of what the difference is anyway.</p>
 <p>At the top of each C file here, we have the following:</p>
+<figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div></pre></td><td class='main  c'><pre><div class='line'><code><span class="cp">#include &lt;stdint.h&gt;</span>
+</code></div><div class='line'><code><span class="k">struct</span> <span class="n">number_list</span> <span class="p">{</span>
+</code></div><div class='line'><code>  <span class="kt">uint64_t</span> <span class="n">number</span><span class="p">;</span>
+</code></div><div class='line'><code>  <span class="k">struct</span> <span class="n">number_list</span> <span class="o">&ast;</span><span class="n">next</span><span class="p">;</span>
+</code></div><div class='line'><code><span class="p">};</span>
+</code></div></pre></td></tr></table></div></figure>
+
+
 <p><a name="iteration"></a></p>
 <h3 id="iteration">Iteration</h3>
 <p>If I were solving this problem in the context of a C program, this is how I would do it.</p>

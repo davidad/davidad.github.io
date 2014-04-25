@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-04-25T03:55:21-04:00</updated>
+  <updated>2014-04-25T03:59:55-04:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -161,7 +161,7 @@ Mitigation
 </th><th width=150>
 Common Implementation
 </th><th width=180>
-My Preferred Implemenation
+My Preferred Implementation
 </th></tr>
 </thead>
 <tbody>
@@ -214,11 +214,11 @@ public-key signature of cryptographic hash
 </p>
 
 <p>Integrity protocols are fairly simple: the appropriate verification material is placed at the beginning of every Data Link payload. The Integrity layer exposes the same kind of “transmit queue and receive queue” interface as the Data Link layer, but the payload which can be passed to the Integrity layer must be somewhat smaller, so that there is room for the verification material and the Integrity payload together to fit into 1280 octets. Overhead ranges from 4 octets for a CRC-32C checksum to 96 octets for an Ed25519 signature.</p>
-<p>In the keyed hash case, some state is necessary at the Integrity protocol level: each API customer must be able to add “trusted contacts” to its “address book” by specifying a symmetric key correpsonding to a given endpoint name (which may have been negotiated at a higher protocol level, or simply out-of-band entirely). Since some advanced higher-level protocols may define symmetric authentication keys that are only good for a single use (e.g. <a href="https://github.com/trevp/axolotl/wiki">Axolotl ratcheting</a> after the handshake phase), “address book entries” should be single-use by default, with renewal explicitly required after each payload received from a given contact.</p>
+<p>In the keyed hash case, some state is necessary at the Integrity protocol level: each API customer must be able to add “trusted contacts” to its “address book” by specifying a symmetric key corresponding to a given endpoint name (which may have been negotiated at a higher protocol level, or simply out-of-band entirely). Since some advanced higher-level protocols may define symmetric authentication keys that are only good for a single use (e.g. <a href="https://github.com/trevp/axolotl/wiki">Axolotl ratcheting</a> after the handshake phase), “address book entries” should be single-use by default, with renewal explicitly required after each payload received from a given contact.</p>
 <p><a name="Availability"></a></p>
 <h2 id="availability-layer">Availability layer</h2>
 <p>We would like networked endpoints to be available to receive packets from other endpoints in a way that is robust to unannounced changes in network topology. This layer conceptually takes the place of the <a href="http://en.wikipedia.org/wiki/Network_layer">Network</a> layer in the original model, as it will be responsible for routing packets. <b>Significantly, in this proposal, there are no “hosts” or “ports”: only “endpoints”, identified by public keys.</b> This is simply taking the <a href="http://en.wikipedia.org/wiki/End-to-end_principle">end-to-end principle</a> one step further, by considering the “host” merely part of the network infrastructure which makes applications available.</p>
-<p>A fully implemented Availability layer should provide <a href="http://en.wikipedia.org/wiki/Unicast">unicast</a> (deliver to a unique endpoint authenticated by a given public key, wherever it may be), <a href="http://en.wikipedia.org/wiki/Anycast">anycast</a> (deliver to nearest endpoint authenaticated by a given public key), and <a href="http://en.wikipedia.org/wiki/Multicast">multicast</a> (<i>a.k.a.</i> <a href="http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern">pub/sub</a>: route to all endpoints who have asked to subscribe to a given ID, and provide a subscription method).</p>
+<p>A fully implemented Availability layer should provide <a href="http://en.wikipedia.org/wiki/Unicast">unicast</a> (deliver to a unique endpoint authenticated by a given public key, wherever it may be), <a href="http://en.wikipedia.org/wiki/Anycast">anycast</a> (deliver to nearest endpoint authenticated by a given public key), and <a href="http://en.wikipedia.org/wiki/Multicast">multicast</a> (<i>a.k.a.</i> <a href="http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern">pub/sub</a>: route to all endpoints who have asked to subscribe to a given ID, and provide a subscription method).</p>
 <p>
 <table>
 <thead>
@@ -380,7 +380,7 @@ Message is difficult to trace
 
 <p><a name="Transactions"></a></p>
 <h2 id="transactions-layer">Transactions layer</h2>
-<p>We would like for sets of nodes which wish to maintain common mutable state variables to be able to do so, even in the presence of various types of adversaries. This is a common abstraction for the requirements of <code>git</code>, cryptocrurencies, and distributed databases (i.e. <a href="http://en.wikipedia.org/wiki/ACID">ACID</a> <a href="http://en.wikipedia.org/wiki/Multiversion_concurrency_control">MVCC</a>). I propose that (borrowing most directly from <code>git</code>, but also from Clojure’s concurrent data structures) changes in large or complex mutable states be represented as changes to the root of a <a href="http://en.wikipedia.org/wiki/Merkle_tree">Merkle tree</a>, thus reducing the state subject to transactional semantics to single-packet size<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>.</p>
+<p>We would like for sets of nodes which wish to maintain common mutable state variables to be able to do so, even in the presence of various types of adversaries. This is a common abstraction for the requirements of <code>git</code>, cryptocurrencies, and distributed databases (i.e. <a href="http://en.wikipedia.org/wiki/ACID">ACID</a> <a href="http://en.wikipedia.org/wiki/Multiversion_concurrency_control">MVCC</a>). I propose that (borrowing most directly from <code>git</code>, but also from Clojure’s concurrent data structures) changes in large or complex mutable states be represented as changes to the root of a <a href="http://en.wikipedia.org/wiki/Merkle_tree">Merkle tree</a>, thus reducing the state subject to transactional semantics to single-packet size<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>.</p>
 <p>To make it obvious what I’m intending to refer to, the owner of a particular “domain name” or a particular “coin” (or, generally, any cryptographically controlled resource) is an example of a mutable state. But so is, for instance, the contents of any social media profile, email inbox, hypertext page, or source code repository. These things could all be managed without reference to central authorities or single points of failure.</p>
 <p>
 <table>
@@ -426,7 +426,7 @@ Any attack that Bitcoin can survive
 </table>
 </p>
 
-<p>Many (including myself) have claimed that the core contribution of Bitcoin, the block-chain protocol, is a novel solution to the <a href="http://research.microsoft.com/en-us/um/people/lamport/pubs/byz.pdf">Byzantine Generals Problem</a>, but it turns out this is somewhat misleading. Although the block-chain protocol is Byzantine-fault-tolerant in a novel way, there has been plenty of research on Byzantine protocols over the years, and it seems probably unnecessary to constantly “mine,” i.e. solve cryptopuzzles, to achieve Byzantine fault tolerance. The main reason to introduce cryptopuzzles is to reduce the efficacy of <a href="http://en.wikipedia.org/wiki/Sybil_attack">Sybil attacks</a>, in which one malicious actor fabricates arbitrarily many identities in order to exceed the Byzantine fault tolerance threshhold and control the system. However, these attacks can also be mitigated by requiring crypto-puzzles only for joining the network (as in <a href="http://www.researchgate.net/publication/4319659_SKademlia_A_practicable_approach_towards_secure_key-based_routing/file/72e7e524ad3e97d67d.pdf">S/Kademlia</a>), and by blacklisting nodes which behave suspiciously (the latter being how most attacks on Bitcoin are stopped in practice).</p>
+<p>Many (including myself) have claimed that the core contribution of Bitcoin, the block-chain protocol, is a novel solution to the <a href="http://research.microsoft.com/en-us/um/people/lamport/pubs/byz.pdf">Byzantine Generals Problem</a>, but it turns out this is somewhat misleading. Although the block-chain protocol is Byzantine-fault-tolerant in a novel way, there has been plenty of research on Byzantine protocols over the years, and it seems probably unnecessary to constantly “mine,” i.e. solve cryptopuzzles, to achieve Byzantine fault tolerance. The main reason to introduce cryptopuzzles is to reduce the efficacy of <a href="http://en.wikipedia.org/wiki/Sybil_attack">Sybil attacks</a>, in which one malicious actor fabricates arbitrarily many identities in order to exceed the Byzantine fault tolerance threshold and control the system. However, these attacks can also be mitigated by requiring crypto-puzzles only for joining the network (as in <a href="http://www.researchgate.net/publication/4319659_SKademlia_A_practicable_approach_towards_secure_key-based_routing/file/72e7e524ad3e97d67d.pdf">S/Kademlia</a>), and by blacklisting nodes which behave suspiciously (the latter being how most attacks on Bitcoin are stopped in practice).</p>
 <p><a name="Application"></a></p>
 <h2 id="application-layer">Application layer</h2>
 <p>In such an environment, applications (or application components!) are essentially just maps from one mutable state to another, in <a href="http://elm-lang.org/learn/What-is-FRP.elm">functional reactive programming</a> style. In the same way that you might encode packet filters into a kernel’s TCP/IP stack today, you might encode entire applications into a kernel’s “mesh” stack in the future. Various search functions, including full-text search, could be provided using the <a href="http://www.michaelpiatek.com/papers/oneswarm_SIGCOMM.pdf">OneSwarm</a> approach or potentially by distributed <a href="http://en.wikipedia.org/wiki/Bloom_filter">Bloom filters</a> implemented atop this platform (an idea due to <a href="https://twitter.com/AndreeMonette">Andrée Monette</a>). Resource control and access control can be provided by means of <a href="http://www.erights.org/elib/capability/ode/ode-protocol.html">cryptographic capabilities</a>.</p>
@@ -440,7 +440,7 @@ href="http://mailhide.recaptcha.net/d?k=01A3Grt9OhKg2-MSZSi6YDVA==&c=YXdAjPYO-xw
 <li id="fn1"><p>This number is cribbed from the <a href="http://tools.ietf.org/html/rfc2460">IPv6 RFC</a>.<a href="#fnref1">↩</a></p></li>
 <li id="fn2"><p>coauthored by <a href="http://www.maymounkov.org/">Petar Maymounkov</a>, who also coauthored <a href="http://en.wikipedia.org/wiki/Kademlia">Kademlia</a>, the <a href="http://en.wikipedia.org/wiki/Distributed_hash_table">DHT</a> powering <a href="http://en.wikipedia.org/wiki/BitTorrent_(protocol)">BitTorrent</a><a href="#fnref2">↩</a></p></li>
 <li id="fn3"><p>Electric routing does need some extensions to mitigate various attacks, but I believe the countermeasures from <a href="http://www.researchgate.net/publication/4319659_SKademlia_A_practicable_approach_towards_secure_key-based_routing/file/72e7e524ad3e97d67d.pdf">S/Kademlia</a> are readily adapted to meet these needs.<a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p>This is similar in principle to the trick used by most practical public-key cryptosystems, which use the actual public-key algorithm only to encrypt a key from some symmetric cryptosystem, and then encrypt arbitrarily large content using a stream cipher. The common principle is that you can do the hard security algorithm on a small piece of data, and use easier security algorithms to apply those hard secrutiy properties to large chunks of data.<a href="#fnref4">↩</a></p></li>
+<li id="fn4"><p>This is similar in principle to the trick used by most practical public-key cryptosystems, which use the actual public-key algorithm only to encrypt a key from some symmetric cryptosystem, and then encrypt arbitrarily large content using a stream cipher. The common principle is that you can do the hard security algorithm on a small piece of data, and use easier security algorithms to apply those hard security properties to large chunks of data.<a href="#fnref4">↩</a></p></li>
 </ol>
 </section>]]></content>
   </entry>
@@ -1643,6 +1643,14 @@ concurrency.asm<a href='https://github.com/davidad/asm_concurrency/blob/TJ-1/con
 <h2 id="addendum-c">Addendum: C</h2>
 <p>In this addendum, we’re going to look at the assembly for iteration, non-tail recursion, and tail recursion, as emitted by <code>gcc</code>, and get to the bottom of what the difference is anyway.</p>
 <p>At the top of each C file here, we have the following:</p>
+<figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div></pre></td><td class='main  c'><pre><div class='line'><code><span class="cp">#include &lt;stdint.h&gt;</span>
+</code></div><div class='line'><code><span class="k">struct</span> <span class="n">number_list</span> <span class="p">{</span>
+</code></div><div class='line'><code>  <span class="kt">uint64_t</span> <span class="n">number</span><span class="p">;</span>
+</code></div><div class='line'><code>  <span class="k">struct</span> <span class="n">number_list</span> <span class="o">&ast;</span><span class="n">next</span><span class="p">;</span>
+</code></div><div class='line'><code><span class="p">};</span>
+</code></div></pre></td></tr></table></div></figure>
+
+
 <p><a name="iteration"></a></p>
 <h3 id="iteration">Iteration</h3>
 <p>If I were solving this problem in the context of a C program, this is how I would do it.</p>
