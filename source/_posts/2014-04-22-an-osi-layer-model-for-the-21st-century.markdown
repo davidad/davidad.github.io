@@ -142,7 +142,7 @@ Integrity protocols mitigate these attacks:
 <p>
 <table>
 <thead>
-  <tr><th width=60>Paranoia Level</th><th width=240>Attacks</th><th width=180>Mitigation</th><th width=150>Common Implementation</th><th width=180>My Preferred Implemenation</th></tr>
+  <tr><th width=60>Paranoia Level</th><th width=240>Attacks</th><th width=180>Mitigation</th><th width=150>Common Implementation</th><th width=180>My Preferred Implementation</th></tr>
 </thead>
 <tbody>
   <tr><td>1</td><td>Thermal noise, cosmic rays</td><td>checksum hash</td><td>[TCP Checksum](http://en.wikipedia.org/wiki/Transmission_Control_Protocol#Checksum_computation)</td><td>[CRC-32C](http://www.strchr.com/crc32_popcnt)</td></tr>
@@ -163,7 +163,7 @@ octets for a CRC-32C checksum to 96 octets for an Ed25519 signature.
 
 In the keyed hash case, some state is necessary at the Integrity protocol level:
 each API customer must be able to add "trusted contacts" to its "address book"
-by specifying a symmetric key correpsonding to a given endpoint name (which may
+by specifying a symmetric key corresponding to a given endpoint name (which may
 have been negotiated at a higher protocol level, or simply out-of-band
 entirely). Since some advanced higher-level protocols may define symmetric
 authentication keys that are only good for a single use (e.g. [Axolotl
@@ -190,7 +190,7 @@ A fully implemented Availability layer should provide
 [unicast](http://en.wikipedia.org/wiki/Unicast) (deliver to a unique endpoint
 authenticated by a given public key, wherever it may be),
 [anycast](http://en.wikipedia.org/wiki/Anycast) (deliver to nearest endpoint
-authenaticated by a given public key), and
+authenticated by a given public key), and
 [multicast](http://en.wikipedia.org/wiki/Multicast) (<i>a.k.a.</i>
 [pub/sub](http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern): route
 to all endpoints who have asked to subscribe to a given ID, and provide a
@@ -296,7 +296,7 @@ orthogonal protocol types, which may be nested:
 We would like for sets of nodes which wish to maintain common mutable state
 variables to be able to do so, even in the presence of various types of
 adversaries. This is a common abstraction for the requirements of `git`,
-cryptocrurencies, and distributed databases (i.e.
+cryptocurrencies, and distributed databases (i.e.
 [ACID](http://en.wikipedia.org/wiki/ACID)
 [MVCC](http://en.wikipedia.org/wiki/Multiversion_concurrency_control)). I
 propose that (borrowing most directly from `git`, but also from Clojure's
@@ -336,7 +336,7 @@ Byzantine protocols over the years, and it seems probably unnecessary to constan
 reason to introduce cryptopuzzles is to reduce the efficacy of [Sybil
 attacks](http://en.wikipedia.org/wiki/Sybil_attack), in which one malicious
 actor fabricates arbitrarily many identities in order to exceed the Byzantine
-fault tolerance threshhold and control the system. However, these attacks can
+fault tolerance threshold and control the system. However, these attacks can
 also be mitigated by requiring crypto-puzzles only for joining the network (as
 in
 [S/Kademlia](http://www.researchgate.net/publication/4319659_SKademlia_A_practicable_approach_towards_secure_key-based_routing/file/72e7e524ad3e97d67d.pdf)),
@@ -382,4 +382,4 @@ public-key cryptosystems, which use the actual public-key algorithm only to
 encrypt a key from some symmetric cryptosystem, and then encrypt arbitrarily
 large content using a stream cipher. The common principle is that you can do the
 hard security algorithm on a small piece of data, and use easier security
-algorithms to apply those hard secrutiy properties to large chunks of data.
+algorithms to apply those hard security properties to large chunks of data.
