@@ -264,8 +264,9 @@ network, but some types of mitigation are possible:
 In cases 3 and 4, this layer has to maintain some state, holding session keys or
 message keys, and the Axolotl ratchet is a little complicated; but this layer
 does not have to worry about the verification of identity (which will be
-provided on a higher layer) or integrity (which will be provided by a lower
-layer).
+provided on a higher layer, by services such as [keybase.io](https://keybase.io)
+or using pronounceable hash fingerprints) or integrity (which will be provided
+by a lower layer).
 
 <a name="Non-Repudiation"></a>
 ##Non-Repudiation and/or Repudiation layer
