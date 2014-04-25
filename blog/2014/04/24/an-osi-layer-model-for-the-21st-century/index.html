@@ -409,7 +409,7 @@ ephemeral key agreement + symmetric encryption
 </table>
 </p>
 
-<p>In cases 3 and 4, this layer has to maintain some state, holding session keys or message keys, and the Axolotl ratchet is a little complicated; but this layer does not have to worry about the verification of identity (which will be provided on a higher layer) or integrity (which will be provided by a lower layer).</p>
+<p>In cases 3 and 4, this layer has to maintain some state, holding session keys or message keys, and the Axolotl ratchet is a little complicated; but this layer does not have to worry about the verification of identity (which will be provided on a higher layer, by services such as <a href="https://keybase.io">keybase.io</a> or using pronounceable hash fingerprints) or integrity (which will be provided by a lower layer).</p>
 <p><a name="Non-Repudiation"></a></p>
 <h2 id="non-repudiation-andor-repudiation-layer">Non-Repudiation and/or Repudiation layer</h2>
 <p>We would like for a receiver to be sure that a message they receive was sent by a given sender, and we would like for a sender to be sure that a given message was successfully received. Sometimes, we would also like for a receiver to be unaware of the location a message was sent from. The result is three related but orthogonal protocol types, which may be nested:</p>
