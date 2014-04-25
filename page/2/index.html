@@ -9,7 +9,7 @@
   <meta name="author" content="davidad (David A. Dalrymple)">
 
   
-  <meta name="description" content="One of my 3 major goals for Hacker School was to create a bootable, 64-bit kernel image from scratch, using only nasm and my text editor. Well, folks &hellip;">
+  <meta name="description" content="Myth: “Virtual memory” is the mechanism that a kernel uses to make more memory available than is actually physically installed, by setting aside a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,52 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/19/relocatable-vs-position-independent-code-or/">Relocatable vs. Position-Independent Code (or, Virtual Memory isn't Just For Swap)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-19T17:12:50-05:00" pubdate data-updated="true">Feb 19<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote>
+<p><strong>Myth</strong>: “Virtual memory” is the mechanism that a kernel uses to make more memory available than is actually physically installed, by setting aside a disk partition for the overflow and copying pages between memory and disk as needed.</p>
+</blockquote>
+<p>I acquired this belief very early in my programming career, but it turns out that swapping pages to disk is merely one of the many things that “virtual memory” makes possible.</p>
+<blockquote>
+<p><strong>Fact</strong>: “Virtual memory” is a <em>hardware</em> (CPU) mechanism, which, every single time memory is accessed, references a kernel-specified data structure called a “page table” to arbitrarily <a href="http://www.catb.org/jargon/html/F/frobnicate.html">frobnicate</a> the high bits of the address, which is called “translating” from a “linear address” to a “physical address”. (The page table gets cached by a <a href="http://en.wikipedia.org/wiki/Translation_lookaside_buffer">translation lookaside buffer</a>, so the lookup is usually quite efficient!)</p>
+</blockquote>
+<p>This fact became very real to me this week as I made a <a href="/blog/2014/02/18/kernel-from-scratch/">kernel from scratch</a>: I was moderately surprised that I <em>needed</em> to set up a page table, when I had always thought of virtual memory as a somewhat advanced kernel feature. Today, I learned how “relocatable” and “PIC” – terms I’d encountered in the past and never really understood – suddenly make sense in this context. </div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/02/19/relocatable-vs-position-independent-code-or/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -163,6 +209,10 @@ Enter a title for your post:</code></pre>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/">An OSI layer model for the 21st century</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/04/14/all-boolean-functions-are-polynomials/">All Boolean functions are polynomials</a>
       </li>
     
@@ -176,10 +226,6 @@ Enter a title for your post:</code></pre>
     
       <li class="post">
         <a href="/blog/2014/03/23/concurrency-primitives-in-intel-64-assembly/">Concurrency Primitives in Intel 64 Assembly</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/16/infosec-the-product-design-correspondence/">The Security/Product Design Correspondence</a>
       </li>
     
   </ul>

@@ -9,22 +9,7 @@
   <meta name="author" content="davidad (David A. Dalrymple)">
 
   
-  <meta name="description" content="…in the integers mod 2 (a.k.a. the finite field of order 2). Multiplication mod 2 is AND: A
-B
-(AB)
-A B AND 0
-0
-0
-0 0
-1
-0
-0 1
-0
-0
-0 1
-1
-1
-1 Adding one &hellip;">
+  <meta name="description" content="The Internet protocol suite is wonderful, but it was designed before the advent of modern cryptography and without the benefit of hindsight. On the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +65,167 @@ A B AND 0
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/">An OSI layer model for the 21st century</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-24T17:48:03-04:00" pubdate data-updated="true">Apr 24<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The Internet protocol suite is wonderful, but it was designed before the advent of modern cryptography and without the benefit of hindsight. On the modern Internet, cryptography is typically squeezed into a single, incredibly complex layer, Transport Layer Security (TLS; formerly known as Secure Sockets Layer, or SSL). Over the last few months, 3 entirely unrelated (but equally catastrophic) bugs have been uncovered in 3 independent TLS implementations (<a href="https://www.imperialviolet.org/2014/02/22/applebug.html">Apple SSL/TLS</a>, <a href="http://arstechnica.com/security/2014/03/critical-crypto-bug-leaves-linux-hundreds-of-apps-open-to-eavesdropping/">GnuTLS</a>, and most recently <a href="http://heartbleed.com">OpenSSL</a>, which powers most “secure” servers on the Internet), making the TLS system difficult to trust in practice.</p>
+<p>What if cryptographic functions were spread out into more layers? Would the stack of layers become too tall, inefficient, and hard to debug, making the problem worse instead of better? On the contrary, I propose that appropriate cryptographic protocols could replace most existing layers, improving security as well as other functions generally not thought of as cryptographic, such as concurrency control of complex data structures, lookup or discovery of services and data, and decentralized passwordless login. Perhaps most importantly, the new architecture would enable individuals to internetwork as peers rather than as tenants of the telecommunications oligopoly, putting net neutrality directly in the hands of citizens and potentially enabling a drastically more competitive bandwidth market.</p>
+<style>
+td, th {
+text-align: center;
+}
+b {
+font-weight: bold;
+}
+table tr td i {
+font-style: italic;
+}
+thead {
+border-bottom: 1px black solid;
+}
+td.common {
+background-color: #e8f87e;
+}
+td.practice {
+background-color: #ffda88;
+}
+td.phy {
+background-color: #d8f0fe;
+}
+td.new {
+background-color: #d0ee9a;
+font-weight: bold;
+}
+td {
+border-bottom: 1px solid rgba(150,150,150,0.2);
+}
+</style>
+</style>
+<table>
+  <thead>
+  <tr>
+  <th width=40></th><th width=200>
+Current <a href="http://en.wikipedia.org/wiki/OSI_model">OSI model</a>
+</th><th width=180>
+In practice
+</th> <th width=200>
+Proposed update
+</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr><td>
+8
+</td><td>
+<i>(none)</i>
+</td><td class="common">
+Application
+</td><td class="common">
+<a href="/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/#Application">Application</a>
+</td></tr>
+  <tr><td>
+7
+</td><td class="common">
+“<a href="http://en.wikipedia.org/wiki/Application_layer">Application</a>”
+</td><td class="practice">
+<a href="http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a>
+</td><td class="new">
+<a href="/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/#Transactions">Transactions</a>
+</td></tr>
+  <tr><td>
+6
+</td><td class="common">
+<a href="http://en.wikipedia.org/wiki/Presentation_layer">Presentation</a>
+</td><td class="practice">
+<a href="http://en.wikipedia.org/wiki/Transport_Layer_Security">SSL/TLS</a>
+</td><td class="new">
+<a href="/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/#Non-Repudiation">(Non-)Repudiation</a>
+</td></tr>
+  <tr><td>
+5
+</td><td class="common">
+<a href="http://en.wikipedia.org/wiki/Session_layer">Session</a>
+</td><td class="practice" rowspan="2">
+<a href="http://en.wikipedia.org/wiki/Transmission_Control_Protocol">TCP</a>
+</td><td class="new">
+<a href="/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/#Confidentiality">Confidentiality</a>
+</td></tr>
+  <tr><td>
+4
+</td><td class="common">
+<a href="http://en.wikipedia.org/wiki/Transport_layer">Transport</a>
+</td>                                                                          <td class="new">
+<a href="/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/#Availability">Availability</a>
+</td></tr>
+  <tr><td>
+3
+</td><td class="common">
+<a href="http://en.wikipedia.org/wiki/Network_layer">Network</a>
+</td><td class="practice">
+<a href="http://en.wikipedia.org/wiki/Internet_Protocol">IP</a>
+</td><td class="new">
+<a href="/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/#Integrity">Integrity</a>
+</td></tr>
+  <tr><td>
+2
+</td><td class="common">
+<a href="http://en.wikipedia.org/wiki/Data_link_layer">Data Link</a>
+</td>
+  <td class="phy" rowspan="2">
+<a href="http://en.wikipedia.org/wiki/E-UTRA">e-UTRA</a> (LTE), <a href="http://en.wikipedia.org/wiki/IEEE_802.11">802.11</a> (WiFi), <a href="http://en.wikipedia.org/wiki/IEEE_802.3">802.3</a> (Ethernet), <i>etc.</i>
+</td>
+  <td class="common">
+Data Link
+</td></tr>
+  <tr><td>
+1
+</td><td class="common">
+<a href="http://en.wikipedia.org/wiki/Physical_layer">Physical</a>
+</td><td class="common">
+Physical
+</td></tr>
+  </tbody>
+</table>
+<p><br/></p>
+<p>Of course, the layers I propose will doubtless introduce new problems of their own, but I’d like to start this conversation with some concrete ideas, even if I don’t have a final answer. (Please feel free to <a
+ href="http://mailhide.recaptcha.net/d?k=01A3Grt9OhKg2-MSZSi6YDVA==&c=YXdAjPYO-xwh0WDnMu37kmOqfzUGcLhwkXoLkHdM6NA=">email</a> me your comments or tweet <a href="http://twitter.com/davidad"><span class="citation" data-cites="davidad">@davidad</span></a>.)</p>
+<p>Descriptions follow for each of the five new layers I suggest, four of which are named after common <a href="http://en.wikipedia.org/wiki/Security_testing">information security requirements</a>, and one of which (<a href="/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/#Transactions">Transactions</a>) is borrowed from <a href="http://en.wikipedia.org/wiki/ACID">database requirements</a> (and also vaguely suggestive of cryptocurrency).</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -628,52 +774,6 @@ Files foo and foo-4 are identical</code></pre>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/19/relocatable-vs-position-independent-code-or/">Relocatable vs. Position-Independent Code (or, Virtual Memory isn't Just For Swap)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-19T17:12:50-05:00" pubdate data-updated="true">Feb 19<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote>
-<p><strong>Myth</strong>: “Virtual memory” is the mechanism that a kernel uses to make more memory available than is actually physically installed, by setting aside a disk partition for the overflow and copying pages between memory and disk as needed.</p>
-</blockquote>
-<p>I acquired this belief very early in my programming career, but it turns out that swapping pages to disk is merely one of the many things that “virtual memory” makes possible.</p>
-<blockquote>
-<p><strong>Fact</strong>: “Virtual memory” is a <em>hardware</em> (CPU) mechanism, which, every single time memory is accessed, references a kernel-specified data structure called a “page table” to arbitrarily <a href="http://www.catb.org/jargon/html/F/frobnicate.html">frobnicate</a> the high bits of the address, which is called “translating” from a “linear address” to a “physical address”. (The page table gets cached by a <a href="http://en.wikipedia.org/wiki/Translation_lookaside_buffer">translation lookaside buffer</a>, so the lookup is usually quite efficient!)</p>
-</blockquote>
-<p>This fact became very real to me this week as I made a <a href="/blog/2014/02/18/kernel-from-scratch/">kernel from scratch</a>: I was moderately surprised that I <em>needed</em> to set up a page table, when I had always thought of virtual memory as a somewhat advanced kernel feature. Today, I learned how “relocatable” and “PIC” – terms I’d encountered in the past and never really understood – suddenly make sense in this context. </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/02/19/relocatable-vs-position-independent-code-or/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/2">&larr; Older</a>
@@ -689,6 +789,10 @@ Files foo and foo-4 are identical</code></pre>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/">An OSI layer model for the 21st century</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/04/14/all-boolean-functions-are-polynomials/">All Boolean functions are polynomials</a>
       </li>
     
@@ -702,10 +806,6 @@ Files foo and foo-4 are identical</code></pre>
     
       <li class="post">
         <a href="/blog/2014/03/23/concurrency-primitives-in-intel-64-assembly/">Concurrency Primitives in Intel 64 Assembly</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/16/infosec-the-product-design-correspondence/">The Security/Product Design Correspondence</a>
       </li>
     
   </ul>

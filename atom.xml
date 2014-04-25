@@ -4,7 +4,7 @@
   <title><![CDATA[Technical Journal]]></title>
   <link href="http://davidad.github.io/atom.xml" rel="self"/>
   <link href="http://davidad.github.io/"/>
-  <updated>2014-04-15T16:12:57-04:00</updated>
+  <updated>2014-04-25T03:55:21-04:00</updated>
   <id>http://davidad.github.io/</id>
   <author>
     <name><![CDATA[davidad (David A. Dalrymple)]]></name>
@@ -12,6 +12,438 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[An OSI layer model for the 21st century]]></title>
+    <link href="http://davidad.github.io/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/"/>
+    <updated>2014-04-24T17:48:03-04:00</updated>
+    <id>http://davidad.github.io/blog/2014/04/24/an-osi-layer-model-for-the-21st-century</id>
+    <content type="html"><![CDATA[<p>The Internet protocol suite is wonderful, but it was designed before the advent of modern cryptography and without the benefit of hindsight. On the modern Internet, cryptography is typically squeezed into a single, incredibly complex layer, Transport Layer Security (TLS; formerly known as Secure Sockets Layer, or SSL). Over the last few months, 3 entirely unrelated (but equally catastrophic) bugs have been uncovered in 3 independent TLS implementations (<a href="https://www.imperialviolet.org/2014/02/22/applebug.html">Apple SSL/TLS</a>, <a href="http://arstechnica.com/security/2014/03/critical-crypto-bug-leaves-linux-hundreds-of-apps-open-to-eavesdropping/">GnuTLS</a>, and most recently <a href="http://heartbleed.com">OpenSSL</a>, which powers most “secure” servers on the Internet), making the TLS system difficult to trust in practice.</p>
+<p>What if cryptographic functions were spread out into more layers? Would the stack of layers become too tall, inefficient, and hard to debug, making the problem worse instead of better? On the contrary, I propose that appropriate cryptographic protocols could replace most existing layers, improving security as well as other functions generally not thought of as cryptographic, such as concurrency control of complex data structures, lookup or discovery of services and data, and decentralized passwordless login. Perhaps most importantly, the new architecture would enable individuals to internetwork as peers rather than as tenants of the telecommunications oligopoly, putting net neutrality directly in the hands of citizens and potentially enabling a drastically more competitive bandwidth market.</p>
+<style>
+td, th {
+text-align: center;
+}
+b {
+font-weight: bold;
+}
+table tr td i {
+font-style: italic;
+}
+thead {
+border-bottom: 1px black solid;
+}
+td.common {
+background-color: #e8f87e;
+}
+td.practice {
+background-color: #ffda88;
+}
+td.phy {
+background-color: #d8f0fe;
+}
+td.new {
+background-color: #d0ee9a;
+font-weight: bold;
+}
+td {
+border-bottom: 1px solid rgba(150,150,150,0.2);
+}
+</style>
+</style>
+<table>
+  <thead>
+  <tr>
+  <th width=40></th><th width=200>
+Current <a href="http://en.wikipedia.org/wiki/OSI_model">OSI model</a>
+</th><th width=180>
+In practice
+</th> <th width=200>
+Proposed update
+</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr><td>
+8
+</td><td>
+<i>(none)</i>
+</td><td class="common">
+Application
+</td><td class="common">
+<a href="http://davidad.github.io/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/#Application">Application</a>
+</td></tr>
+  <tr><td>
+7
+</td><td class="common">
+“<a href="http://en.wikipedia.org/wiki/Application_layer">Application</a>”
+</td><td class="practice">
+<a href="http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a>
+</td><td class="new">
+<a href="http://davidad.github.io/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/#Transactions">Transactions</a>
+</td></tr>
+  <tr><td>
+6
+</td><td class="common">
+<a href="http://en.wikipedia.org/wiki/Presentation_layer">Presentation</a>
+</td><td class="practice">
+<a href="http://en.wikipedia.org/wiki/Transport_Layer_Security">SSL/TLS</a>
+</td><td class="new">
+<a href="http://davidad.github.io/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/#Non-Repudiation">(Non-)Repudiation</a>
+</td></tr>
+  <tr><td>
+5
+</td><td class="common">
+<a href="http://en.wikipedia.org/wiki/Session_layer">Session</a>
+</td><td class="practice" rowspan="2">
+<a href="http://en.wikipedia.org/wiki/Transmission_Control_Protocol">TCP</a>
+</td><td class="new">
+<a href="http://davidad.github.io/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/#Confidentiality">Confidentiality</a>
+</td></tr>
+  <tr><td>
+4
+</td><td class="common">
+<a href="http://en.wikipedia.org/wiki/Transport_layer">Transport</a>
+</td>                                                                          <td class="new">
+<a href="http://davidad.github.io/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/#Availability">Availability</a>
+</td></tr>
+  <tr><td>
+3
+</td><td class="common">
+<a href="http://en.wikipedia.org/wiki/Network_layer">Network</a>
+</td><td class="practice">
+<a href="http://en.wikipedia.org/wiki/Internet_Protocol">IP</a>
+</td><td class="new">
+<a href="http://davidad.github.io/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/#Integrity">Integrity</a>
+</td></tr>
+  <tr><td>
+2
+</td><td class="common">
+<a href="http://en.wikipedia.org/wiki/Data_link_layer">Data Link</a>
+</td>
+  <td class="phy" rowspan="2">
+<a href="http://en.wikipedia.org/wiki/E-UTRA">e-UTRA</a> (LTE), <a href="http://en.wikipedia.org/wiki/IEEE_802.11">802.11</a> (WiFi), <a href="http://en.wikipedia.org/wiki/IEEE_802.3">802.3</a> (Ethernet), <i>etc.</i>
+</td>
+  <td class="common">
+Data Link
+</td></tr>
+  <tr><td>
+1
+</td><td class="common">
+<a href="http://en.wikipedia.org/wiki/Physical_layer">Physical</a>
+</td><td class="common">
+Physical
+</td></tr>
+  </tbody>
+</table>
+<p><br/></p>
+<p>Of course, the layers I propose will doubtless introduce new problems of their own, but I’d like to start this conversation with some concrete ideas, even if I don’t have a final answer. (Please feel free to <a
+ href="http://mailhide.recaptcha.net/d?k=01A3Grt9OhKg2-MSZSi6YDVA==&c=YXdAjPYO-xwh0WDnMu37kmOqfzUGcLhwkXoLkHdM6NA=">email</a> me your comments or tweet <a href="http://twitter.com/davidad"><span class="citation" data-cites="davidad">@davidad</span></a>.)</p>
+<p>Descriptions follow for each of the five new layers I suggest, four of which are named after common <a href="http://en.wikipedia.org/wiki/Security_testing">information security requirements</a>, and one of which (<a href="http://davidad.github.io/blog/2014/04/24/an-osi-layer-model-for-the-21st-century/#Transactions">Transactions</a>) is borrowed from <a href="http://en.wikipedia.org/wiki/ACID">database requirements</a> (and also vaguely suggestive of cryptocurrency).</p>
+<!-- more -->
+
+<hr />
+<p><strong>General disclaimer for InfoSec articles:</strong> <em>Reading this article does not qualify you to design secure systems. Writing this article does not qualify </em>me <em>to design secure systems. In fact, </em>nobody is qualified to design secure systems<em>. A system should not be considered secure unless it has been reviewed by multiple security experts </em>and <em>resisted multiple serious attempts to violate its security claims in practice. The information contained in this article is offered “as is” and without warranties of any kind (express, implied, and statutory), all of which the author expressly disclaims to the fullest extent permitted by law.</em></p>
+<h2 id="data-link-and-physical-layers">Data Link and Physical layers</h2>
+<p>For our purposes today, the Data Link and Physical layers are a black box (perhaps literally), to which we have an interface (the “network interface”) which looks like a transmit queue and a receive queue. These queues can store “payloads” of anywhere from 1 to 1280<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> <a href="http://en.wikipedia.org/wiki/Octet_(computing)">octets</a> (bytes). The next layer in the stack can push a payload onto the Data Link transmit queue (and possibly get an error if it’s full) and can pop a payload from the Data Link receive queue (and possibly get an error if it’s empty). The Data Link layer is responsible for (eventually) flushing the transmit queue, and any payload which leaves the transmit queue must appear on the receive queues of all <i>other</i> devices connected to the same <a href="http://en.wikipedia.org/wiki/Channel_(communications)">channel</a> (a technical term, which may refer to a radio channel in the case of cellular devices, or simply to a particular length of cable in a point-to-point wired connection).</p>
+<p><a name="Integrity"></a></p>
+<h2 id="integrity-layer">Integrity layer</h2>
+<p>We would like a received payload to self-evidently be the same payload which was sent. Although the Data Link layer is supposed to provide such an assurance, various kinds of attacks on the system might invalidate this assumption. Integrity protocols mitigate these attacks:</p>
+<p>
+<table>
+<thead>
+  <tr><th width=60>
+Paranoia Level
+</th><th width=240>
+Attacks
+</th><th width=180>
+Mitigation
+</th><th width=150>
+Common Implementation
+</th><th width=180>
+My Preferred Implemenation
+</th></tr>
+</thead>
+<tbody>
+  <tr><td>
+1
+</td><td>
+Thermal noise, cosmic rays
+</td><td>
+checksum hash
+</td><td>
+<a href="http://en.wikipedia.org/wiki/Transmission_Control_Protocol#Checksum_computation">TCP Checksum</a>
+</td><td>
+<a href="http://www.strchr.com/crc32_popcnt">CRC-32C</a>
+</td></tr>
+  <tr><td>
+2
+</td><td>
+Deliberate corruption
+</td><td>
+cryptographic hash
+</td><td>
+<a href="http://en.wikipedia.org/wiki/SHA-1">SHA-1</a>
+</td><td>
+<a href="https://blake2.net/">BLAKE2b</a>
+</td></tr>
+  <tr><td>
+3
+</td><td>
+Spoofing of trusted contacts
+</td><td>
+keyed hash
+</td><td>
+<a href="http://en.wikipedia.org/wiki/Hash-based_message_authentication_code">HMAC-SHA1</a>
+</td><td>
+<a href="https://131002.net/siphash/siphash.pdf">SipHash</a>
+</td></tr>
+  <tr><td>
+4
+</td><td>
+Spoofing of strangers
+</td><td>
+public-key signature of cryptographic hash
+</td><td>
+<a href="http://en.wikipedia.org/wiki/SHA-1">SHA-1</a> + <a href="http://en.wikipedia.org/wiki/RSA_(cryptosystem)">RSA</a>
+</td><td>
+<a href="https://blake2.net/">BLAKE2b</a> + <a href="http://ed25519.cr.yp.to/index.html">Ed25519</a>
+</td></tr>
+</tbody>
+</table>
+</p>
+
+<p>Integrity protocols are fairly simple: the appropriate verification material is placed at the beginning of every Data Link payload. The Integrity layer exposes the same kind of “transmit queue and receive queue” interface as the Data Link layer, but the payload which can be passed to the Integrity layer must be somewhat smaller, so that there is room for the verification material and the Integrity payload together to fit into 1280 octets. Overhead ranges from 4 octets for a CRC-32C checksum to 96 octets for an Ed25519 signature.</p>
+<p>In the keyed hash case, some state is necessary at the Integrity protocol level: each API customer must be able to add “trusted contacts” to its “address book” by specifying a symmetric key correpsonding to a given endpoint name (which may have been negotiated at a higher protocol level, or simply out-of-band entirely). Since some advanced higher-level protocols may define symmetric authentication keys that are only good for a single use (e.g. <a href="https://github.com/trevp/axolotl/wiki">Axolotl ratcheting</a> after the handshake phase), “address book entries” should be single-use by default, with renewal explicitly required after each payload received from a given contact.</p>
+<p><a name="Availability"></a></p>
+<h2 id="availability-layer">Availability layer</h2>
+<p>We would like networked endpoints to be available to receive packets from other endpoints in a way that is robust to unannounced changes in network topology. This layer conceptually takes the place of the <a href="http://en.wikipedia.org/wiki/Network_layer">Network</a> layer in the original model, as it will be responsible for routing packets. <b>Significantly, in this proposal, there are no “hosts” or “ports”: only “endpoints”, identified by public keys.</b> This is simply taking the <a href="http://en.wikipedia.org/wiki/End-to-end_principle">end-to-end principle</a> one step further, by considering the “host” merely part of the network infrastructure which makes applications available.</p>
+<p>A fully implemented Availability layer should provide <a href="http://en.wikipedia.org/wiki/Unicast">unicast</a> (deliver to a unique endpoint authenticated by a given public key, wherever it may be), <a href="http://en.wikipedia.org/wiki/Anycast">anycast</a> (deliver to nearest endpoint authenaticated by a given public key), and <a href="http://en.wikipedia.org/wiki/Multicast">multicast</a> (<i>a.k.a.</i> <a href="http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern">pub/sub</a>: route to all endpoints who have asked to subscribe to a given ID, and provide a subscription method).</p>
+<p>
+<table>
+<thead>
+  <tr><th width=80 rowspan="2">
+Routing Semantics
+</th><th width=170 rowspan="2">
+Current Reliability
+</th><th colspan="2" style="border-bottom: 1px solid rgba(150,150,150,0.4)">
+New Implemenation
+</th></tr>
+  <tr><th width=260>
+Overlay on existing Internet
+</th><th width=280>
+Native Mesh
+</th></tr>
+</thead>
+<tbody>
+  <tr><td>
+Multicast
+</td><td>
+awful
+</td><td>
+<a href="http://www.researchgate.net/publication/4319659_SKademlia_A_practicable_approach_towards_secure_key-based_routing/file/72e7e524ad3e97d67d.pdf">S/Kademlia</a> message broker
+</td><td>
+Straightforward extension of unicast
+</td></tr>
+  <tr><td>
+Anycast
+</td><td>
+decent
+</td><td>
+No advantage over load balancers
+</td><td>
+Possible extension of unicast
+</td></tr>
+  <tr><td>
+Unicast
+</td><td>
+excellent
+</td><td>
+Special case of multicast
+</td><td>
+<a href="http://arxiv.org/pdf/0909.2859v1.pdf">Electric Routing</a>
+</td></tr>
+</tbody>
+</table>
+</p>
+
+<p>I believe the <a href="http://arxiv.org/pdf/0909.2859v1.pdf">Electric Routing</a> algorithm<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> is up to the challenge of replacing unicast<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>, and that it could be extended to provide multicast and even anycast, but other algorithms could be developed at this protocol layer as well. The first real-world implementation of the system I’m describing will very likely be developed as an overlay network on top of <a href="http://en.wikipedia.org/wiki/Internet_Protocol">IP</a>, in which case multicast can be implemented simply atop <a href="http://www.researchgate.net/publication/4319659_SKademlia_A_practicable_approach_towards_secure_key-based_routing/file/72e7e524ad3e97d67d.pdf">S/Kademlia</a>, with unicast as a special case, and anycast can be emulated with standard load-balancing techniques.</p>
+<p>The tradeoff here is that routers have a lot more work to do, since there are no “addresses” corresponding directly to geographic location. But, it means that every node on the network can participate as a router, so there is a lot more capacity to do that work. In addition, the endpoints-only scheme has many potentially desirable properties with respect to features like pseudonymity, NAT transparency, redundancy, and decentralization of the telecommunications market (especially in densely settled areas).</p>
+<p><a name="Confidentiality"></a></p>
+<h2 id="confidentiality-layer">Confidentiality layer</h2>
+<p>Ideally, we would like to not transmit any information to anything other than the destination endpoint(s). This ideal is not in general achievable on a public network, but some types of mitigation are possible:</p>
+<p>
+<table>
+<thead>
+  <tr><th width=60>
+Paranoia Level
+</th><th width=240>
+Attacks
+</th><th width=180>
+Mitigation
+</th><th width=150>
+Common Implementation
+</th><th width=180>
+My Preferred Implemenation
+</th></tr>
+</thead>
+<tbody>
+  <tr><td>
+1
+</td><td>
+Sniffing payloads to trusted contacts
+</td><td>
+<a href="http://en.wikipedia.org/wiki/Symmetric-key_algorithm">symmetric</a> encryption
+</td><td>
+<a href="http://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>
+</td><td>
+<a href="http://cr.yp.to/chacha.html">ChaCha</a>
+</td></tr>
+  <tr><td>
+2
+</td><td>
+Sniffing payloads to strangers
+</td><td>
+<a href="http://en.wikipedia.org/wiki/Public-key_cryptography">public-key</a> encryption
+</td><td>
+<a href="http://en.wikipedia.org/wiki/RSA_(algorithm)">RSA</a>
+</td><td>
+<a href="http://en.wikipedia.org/wiki/RSA_(algorithm)">RSA</a>
+</td></tr>
+  <tr><td>
+3
+</td><td>
+Chosen plaintext attacks
+</td><td>
+<a href="http://en.wikipedia.org/wiki/Key-agreement_protocol">key agreement</a> + symmetric encryption
+</td><td>
+<a href="http://en.wikipedia.org/wiki/Elliptic_Curve_Diffie%E2%80%93Hellman">ECDH</a> + <a href="http://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>
+</td><td>
+<a href="http://cr.yp.to/ecdh.html">Curve25519</a> + <a href="http://cr.yp.to/chacha.html">ChaCha</a>
+</td></tr>
+  <tr><td>
+4
+</td><td>
+Key compromise
+</td><td>
+ephemeral key agreement + symmetric encryption
+</td><td>
+<a href="http://vincent.bernat.im/en/blog/2011-ssl-perfect-forward-secrecy.html">ECDHE</a> + <a href="http://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>
+</td><td>
+<a href="https://github.com/trevp/axolotl/wiki">Axolotl ratchet</a> with <a href="http://cr.yp.to/ecdh.html">Curve25519</a>, <a href="https://131002.net/siphash/siphash.pdf">SipHash</a>, <a href="http://en.wikipedia.org/wiki/PBKDF2">PBKDF2</a>, <a href="http://cr.yp.to/chacha.html">ChaCha</a>
+</td></tr>
+</tbody>
+</table>
+</p>
+
+<p>In cases 3 and 4, this layer has to maintain some state, holding session keys or message keys, and the Axolotl ratchet is a little complicated; but this layer does not have to worry about the verification of identity (which will be provided on a higher layer) or integrity (which will be provided by a lower layer).</p>
+<p><a name="Non-Repudiation"></a></p>
+<h2 id="non-repudiation-andor-repudiation-layer">Non-Repudiation and/or Repudiation layer</h2>
+<p>We would like for a receiver to be sure that a message they receive was sent by a given sender, and we would like for a sender to be sure that a given message was successfully received. Sometimes, we would also like for a receiver to be unaware of the location a message was sent from. The result is three related but orthogonal protocol types, which may be nested:</p>
+<p>
+<table>
+<thead>
+  <tr><th width=180>
+Repudiation Property
+</th><th width=200>
+Meaning
+</th><th width=300>
+Protocol
+</th></tr>
+</thead>
+<tbody>
+  <tr><td>
+Non-Repudiation of Sending
+</td><td>
+Recipient knows immediate sender
+</td><td>
+Sender includes a hash of their public key in the message. To understand why this is necessary given the Integrity layer, read <a href="http://world.std.com/~dtd/sign_encrypt/sign_encrypt7.html">this excellent article</a>
+</td></tr>
+  <tr><td>
+Non-Repudiation of Receipt
+</td><td>
+Sender knows message was received
+</td><td>
+Recipient must send a signed acknowledgement for every message. This also implements “reliable delivery”
+</td></tr>
+  <tr><td>
+Repudiation of Origin
+</td><td>
+Message is difficult to trace
+</td><td>
+<a href="http://en.wikipedia.org/wiki/Onion_routing">Onion Routing</a>
+</td></tr>
+</tbody>
+</table>
+</p>
+
+
+<p><a name="Transactions"></a></p>
+<h2 id="transactions-layer">Transactions layer</h2>
+<p>We would like for sets of nodes which wish to maintain common mutable state variables to be able to do so, even in the presence of various types of adversaries. This is a common abstraction for the requirements of <code>git</code>, cryptocrurencies, and distributed databases (i.e. <a href="http://en.wikipedia.org/wiki/ACID">ACID</a> <a href="http://en.wikipedia.org/wiki/Multiversion_concurrency_control">MVCC</a>). I propose that (borrowing most directly from <code>git</code>, but also from Clojure’s concurrent data structures) changes in large or complex mutable states be represented as changes to the root of a <a href="http://en.wikipedia.org/wiki/Merkle_tree">Merkle tree</a>, thus reducing the state subject to transactional semantics to single-packet size<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>.</p>
+<p>To make it obvious what I’m intending to refer to, the owner of a particular “domain name” or a particular “coin” (or, generally, any cryptographically controlled resource) is an example of a mutable state. But so is, for instance, the contents of any social media profile, email inbox, hypertext page, or source code repository. These things could all be managed without reference to central authorities or single points of failure.</p>
+<p>
+<table>
+<thead>
+  <tr><th width=60>
+Paranoia Level
+</th><th width=340>
+Attacks
+</th><th width=380>
+Mitigation
+</th></tr>
+</thead>
+<tbody>
+  <tr><td>
+1
+</td><td>
+Asynchrony; node failure/disconnection
+</td><td>
+<a href="http://www.cos.ufrj.br/~monnerat/papers/Monnerat_et_Amorim_D1HT_2006.pdf">D1HT</a> tracker
+</td></tr>
+  <tr><td>
+2
+</td><td>
+Sybil attacks; eclipse attacks; churn attacks
+</td><td>
+<a href="http://www.researchgate.net/publication/4319659_SKademlia_A_practicable_approach_towards_secure_key-based_routing/file/72e7e524ad3e97d67d.pdf">S/Kademlia</a> tracker
+</td></tr>
+  <tr><td>
+3
+</td><td>
+Malicious trackers
+</td><td>
+<a href="http://research.microsoft.com/en-us/um/people/lamport/pubs/disc-leaderless-web.pdf">Leaderless Byzantine Paxos</a> or <a href="http://link.springer.com/article/10.1007%2Fs10796-013-9460-7#page-1">Byzantine gossip</a>
+</td></tr>
+  <tr><td>
+4
+</td><td>
+Any attack that Bitcoin can survive
+</td><td>
+<a href="https://en.bitcoin.it/wiki/Block_chain">Block-chain</a> protocol
+</td></tr>
+</tbody>
+</table>
+</p>
+
+<p>Many (including myself) have claimed that the core contribution of Bitcoin, the block-chain protocol, is a novel solution to the <a href="http://research.microsoft.com/en-us/um/people/lamport/pubs/byz.pdf">Byzantine Generals Problem</a>, but it turns out this is somewhat misleading. Although the block-chain protocol is Byzantine-fault-tolerant in a novel way, there has been plenty of research on Byzantine protocols over the years, and it seems probably unnecessary to constantly “mine,” i.e. solve cryptopuzzles, to achieve Byzantine fault tolerance. The main reason to introduce cryptopuzzles is to reduce the efficacy of <a href="http://en.wikipedia.org/wiki/Sybil_attack">Sybil attacks</a>, in which one malicious actor fabricates arbitrarily many identities in order to exceed the Byzantine fault tolerance threshhold and control the system. However, these attacks can also be mitigated by requiring crypto-puzzles only for joining the network (as in <a href="http://www.researchgate.net/publication/4319659_SKademlia_A_practicable_approach_towards_secure_key-based_routing/file/72e7e524ad3e97d67d.pdf">S/Kademlia</a>), and by blacklisting nodes which behave suspiciously (the latter being how most attacks on Bitcoin are stopped in practice).</p>
+<p><a name="Application"></a></p>
+<h2 id="application-layer">Application layer</h2>
+<p>In such an environment, applications (or application components!) are essentially just maps from one mutable state to another, in <a href="http://elm-lang.org/learn/What-is-FRP.elm">functional reactive programming</a> style. In the same way that you might encode packet filters into a kernel’s TCP/IP stack today, you might encode entire applications into a kernel’s “mesh” stack in the future. Various search functions, including full-text search, could be provided using the <a href="http://www.michaelpiatek.com/papers/oneswarm_SIGCOMM.pdf">OneSwarm</a> approach or potentially by distributed <a href="http://en.wikipedia.org/wiki/Bloom_filter">Bloom filters</a> implemented atop this platform (an idea due to <a href="https://twitter.com/AndreeMonette">Andrée Monette</a>). Resource control and access control can be provided by means of <a href="http://www.erights.org/elib/capability/ode/ode-protocol.html">cryptographic capabilities</a>.</p>
+<p>But, in general, this layer is completely open for all sorts of applications. Essentially, any end-user service that runs on a network (and what doesn’t, these days?) would fit here.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>I’ve outlined some radical ideas for how to re-build the Internet protocol stack in a way that is ultimately more coherent with Internet cultural values (freedom of expression, pseudonymity, reduced potential for abuses of power). This outline still needs quite a bit of work and thought before being turned into implementations, but I feel like I’ve reached a turning point in making my <a href="http://mesh.is/confusing,ok?">ideas</a> about next-generation architectures concrete, and at a timely moment with respect to conversations about TLS and net neutrality. If you would like to see these concepts made into working code, please <a
+href="http://mailhide.recaptcha.net/d?k=01A3Grt9OhKg2-MSZSi6YDVA==&c=YXdAjPYO-xwh0WDnMu37kmOqfzUGcLhwkXoLkHdM6NA=">reach out</a> and let me know.</p>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>This number is cribbed from the <a href="http://tools.ietf.org/html/rfc2460">IPv6 RFC</a>.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>coauthored by <a href="http://www.maymounkov.org/">Petar Maymounkov</a>, who also coauthored <a href="http://en.wikipedia.org/wiki/Kademlia">Kademlia</a>, the <a href="http://en.wikipedia.org/wiki/Distributed_hash_table">DHT</a> powering <a href="http://en.wikipedia.org/wiki/BitTorrent_(protocol)">BitTorrent</a><a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Electric routing does need some extensions to mitigate various attacks, but I believe the countermeasures from <a href="http://www.researchgate.net/publication/4319659_SKademlia_A_practicable_approach_towards_secure_key-based_routing/file/72e7e524ad3e97d67d.pdf">S/Kademlia</a> are readily adapted to meet these needs.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>This is similar in principle to the trick used by most practical public-key cryptosystems, which use the actual public-key algorithm only to encrypt a key from some symmetric cryptosystem, and then encrypt arbitrarily large content using a stream cipher. The common principle is that you can do the hard security algorithm on a small piece of data, and use easier security algorithms to apply those hard secrutiy properties to large chunks of data.<a href="#fnref4">↩</a></p></li>
+</ol>
+</section>]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[All Boolean functions are polynomials]]></title>
@@ -1211,14 +1643,6 @@ concurrency.asm<a href='https://github.com/davidad/asm_concurrency/blob/TJ-1/con
 <h2 id="addendum-c">Addendum: C</h2>
 <p>In this addendum, we’re going to look at the assembly for iteration, non-tail recursion, and tail recursion, as emitted by <code>gcc</code>, and get to the bottom of what the difference is anyway.</p>
 <p>At the top of each C file here, we have the following:</p>
-<figure class='code'><div class='highlight'><table><tr><td class='line-numbers' aria-hidden='true'><pre><div data-line='1' class='line-number'></div><div data-line='2' class='line-number'></div><div data-line='3' class='line-number'></div><div data-line='4' class='line-number'></div><div data-line='5' class='line-number'></div></pre></td><td class='main  c'><pre><div class='line'><code><span class="cp">#include &lt;stdint.h&gt;</span>
-</code></div><div class='line'><code><span class="k">struct</span> <span class="n">number_list</span> <span class="p">{</span>
-</code></div><div class='line'><code>  <span class="kt">uint64_t</span> <span class="n">number</span><span class="p">;</span>
-</code></div><div class='line'><code>  <span class="k">struct</span> <span class="n">number_list</span> <span class="o">&ast;</span><span class="n">next</span><span class="p">;</span>
-</code></div><div class='line'><code><span class="p">};</span>
-</code></div></pre></td></tr></table></div></figure>
-
-
 <p><a name="iteration"></a></p>
 <h3 id="iteration">Iteration</h3>
 <p>If I were solving this problem in the context of a C program, this is how I would do it.</p>
